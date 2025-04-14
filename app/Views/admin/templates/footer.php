@@ -38,6 +38,8 @@
             <script src="<?= base_url('templates/js/bootstrap@5.3.3.bundle.min.js?v=2.2.2') ?>"></script>
             <script src="<?= base_url('templates/js/admin-lte@3.2.min.js?v=2.2.2') ?>"></script>
         <?php endif ?>
+
+        <script src="<?= base_url('templates/js/adminscript.js?v=3.3.3') ?>"></script>
         
     </body>
 </html>

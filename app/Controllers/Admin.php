@@ -55,22 +55,7 @@ class Admin extends BaseController
             'redirect_url' => base_url('admin/dashboard')
         ]);
         
-        // if ($user && password_verify($password, $user['password'])) {
-        //     session()->set([
-        //         'user_id' => $user['id'],
-        //         'user_email' => $user['email'],
-        //         'logged_in' => true,
-        //     ]);
-
-        //     return $this->response->setJSON([
-        //         'success' => true,
-        //         'redirect_url' => base_url('admin/dashboard') // or any route you want
-        //     ]);
-        // }
-
-        // return $this->response->setJSON([
-        //     'success' => false
-        // ]);
+        
     }
 
     public function get_user_data_by_id()
@@ -251,4 +236,15 @@ class Admin extends BaseController
         return redirect()->to(base_url('/admin/login'));
     }
     
+    // public function searching()
+    // {
+    //     $search = $this->request->getPost("search");
+
+    //     $User_Model = new UserModel();
+
+    //     $user_data = $User_Model->like("email", $search)->findAll(5);
+
+    //     return json_encode($user_data);
+
+    // }
 }

@@ -14,6 +14,9 @@
         <link rel="stylesheet" href="<?= base_url('templates/css/adminlte@3.2.min.css?v=1.1.1') ?>">
     <?php endif ?>
     
+    <!-- Default Icon in the Head Section -->
+    <link rel="shortcut icon" href="<?= base_url('templates/img/icon.png') ?>" type="image/x-icon">
+
     <link rel="stylesheet" href="<?= base_url('templates/css/admin-style.css?v=1.1.1') ?>">
 
 </head>
@@ -36,15 +39,18 @@
                 <ul class="navbar-nav ml-1">
                     <li class="nav-item">
                         <form class="form-inline" id="searchForm">
-                            <div class="input-group input-group-sm ml-1">
-                                <input id="searchInput" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                            <div class="input-group input-group-sm ml-1 position-relative">
+                                <input id="searchInput" class="form-control" type="search" placeholder="Search" aria-label="Search" autocomplete="off">
                                 <div class="input-group-append">
-                                    <button class="btn btn-navbar" type="submit">
+                                    <button class="btn btn-navbar rounded-end" type="submit">
                                         <i class="bi bi-search"></i>
                                     </button>
                                 </div>
+                                <ul id="suggestionsList" class="list-group position-absolute w-100" style="top: 100%; z-index: 1050; display: none;"></ul>
                             </div>
                         </form>
+
+                        <input type="hidden" id="base_url" value="<?= base_url('admin') ?>/" />
 
                     </li>
                 </ul>
@@ -166,32 +172,5 @@
             </div>
         </aside>
 
-        <script>
-    document.getElementById('searchForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const input = document.getElementById('searchInput').value.trim().toLowerCase();
-
-        const baseURL = "<?= base_url('admin') ?>/"; // Base URL for all admin pages
-
-        const pages = [
-            { keywords: ['dashboard'], route: 'dashboard' },
-            { keywords: ['inventory', 'stock', 'seeds inventory'], route: 'inventory' },
-            { keywords: ['seeds', 'seed requests', 'requests'], route: 'seedsRequests' },
-            { keywords: ['beneficiaries', 'farmers', 'recipients'], route: 'beneficiaries' },
-            { keywords: ['reports', 'summary', 'analytics'], route: 'reports' },
-            { keywords: ['logs', 'activity log', 'history'], route: 'logs' },
-            { keywords: ['logout', 'sign out', 'exit'], route: 'logout' }
-        ];
-
-        const matchedPage = pages.find(page =>
-            page.keywords.some(keyword => keyword.includes(input) || input.includes(keyword))
-        );
-
-        if (matchedPage) {
-            window.location.href = baseURL + matchedPage.route;
-        } else {
-            alert('No matching page found.');
-        }
-    });
-</script>
+        
 
