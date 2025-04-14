@@ -2,7 +2,7 @@ $(document).ready(function () {
     
 
     preventDevTools(false);
-    preventMobileAccess();
+    // preventMobileAccess();
 
 
     function preventDevTools(enable) {
@@ -45,17 +45,17 @@ $(document).ready(function () {
         }, 1000);
     }
 
-    function preventMobileAccess() {
-        if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            document.body.innerHTML = `
-            <div style="display: flex; height: 100vh; align-items: center; justify-content: center; background-color: #f8d7da; color: #721c24; text-align: center; padding: 20px; font-family: Arial, sans-serif;">
-                <div>
-                    <h1 style="font-size: 3rem;">Access Denied</h1>
-                    <p style="font-size: 1.5rem;">This page is not accessible on mobile devices.</p>
-                </div>
-            </div>`;
-        }
-    }
+    // function preventMobileAccess() {
+    //     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    //         document.body.innerHTML = `
+    //         <div style="display: flex; height: 100vh; align-items: center; justify-content: center; background-color: #f8d7da; color: #721c24; text-align: center; padding: 20px; font-family: Arial, sans-serif;">
+    //             <div>
+    //                 <h1 style="font-size: 3rem;">Access Denied</h1>
+    //                 <p style="font-size: 1.5rem;">This page is not accessible on mobile devices.</p>
+    //             </div>
+    //         </div>`;
+    //     }
+    // }
 
     $("#login_form").submit(function () {
         const email = $("#login_email").val();

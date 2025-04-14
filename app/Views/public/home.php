@@ -21,40 +21,59 @@
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand-lg navbar-light bg-white border-bottom">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="<?= base_url('templates/img/icon.png') ?>" alt="Logo" class="img-fluid" style="max-width: 80px;">
+                <!-- Logo and DA text -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="<?= base_url('templates/img/icon.png') ?>" alt="Logo" class="img-fluid" style="max-width: 60px;">
+                    <div class="ms-2">
+                        <span class="fw-bold" style="font-size: 22px;">Department of Agriculture</span><br>
+                        <small class="text-muted">Oras, Eastern Samar</small>
+                    </div>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+
+                <!-- Toggler -->
+                <!-- <button class="navbar-toggler ms-1 mb-2 mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Request Seeds</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Distributions</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-                    </ul>
-                    <ul class="navbar-nav me-auto ms-auto">
-                        <li class="nav-item">
-                            <form class="form-inline">
+                </button> -->
+
+                <ul class="navbar-nav ms-1 d-lg-none"> <!-- d-lg-none hides this on large screens -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" role="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="bi bi-list fs-3"></i> <!-- User icon, same as sidebar toggle -->
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Collapsible content -->
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <!-- Left links -->
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item ms-1 mt-1 mr-1">
+                            <form class="d-flex" role="search">
                                 <div class="input-group input-group-sm">
-                                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-navbar" type="submit">
-                                            <i class="bi bi-search"></i>
-                                        </button>
-                                    </div>
+                                    <input type="search" class="form-control" placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
                                 </div>
                             </form>
                         </li>
-                    
-                        <li class="nav-item">
-                            <a href="logout" class="btn btn-outline-dark btn-sm ml-3">Logout</a>
+                        <li class="nav-item ms-1"><a class="nav-link active" href="#">Home</a></li>
+                        <li class="nav-item ms-1"><a class="nav-link" href="#">Request Seeds</a></li>
+                        <li class="nav-item ms-1"><a class="nav-link" href="#">Distributions</a></li>
+                        <li class="nav-item ms-1"><a class="nav-link" href="#">About</a></li>
+                    </ul>
+
+                    <!-- Right content -->
+                    <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                        <li class="nav-item ms-1">
+                            <a href="logout" class="btn btn-outline-dark btn-sm">Logout</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
+
 
         <!-- Main Content -->
         <div class="content-wrapper">
