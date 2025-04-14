@@ -12,12 +12,13 @@
         <link rel="stylesheet" href="<?= base_url('templates/css/bootstrap@5.3.3.min.css?v=1.1.1') ?>">
         <link rel="stylesheet" href="<?= base_url('templates/css/bootstrap-icons@1.10.5.css?v=1.1.1') ?>">
         <link rel="stylesheet" href="<?= base_url('templates/css/adminlte@3.2.min.css?v=1.1.1') ?>">
+        
     <?php endif ?>
     
     <!-- Default Icon in the Head Section -->
     <link rel="shortcut icon" href="<?= base_url('templates/img/icon.png') ?>" type="image/x-icon">
 
-    <link rel="stylesheet" href="<?= base_url('templates/css/admin-style.css?v=1.1.1') ?>">
+    <link rel="stylesheet" href="<?= base_url('templates/css/admin-style.css?v=2.2.2') ?>">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
