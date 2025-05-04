@@ -45,6 +45,9 @@ $(document).ready(function () {
         }, 1000);
     }
 
+    // Inventory Table
+    $('#seedTable').DataTable();
+
     // function preventMobileAccess() {
     //     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     //         document.body.innerHTML = `

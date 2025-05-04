@@ -20,6 +20,12 @@
 
     <link rel="stylesheet" href="<?= base_url('templates/css/admin-style.css?v=2.2.2') ?>">
 
+    
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<!-- Font Awesome Icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
