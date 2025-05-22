@@ -13,6 +13,12 @@
         <link rel="stylesheet" href="<?= base_url('templates/css/bootstrap-icons@1.10.5.css?v=1.1.1') ?>">
         <link rel="stylesheet" href="<?= base_url('templates/css/adminlte@3.2.min.css?v=1.1.1') ?>">
     <?php endif ?>
+
+    <!-- Default Icon in the Head Section -->
+    <link rel="shortcut icon" href="<?= base_url('templates/img/icon.png') ?>" type="image/x-icon">
+
+    <link rel="stylesheet" href="<?= base_url('templates/css/admin-style.css?v=2.2.2') ?>">
+
 </head>
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
@@ -54,8 +60,7 @@
         <script src="<?= base_url('templates/js/bootstrap@5.3.3.bundle.min.js?v=2.2.2') ?>"></script>
         <script src="<?= base_url('templates/js/admin-lte@3.2.min.js?v=2.2.2') ?>"></script>
     <?php endif ?>
-
-    <script src="<?= base_url('templates/js/adminscript.js?v=2.2.2') ?>"></script>
+    <script src="<?= base_url('templates/js/adminLoginScript.js?v=2.2.2') ?>"></script>
 
 </body>
 </html>

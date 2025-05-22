@@ -20,3 +20,8 @@ html, body {
 footer {
     flex-shrink: 0; /* Makes sure the footer doesn't stretch unnecessarily */
 }
+
+#seedTable td {
+    vertical-align: middle;
+    white-space: nowrap;
+}

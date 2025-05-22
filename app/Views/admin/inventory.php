@@ -59,13 +59,13 @@
                                     <td>100</td>
                                     <td><span class="badge bg-success">Available</span></td>
                                     <td>1st CROPPING 2025</td>
-                                    <td>2025-04-15</td>
+                                    <td class="align-middle">2025-04-15</td>
                                     <td class="text-center">
                                         <div class="btn-group text-center" role="group">
-                                            <button class="btn btn-sm btn-outline-primary">
+                                            <button class="btn btn-sm btn-outline-primary" title="Edit">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-outline-danger">
+                                            <button class="btn btn-sm btn-outline-danger" title="Delete">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
