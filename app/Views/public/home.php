@@ -62,14 +62,18 @@
                         </li>
                         <li class="nav-item ms-1"><a class="nav-link active" href="#">Home</a></li>
                         <li class="nav-item ms-1"><a class="nav-link" href="#">Request Seeds</a></li>
-                        <li class="nav-item ms-1"><a class="nav-link" href="#">Distributions</a></li>
+                        <li class="nav-item ms-1"><a class="nav-link" href="#">Sent Request</a></li>
                         <li class="nav-item ms-1"><a class="nav-link" href="#">About</a></li>
+                        <li class="nav-item ms-1"><a class="nav-link" href="#">Profile</a></li>
                     </ul>
 
                     <!-- Right content -->
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
-                        <li class="nav-item ms-1">
-                            <a href="logout" class="btn btn-outline-dark btn-sm">Logout</a>
+                        <li class="nav-item mr-2">
+                            <a href="signup" class="btn btn-outline-dark btn-sm">Sign up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="login" class="btn btn-outline-dark btn-sm">Log in</a>
                         </li>
                     </ul>
                 </div>
@@ -87,8 +91,8 @@
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-start">
-                                    <li class="breadcrumb-item"><a href="<?= base_url("admin") ?>">Home</a></li>
-                                    <li class="breadcrumb-item active">Reports</li>
+                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                    <!-- <li class="breadcrumb-item active">Reports</li> -->
                                 </ol>
                             </div>
                         </div>
@@ -107,7 +111,7 @@
 
         <!-- Footer -->
         <footer class="main-footer bg-dark text-white py-4">
-            <div class="container p-4">
+            <!-- <div class="container p-4">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 mb-4 mb-md-0 text-start">
                         <h5 class="text-uppercase">About Us</h5>
@@ -126,9 +130,9 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="text-center p-3 bg-secondary text-white">
-                © 2025 Seed Distribution System | All rights reserved.
+                © 2025 Seed Request and Distribution System with QR Integration | All rights reserved.
             </div>
         </footer>
 

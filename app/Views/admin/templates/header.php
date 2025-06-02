@@ -144,7 +144,7 @@
                         <li class="nav-item">
                             <a href="seedsRequests" class="nav-link <?= session()->get("current_tab") == "seeds_requests" ? "active" : null ?>">
                                 <i class="nav-icon bi bi-journal-text ml-1"></i>
-                                <p>Seeds Requests</p>
+                                <p>Seed Requests</p>
                             </a>
                         </li>
             

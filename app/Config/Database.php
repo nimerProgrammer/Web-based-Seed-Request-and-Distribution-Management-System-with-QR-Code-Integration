@@ -27,9 +27,9 @@ class Database extends Config
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'nimerprogram',
-        'password'     => '@nimerprog25',
-        'database'     => 'department_of_agriculture',
+        'username'     => 'root',
+        'password'     => '',
+        'database'     => 'omas_db',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,

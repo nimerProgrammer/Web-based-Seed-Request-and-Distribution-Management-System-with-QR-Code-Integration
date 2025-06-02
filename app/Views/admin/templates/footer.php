@@ -2,7 +2,7 @@
 
             <!-- Footer -->
             <footer class="main-footer bg-dark text-white py-4">
-                <div class="container p-4">
+                <!-- <div class="container p-4">
                     <div class="row">
                         <div class="col-lg-6 col-md-12 mb-4 mb-md-0 text-start">
                             <h5 class="text-uppercase">About Us</h5>
@@ -21,9 +21,9 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="text-center p-3 bg-secondary text-white">
-                    © 2025 Seed Distribution System | All rights reserved.
+                    © 2025 Seed Request and Distribution System with QR Integration | All rights reserved.
                 </div>
             </footer>
 

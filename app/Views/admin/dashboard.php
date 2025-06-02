@@ -68,5 +68,13 @@
     </div>
 </section>
 
+<section class="content">
+    <div class="container-fluid">
+        <h1 class="text-secondary text-center">
+            Under Development
+        </h1>
+    </div>
+</section>
+
 
 </div>
