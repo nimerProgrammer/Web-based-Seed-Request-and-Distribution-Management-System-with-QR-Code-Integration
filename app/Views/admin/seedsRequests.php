@@ -39,7 +39,7 @@
                         <!-- Rice Seed Inventory Tab -->
                         <div class="tab-pane fade show active" id="rice_seeds" role="tabpanel" aria-labelledby="rice-seed">
                             <div class="table-responsive">
-                                <table id="seedTableRice" class="table table-bordered table-hover">
+                                <table id="seedTable" class="table table-bordered table-hover">
                                     <thead class="table-secondary">
                                         <tr>
                                             <th>No.</th>
@@ -84,7 +84,7 @@
                         <!-- Eggplant Seed Inventory Tab -->
                         <div class="tab-pane fade" id="eggplant_seeds" role="tabpanel" aria-labelledby="eggplant-seed">
                             <div class="table-responsive">
-                                <table id="seedTableEggplant" class="table table-bordered table-hover">
+                                <table id="seedTable" class="table table-bordered table-hover">
                                     <thead class="table-secondary">
                                         <tr>
                                             <th>No.</th>
