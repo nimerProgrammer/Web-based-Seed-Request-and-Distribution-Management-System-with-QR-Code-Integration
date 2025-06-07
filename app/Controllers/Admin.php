@@ -45,7 +45,7 @@ class Admin extends BaseController
         }
     
         session()->set([
-            'user_id' => $user['id'],
+            'user_id' => $user['users_tbl_id'],
             'user_email' => $user['email'],
             'logged_in' => true,
         ]);
@@ -64,7 +64,7 @@ class Admin extends BaseController
 
         $User_Model = new UserModel();
 
-        $user_data = $User_Model->where("id", $user_id)->findAll(1)[0];
+        $user_data = $User_Model->where("users_tbl_id", $user_id)->findAll(1)[0];
 
         return json_encode($user_data);
     }
@@ -89,7 +89,7 @@ class Admin extends BaseController
 
         $User_Model = new UserModel();
 
-        $data["user"] = $User_Model->where("id", session()->get("user_id"))->findAll(1)[0];
+        $data["user"] = $User_Model->where("users_tbl_id", session()->get("user_id"))->findAll(1)[0];
 
         $header = view('admin/templates/header');
         $body = view('admin/dashboard');
