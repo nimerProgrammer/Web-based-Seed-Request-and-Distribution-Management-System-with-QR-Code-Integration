@@ -68,11 +68,7 @@
     </div>
 </section>
 
-<section>
-    <div>
-        
-    </div>
-</section>
+
 <section class="content">
     <div class="container-fluid">
         <h1 class="text-secondary text-center">
