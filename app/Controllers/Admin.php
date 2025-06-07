@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-use App\Models\UserModel;
+use App\Models\AdminModel;
 
 class Admin extends BaseController
 {
@@ -27,7 +27,7 @@ class Admin extends BaseController
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
-        $model = new UserModel();
+        $model = new AdminModel();
         $user = $model->where('email', $email)->first();
 
         if (!$user) {
@@ -62,7 +62,7 @@ class Admin extends BaseController
     {
         $user_id = $this->request->getPost("user_id");
 
-        $User_Model = new UserModel();
+        $User_Model = new AdminModel();
 
         $user_data = $User_Model->where("users_tbl_id", $user_id)->findAll(1)[0];
 
@@ -87,7 +87,7 @@ class Admin extends BaseController
         session()->set("title", "Dashboard");
         session()->set("current_tab", "dashboard");
 
-        $User_Model = new UserModel();
+        $User_Model = new AdminModel();
 
         $data["user"] = $User_Model->where("users_tbl_id", session()->get("user_id"))->findAll(1)[0];
 
@@ -240,7 +240,7 @@ class Admin extends BaseController
     // {
     //     $search = $this->request->getPost("search");
 
-    //     $User_Model = new UserModel();
+    //     $User_Model = new AdminModel();
 
     //     $user_data = $User_Model->like("email", $search)->findAll(5);
 
