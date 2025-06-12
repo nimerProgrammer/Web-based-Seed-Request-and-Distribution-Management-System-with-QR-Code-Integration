@@ -53,6 +53,9 @@ $(document).ready(function () {
     ordering: false,
   });
 
+  $(".set-Table").DataTable({
+    ordering: false,
+  });
   // function preventMobileAccess() {
   //     if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
   //         document.body.innerHTML = `
@@ -139,6 +142,17 @@ $(document).ready(function () {
     if (!$(e.target).closest("#searchForm").length) {
       $("#suggestionsList").hide();
     }
+  });
+
+  // Save New Seed to Inventory
+  const form = document.querySelector("#addSeedModal form");
+  const saveBtn = document.getElementById("add_seed_to_inventory");
+  const cancelBtn = document.querySelector("#addSeedModal .btn-secondary");
+
+  form.addEventListener("submit", function () {
+    saveBtn.innerHTML = "Saving...";
+    saveBtn.disabled = true;
+    cancelBtn.disabled = true;
   });
 
   // Edit Seed Inventory

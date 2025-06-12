@@ -44,6 +44,8 @@
                                     <th>Seed Name</th>
                                     <th>Seed Class</th>
                                     <th>Stock (kg)</th>
+                                    <th>Distributed</th>
+                                    <th>Total</th>
                                     <th>Availability</th>
                                     <th>Cropping Season</th>
                                     <th>Date Stored</th>
@@ -57,7 +59,9 @@
                                         <td><?= $i++ ?></td>
                                         <td><?= esc( $item[ 'seed_name' ] ) ?></td>
                                         <td><?= esc( $item[ 'seed_class' ] ?? '-' ) ?></td>
-                                        <td><?= esc( $item[ 'stock' ] ) ?></td>
+                                        <td><?= esc( $item[ 'stock' ] - $item[ 'distributed' ] ) ?></td>
+                                        <td><?= esc( $item[ 'distributed' ] ?? 0 ) ?></td>
+                                        <td><?= esc( $item[ 'stock' ] + $item[ 'distributed' ] ) ?></td>
                                         <td>
                                             <?php if ( $item[ 'stock' ] > 0 ) : ?>
                                                 <span class="badge bg-success">Available</span>
@@ -68,7 +72,11 @@
                                         <td>
                                             <?= esc( $item[ 'season' ] ) ?> (<?= esc( $item[ 'year' ] ) ?>)
                                         </td>
-                                        <td><?= date( 'F j, Y', strtotime( $item[ 'date_stored' ] ) ) ?></td>
+                                        <td>
+                                            <?= date( 'F j, Y', strtotime( $item[ 'date_stored' ] ) ) ?><br>
+                                            <small><?= date( 'h:i A', strtotime( $item[ 'date_stored' ] ) ) ?></small>
+                                        </td>
+
                                         <!-- Add edit/delete actions here -->
                                         <td class="text-center">
                                             <div class="btn-group text-center" role="group">

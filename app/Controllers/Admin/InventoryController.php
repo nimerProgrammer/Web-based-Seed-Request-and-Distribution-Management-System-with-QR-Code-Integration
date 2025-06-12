@@ -18,7 +18,7 @@ class InventoryController extends BaseController
             'seed_name' => $this->request->getPost( 'add_seed_name' ),
             'seed_class' => $this->request->getPost( 'add_seed_class' ),
             'stock' => $this->request->getPost( 'add_stock' ),
-            'date_stored' => date( 'Y-m-d' ), // You can also get from input if needed
+            'date_stored' => date( 'm-d-Y h:i A' ), // You can also get from input if needed
             'cropping_season_tbl_id' => $this->request->getPost( 'cropping_season_tbl_id' )
         ];
 
@@ -61,16 +61,13 @@ class InventoryController extends BaseController
     {
         $inventoryModel = new \App\Models\InventoryModel();
 
-        if ( $inventoryModel->delete( $id ) )
-        {
+        if ( $inventoryModel->delete( $id ) ) {
             session()->setFlashdata( 'swal', [ 
                 'title' => 'Deleted!',
                 'text' => 'Seed entry deleted successfully.',
                 'icon' => 'success'
             ] );
-        }
-        else
-        {
+        } else {
             session()->setFlashdata( 'swal', [ 
                 'title' => 'Error!',
                 'text' => 'Failed to delete the seed entry.',
