@@ -10,6 +10,7 @@ use App\Models\InventoryModel;
 use App\Models\CroppingSeasonModel;
 use App\Models\SeedRequestsModel;
 use App\Models\ClientInfoModel;
+use App\Models\BeneficiariesModel;
 
 
 class Admin extends BaseController
@@ -29,40 +30,39 @@ class Admin extends BaseController
 
     public function get_user_data()
     {
-        $email = $this->request->getPost( 'email' );
+        $email    = $this->request->getPost( 'email' );
         $password = $this->request->getPost( 'password' );
 
         $model = new UsersModel();
-        $user = $model->where( 'email', $email )->first();
+        $user  = $model->where( 'email', $email )->first();
 
         if ( !$user ) {
             return $this->response->setJSON( [ 
                 'success' => false,
-                'error' => 'Email not found'
+                'error'   => 'Email not found'
             ] );
         }
 
         if ( !password_verify( $password, $user[ 'password' ] ) ) {
             return $this->response->setJSON( [ 
                 'success' => false,
-                'error' => 'Wrong password'
+                'error'   => 'Wrong password'
             ] );
         }
 
         session()->set( [ 
-            'user_id' => $user[ 'users_tbl_id' ],
+            'user_id'    => $user[ 'users_tbl_id' ],
             'user_email' => $user[ 'email' ],
-            'logged_in' => true,
+            'logged_in'  => true,
         ] );
 
         return $this->response->setJSON( [ 
-            'success' => true,
+            'success'      => true,
             'redirect_url' => base_url( 'admin/dashboard' )
         ] );
 
 
     }
-
     public function get_user_data_by_id()
     {
         $user_id = $this->request->getPost( "user_id" );
@@ -81,7 +81,7 @@ class Admin extends BaseController
 
             $response = [ 
                 "alert_type" => "danger",
-                "message" => "You need to login first!"
+                "message"    => "You need to login first!"
             ];
 
             session()->setFlashdata( "response", $response );
@@ -97,7 +97,7 @@ class Admin extends BaseController
         $data[ "user" ] = $User_Model->where( "users_tbl_id", session()->get( "user_id" ) )->findAll( 1 )[ 0 ];
 
         $header = view( 'admin/templates/header' );
-        $body = view( 'admin/dashboard' );
+        $body   = view( 'admin/dashboard' );
         // $modals = view('_admin/modals/profile_modal');
         $footer = view( 'admin/templates/footer' );
 
@@ -111,7 +111,7 @@ class Admin extends BaseController
 
             $response = [ 
                 "alert_type" => "danger",
-                "message" => "You need to login first!"
+                "message"    => "You need to login first!"
             ];
 
             session()->setFlashdata( "response", $response );
@@ -122,7 +122,7 @@ class Admin extends BaseController
         session()->set( "title", "Inventory" );
         session()->set( "current_tab", "inventory" );
 
-        $inventoryModel = new InventoryModel();
+        $inventoryModel       = new InventoryModel();
         $cropping_seasonModel = new CroppingSeasonModel();
 
         $dataInventory[ 'inventory' ] = $inventoryModel
@@ -136,7 +136,7 @@ class Admin extends BaseController
             ->first();
 
         $header = view( 'admin/templates/header' );
-        $body = view( 'admin/inventory', $dataInventory );
+        $body   = view( 'admin/inventory', $dataInventory );
         $modals = view( 'admin/modals/inventory_seed_modal', $dataCroppingSeason );
         $footer = view( 'admin/templates/footer' );
 
@@ -150,7 +150,7 @@ class Admin extends BaseController
 
             $response = [ 
                 "alert_type" => "danger",
-                "message" => "You need to login first!"
+                "message"    => "You need to login first!"
             ];
 
             session()->setFlashdata( "response", $response );
@@ -161,18 +161,15 @@ class Admin extends BaseController
         session()->set( "title", "Seeds Requests" );
         session()->set( "current_tab", "seeds_requests" );
 
-        $inventoryModel = new InventoryModel();
-        $cropping_seasonModel = new CroppingSeasonModel();
+        $inventoryModel     = new InventoryModel();
+        $beneficiariesModel = new BeneficiariesModel();
+        $seedRequestsModel  = new SeedRequestsModel();
 
         $dataInventory[ 'inventory' ] = $inventoryModel
             ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
-            ->orderBy( 'inventory.seed_name', 'ASC' ) // Order by seed_name alphabetically
+            ->orderBy( 'inventory.seed_name', 'ASC' )
             ->findAll();
-
-
-        // ✅ Get seed requests where cropping_season is current, ordered by request date
-        $seedRequestsModel = new SeedRequestsModel();
 
         $dataRequests[ 'seed_requests' ] = $seedRequestsModel
             ->select( [ 
@@ -197,10 +194,31 @@ class Admin extends BaseController
             ->orderBy( 'seed_requests.date_time_requested', 'ASC' )
             ->findAll();
 
+        // ✅ Add beneficiary_status to each request
+        foreach ( $dataRequests[ 'seed_requests' ] as &$request ) {
+            $season    = $request[ 'season' ];
+            $year      = $request[ 'year' ];
+            $seedName  = $request[ 'seed_name' ];
+            $seedClass = $request[ 'seed_class' ];
+            $rsbsa     = $request[ 'rsbsa_ref_no' ];
+            $requestId = $request[ 'seed_requests_tbl_id' ];
+
+            $qrCode = "{$season}-{$year}-{$seedName}-{$seedClass}-{$rsbsa}";
+
+            $beneficiary = $beneficiariesModel
+                ->where( 'seed_requests_tbl_id', $requestId )
+                ->where( 'qr_code', $qrCode )
+                ->first();
+
+            $request[ 'beneficiary_status' ] = $beneficiary[ 'status' ] ?? null;
+        }
+
+        unset( $request ); // clear reference
+
         // ✅ Merge all data and pass to view
-        $data = array_merge( $dataInventory, $dataRequests );
+        $data   = array_merge( $dataInventory, $dataRequests );
         $header = view( 'admin/templates/header' );
-        $body = view( 'admin/seedsRequests', $data );
+        $body   = view( 'admin/seedsRequests', $data );
         // $modals = view('_admin/modals/profile_modal');
         $footer = view( 'admin/templates/footer' );
 
@@ -214,7 +232,7 @@ class Admin extends BaseController
 
             $response = [ 
                 "alert_type" => "danger",
-                "message" => "You need to login first!"
+                "message"    => "You need to login first!"
             ];
 
             session()->setFlashdata( "response", $response );
@@ -225,8 +243,54 @@ class Admin extends BaseController
         session()->set( "title", "Beneficiaries" );
         session()->set( "current_tab", "beneficiaries" );
 
+
+
+        $inventoryModel     = new InventoryModel();
+        $beneficiariesModel = new BeneficiariesModel();
+        $seedRequestsModel  = new SeedRequestsModel();
+        $usersModel         = new UsersModel();
+
+        $dataBeneficiaries[ 'beneficiaries' ] = $beneficiariesModel
+            ->select( [ 
+                'beneficiaries.*',
+                'client_info.rsbsa_ref_no',
+                'client_info.last_name',
+                'client_info.first_name',
+                'client_info.middle_name',
+                'client_info.suffix_and_ext',
+                'client_info.st_pk_brgy',
+                'client_info.mun',
+                'client_info.prov',
+                'client_info.b_date',
+                'client_info.gender',
+                'client_info.farm_area',
+                'client_info.name_land_owner',
+                'users.contact_no',
+                'inventory.inventory_tbl_id',
+                'inventory.seed_name',
+                'inventory.seed_class',
+                'cropping_season.season',
+                'cropping_season.year'
+            ] )
+            ->join( 'seed_requests', 'seed_requests.seed_requests_tbl_id = beneficiaries.seed_requests_tbl_id' )
+            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id' ) // ✅ Join to get contact_no
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->where( 'cropping_season.status', 'Current' )
+            ->orderBy( 'beneficiaries.date_time_received', 'DESC' )
+            ->findAll();
+
+
+        $dataInventory[ 'inventory' ] = $inventoryModel
+            ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
+            ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->orderBy( 'inventory.seed_name', 'ASC' )
+            ->findAll();
+
+        $data   = array_merge( $dataInventory, $dataBeneficiaries );
         $header = view( 'admin/templates/header' );
-        $body = view( 'admin/beneficiaries' );
+        $body   = view( 'admin/beneficiaries', $data );
         // $modals = view('_admin/modals/profile_modal');
         $footer = view( 'admin/templates/footer' );
 
@@ -240,7 +304,7 @@ class Admin extends BaseController
 
             $response = [ 
                 "alert_type" => "danger",
-                "message" => "You need to login first!"
+                "message"    => "You need to login first!"
             ];
 
             session()->setFlashdata( "response", $response );
@@ -252,7 +316,7 @@ class Admin extends BaseController
         session()->set( "current_tab", "reports" );
 
         $header = view( 'admin/templates/header' );
-        $body = view( 'admin/reports' );
+        $body   = view( 'admin/reports' );
         // $modals = view('_admin/modals/profile_modal');
         $footer = view( 'admin/templates/footer' );
 
@@ -266,7 +330,7 @@ class Admin extends BaseController
 
             $response = [ 
                 "alert_type" => "danger",
-                "message" => "You need to login first!"
+                "message"    => "You need to login first!"
             ];
 
             session()->setFlashdata( "response", $response );
@@ -278,7 +342,7 @@ class Admin extends BaseController
         session()->set( "current_tab", "logs" );
 
         $header = view( 'admin/templates/header' );
-        $body = view( 'admin/logs' );
+        $body   = view( 'admin/logs' );
         // $modals = view('_admin/modals/profile_modal');
         $footer = view( 'admin/templates/footer' );
 

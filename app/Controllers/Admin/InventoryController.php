@@ -14,20 +14,24 @@ class InventoryController extends BaseController
     {
         $inventoryModel = new InventoryModel();
 
+        // Get Philippine time
+        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
+        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
+
         $data = [ 
-            'seed_name' => $this->request->getPost( 'add_seed_name' ),
-            'seed_class' => $this->request->getPost( 'add_seed_class' ),
-            'stock' => $this->request->getPost( 'add_stock' ),
-            'date_stored' => date( 'm-d-Y h:i A' ), // You can also get from input if needed
+            'seed_name'              => $this->request->getPost( 'add_seed_name' ),
+            'seed_class'             => $this->request->getPost( 'add_seed_class' ),
+            'stock'                  => $this->request->getPost( 'add_stock' ),
+            'date_stored'            => $formattedDate,
             'cropping_season_tbl_id' => $this->request->getPost( 'cropping_season_tbl_id' )
         ];
 
         $inventoryModel->insert( $data ); // Inserts into the database
 
         session()->setFlashdata( 'swal', [ 
-            'title' => 'Success!',
-            'text' => 'Seed added successfully.',
-            'icon' => 'success',
+            'title'             => 'Success!',
+            'text'              => 'Seed added successfully.',
+            'icon'              => 'success',
             'confirmButtonText' => 'OK' // <- custom button text
         ] );
 
@@ -39,9 +43,9 @@ class InventoryController extends BaseController
         $inventoryModel = new InventoryModel();
 
         $data = [ 
-            'seed_name' => $this->request->getPost( 'edit_seed_name' ),
+            'seed_name'  => $this->request->getPost( 'edit_seed_name' ),
             'seed_class' => $this->request->getPost( 'edit_seed_class' ),
-            'stock' => $this->request->getPost( 'edit_stock' ),
+            'stock'      => $this->request->getPost( 'edit_stock' ),
         ];
 
 
@@ -49,8 +53,8 @@ class InventoryController extends BaseController
 
         session()->setFlashdata( 'swal', [ 
             'title' => 'Updated!',
-            'text' => 'Seed inventory updated successfully.',
-            'icon' => 'success'
+            'text'  => 'Seed inventory updated successfully.',
+            'icon'  => 'success'
         ] );
 
         return redirect()->to( '/admin/inventory' );
@@ -59,19 +63,19 @@ class InventoryController extends BaseController
 
     public function deleteInventory( $id )
     {
-        $inventoryModel = new \App\Models\InventoryModel();
+        $inventoryModel = new InventoryModel();
 
         if ( $inventoryModel->delete( $id ) ) {
             session()->setFlashdata( 'swal', [ 
                 'title' => 'Deleted!',
-                'text' => 'Seed entry deleted successfully.',
-                'icon' => 'success'
+                'text'  => 'Seed entry deleted successfully.',
+                'icon'  => 'success'
             ] );
         } else {
             session()->setFlashdata( 'swal', [ 
                 'title' => 'Error!',
-                'text' => 'Failed to delete the seed entry.',
-                'icon' => 'error'
+                'text'  => 'Failed to delete the seed entry.',
+                'icon'  => 'error'
             ] );
         }
 

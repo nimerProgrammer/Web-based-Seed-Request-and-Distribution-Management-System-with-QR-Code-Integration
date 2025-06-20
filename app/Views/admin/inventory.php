@@ -72,10 +72,20 @@
                                         <td>
                                             <?= esc( $item[ 'season' ] ) ?> (<?= esc( $item[ 'year' ] ) ?>)
                                         </td>
-                                        <td>
-                                            <?= date( 'F j, Y', strtotime( $item[ 'date_stored' ] ) ) ?><br>
-                                            <small><?= date( 'h:i A', strtotime( $item[ 'date_stored' ] ) ) ?></small>
+                                        <td class="align-middle">
+                                            <?php
+                                            $rawStored = $item[ 'date_stored' ];
+                                            $storedObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawStored );
+
+                                            if ( $storedObj ) :
+                                                ?>
+                                                <?= $storedObj->format( 'F j, Y' ) ?><br>
+                                                <small><?= $storedObj->format( 'h:i A' ) ?></small>
+                                            <?php else : ?>
+                                                <span class="text-muted">—</span>
+                                            <?php endif; ?>
                                         </td>
+
 
                                         <!-- Add edit/delete actions here -->
                                         <td class="text-center">

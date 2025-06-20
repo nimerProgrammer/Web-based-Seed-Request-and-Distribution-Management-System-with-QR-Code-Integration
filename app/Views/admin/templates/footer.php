@@ -56,7 +56,7 @@
 
 <?php endif ?>
 
-<script src="<?= base_url( 'templates/js/adminscript.js?v=2.2.2' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/adminscript.js?v=3.3.3' ) ?>"></script>
 
 <?php if ( session()->has( 'swal' ) ) : ?>
     <script>

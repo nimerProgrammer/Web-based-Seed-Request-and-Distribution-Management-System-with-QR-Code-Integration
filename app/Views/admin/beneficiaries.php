@@ -1,6 +1,3 @@
-
-
-
 <div class="content-wrapper">
     <!-- Content Header -->
     <div class="content-header border-bottom">
@@ -9,7 +6,7 @@
                 <!-- Breadcrumb -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-start">
-                        <li class="breadcrumb-item"><a href="<?= base_url('admin') ?>">Home</a></li>
+                        <li class="breadcrumb-item"><a href="<?= base_url( 'admin' ) ?>">Home</a></li>
                         <li class="breadcrumb-item active">Beneficiaries</li>
                     </ol>
                 </div>
@@ -20,7 +17,194 @@
     <!-- Main Content -->
     <section class="content">
         <div class="container-fluid">
-            <h1 class="text-center text-secondary">Under Development</h1>
+            <div class="card mt-3 text-center">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="beneficiariesInventoryTabs" role="tablist">
+                        <?php $isFirst = true; ?>
+                        <?php foreach ( $inventory as $item ) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link <?= $isFirst ? 'active' : '' ?>"
+                                    id="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>" data-bs-toggle="tab"
+                                    data-bs-target="#tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>" role="tab"
+                                    aria-controls="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                    aria-selected="<?= $isFirst ? 'true' : 'false' ?>">
+                                    <?= esc( $item[ 'seed_name' ] ) ?>
+                                </a>
+
+                            </li>
+                            <?php $isFirst = false; ?>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+                <div class="card-body">
+                    <div class="tab-content">
+                        <?php $isFirst = true; ?>
+                        <?php foreach ( $inventory as $item ) : ?>
+                            <div class=" tab-pane fade <?= $isFirst ? 'show active' : '' ?>"
+                                id="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>" role="tabpanel"
+                                aria-labelledby="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>">
+                                <div class="table-responsive">
+                                    <table class="set-Table table table-bordered table-hover">
+                                        <thead class="table-secondary">
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>RSBSA Reference No.</th>
+                                                <th>Last Name</th>
+                                                <th>First Name</th>
+                                                <th>Middle Name</th>
+                                                <th>Suffix & Ext.</th>
+                                                <th>Street/Purok/Barangay</th>
+                                                <th>Municipality</th>
+                                                <th>Province</th>
+                                                <th>Birthdate<br>(mm/dd/yyyy)</th>
+                                                <th>Gender<br>Male/Female</th>
+                                                <th>Contact No.<br>(Mobile No.)</th>
+                                                <th>Farm Area<br>(Hectares)</th>
+                                                <th>Province</th>
+                                                <th>Date & Time Received</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $i = 1; ?>
+                                            <?php foreach ( $beneficiaries as $beneficiary ) : ?>
+                                                <?php if ( $beneficiary[ 'inventory_tbl_id' ] != $item[ 'inventory_tbl_id' ] )
+                                                    continue; ?>
+
+                                                <tr class="text-center">
+                                                    <td class="align-middle"><?= $i++ ?></td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'rsbsa_ref_no' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'last_name' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'first_name' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'middle_name' ] ?? '—' ) ?>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <?= esc( $beneficiary[ 'suffix_and_ext' ] ?? '—' ) ?>
+                                                    </td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'st_pk_brgy' ] ?? '—' ) ?>
+                                                    </td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'mun' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'prov' ] ) ?></td>
+                                                    <td class="align-middle">
+                                                        <?php
+                                                        $rawBDate = $beneficiary[ 'b_date' ];
+                                                        $dateObj  = DateTime::createFromFormat( 'm-d-Y', $rawBDate );
+                                                        ?>
+
+                                                        <?php if ( $dateObj ) : ?>
+                                                            <?= $dateObj->format( 'F j, Y' ) ?>
+                                                        <?php else : ?>
+                                                            <span class="text-muted">—</span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'gender' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'contact_no' ] ?? '—' ) ?>
+                                                    </td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'farm_area' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'prov' ] ) ?></td>
+                                                    <td class="align-middle">
+                                                        <?php
+                                                        $rawDate = $beneficiary[ 'date_time_received' ];
+
+                                                        // Create DateTime from the exact format used in DB
+                                                        $dateObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawDate );
+
+                                                        if ( $dateObj ) : ?>
+                                                            <?= $dateObj->format( 'F j, Y' ) ?><br>
+                                                            <small><?= $dateObj->format( 'h:i A' ) ?></small>
+                                                        <?php else : ?>
+                                                            <span class="text-muted">—</span>
+                                                        <?php endif; ?>
+                                                    </td>
+
+
+                                                    <td class="align-middle">
+                                                        <?php if ( $beneficiary[ 'status' ] === 'Received' ) : ?>
+                                                            <span class="badge bg-success">Received</span>
+                                                        <?php else : ?>
+                                                            <span
+                                                                class="badge bg-primary"><?= esc( $beneficiary[ 'status' ] ) ?></span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <div class="btn-group" role="group">
+                                                            <?php
+                                                            $isReceived    = $beneficiary[ 'status' ] === 'Received';
+                                                            $beneficiaryId = $beneficiary[ 'beneficiaries_tbl_id' ];
+                                                            ?>
+
+                                                            <?php if ( $isReceived ) : ?>
+                                                                <!-- Undo Receive Button -->
+                                                                <form method="post"
+                                                                    action="<?= base_url( '/admin/beneficiaries/undoReceive/' . $beneficiaryId ) ?>"
+                                                                    style="display:inline;">
+                                                                    <?= csrf_field() ?>
+                                                                    <input type="hidden" name="beneficiaries_tbl_id"
+                                                                        value="<?= esc( $beneficiaryId ) ?>">
+                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                                                        title="Undo Receive"
+                                                                        onclick="return confirm('Undo received status for this beneficiary?')">
+                                                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                                                    </button>
+                                                                </form>
+                                                            <?php else : ?>
+                                                                <!-- Mark as Received Button -->
+                                                                <form method="post"
+                                                                    action="<?= base_url( '/admin/beneficiaries/markReceived/' . $beneficiaryId ) ?>"
+                                                                    style="display:inline;">
+                                                                    <?= csrf_field() ?>
+                                                                    <input type="hidden" name="beneficiaries_tbl_id"
+                                                                        value="<?= esc( $beneficiaryId ) ?>">
+                                                                    <button type="submit" class="btn btn-sm btn-outline-primary"
+                                                                        title="Mark as Received"
+                                                                        onclick="return confirm('Mark this beneficiary as received?')">
+                                                                        <i class="bi bi-check-circle"></i>
+                                                                    </button>
+                                                                </form>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+
+
+
+
+
+                                    </table>
+                                </div>
+                            </div>
+                            <?php $isFirst = false; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabLinks = document.querySelectorAll('#beneficiariesInventoryTabs .nav-link');
+
+        // Restore active tab from localStorage
+        const savedTabId = localStorage.getItem('activeBeneficiariesInventoryTab');
+        if (savedTabId) {
+            const savedTab = document.querySelector(`#beneficiariesInventoryTabs .nav-link#${savedTabId}`);
+            if (savedTab) {
+                const tabInstance = new bootstrap.Tab(savedTab);
+                tabInstance.show();
+            }
+        }
+
+        // Save active tab on tab change
+        tabLinks.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function (event) {
+                localStorage.setItem('activeBeneficiariesInventoryTab', event.target.id);
+            });
+        });
+    });
+</script>
