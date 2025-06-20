@@ -162,70 +162,67 @@
                                                                 <!-- If status is Received, show only dash -->
                                                                 —
                                                             <?php else : ?>
-                                                                <!-- Approve Button -->
+                                                                <!-- Approve -->
                                                                 <?php if ( !$isApproved && !$isRejected ) : ?>
                                                                     <form method="post"
                                                                         action="<?= base_url( '/admin/seedrequests/approve/' . $request[ 'seed_requests_tbl_id' ] ) ?>"
-                                                                        style="display:inline;">
+                                                                        class="approve-form d-inline">
                                                                         <?= csrf_field() ?>
                                                                         <?php foreach ( $formData as $name => $value ) : ?>
                                                                             <input type="hidden" name="<?= esc( $name ) ?>"
                                                                                 value="<?= esc( $value ) ?>">
                                                                         <?php endforeach; ?>
                                                                         <button type="submit" class="btn btn-sm btn-outline-primary"
-                                                                            title="Approve"
-                                                                            onclick="return confirm('Approve this request?')">
+                                                                            title="Approve">
                                                                             <i class="bi bi-check-circle"></i>
                                                                         </button>
                                                                     </form>
                                                                 <?php endif; ?>
 
-                                                                <!-- Undo Approve Button -->
+                                                                <!-- Undo Approve -->
                                                                 <?php if ( $isApproved ) : ?>
                                                                     <form method="post"
                                                                         action="<?= base_url( '/admin/seedrequests/undoApproved/' . $request[ 'seed_requests_tbl_id' ] ) ?>"
-                                                                        style="display:inline;">
+                                                                        class="undo-approve-form d-inline">
                                                                         <?= csrf_field() ?>
                                                                         <?php foreach ( $formData as $name => $value ) : ?>
                                                                             <input type="hidden" name="<?= esc( $name ) ?>"
                                                                                 value="<?= esc( $value ) ?>">
                                                                         <?php endforeach; ?>
                                                                         <button type="submit" class="btn btn-sm btn-outline-secondary"
-                                                                            title="Undo Approve"
-                                                                            onclick="return confirm('Undo approval?')">
+                                                                            title="Undo Approve">
                                                                             <i class="bi bi-arrow-counterclockwise"></i>
                                                                         </button>
                                                                     </form>
                                                                 <?php endif; ?>
 
-                                                                <!-- Reject Button -->
+                                                                <!-- Reject -->
                                                                 <?php if ( !$isApproved && !$isRejected ) : ?>
                                                                     <form method="post"
                                                                         action="<?= base_url( '/admin/seedrequests/reject/' . $request[ 'seed_requests_tbl_id' ] ) ?>"
-                                                                        style="display:inline;">
+                                                                        class="reject-form d-inline">
                                                                         <?= csrf_field() ?>
                                                                         <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                                            title="Reject"
-                                                                            onclick="return confirm('Reject this request?')">
+                                                                            title="Reject">
                                                                             <i class="bi bi-x-circle"></i>
                                                                         </button>
                                                                     </form>
                                                                 <?php endif; ?>
 
-                                                                <!-- Undo Reject Button -->
+                                                                <!-- Undo Reject -->
                                                                 <?php if ( $isRejected ) : ?>
                                                                     <form method="post"
                                                                         action="<?= base_url( '/admin/seedrequests/undoRejected/' . $request[ 'seed_requests_tbl_id' ] ) ?>"
-                                                                        style="display:inline;">
+                                                                        class="undo-reject-form d-inline">
                                                                         <?= csrf_field() ?>
                                                                         <button type="submit" class="btn btn-sm btn-outline-secondary"
-                                                                            title="Undo Reject"
-                                                                            onclick="return confirm('Undo rejection?')">
+                                                                            title="Undo Reject">
                                                                             <i class="bi bi-arrow-counterclockwise"></i>
                                                                         </button>
                                                                     </form>
                                                                 <?php endif; ?>
                                                             <?php endif; ?>
+
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -262,5 +259,41 @@
                 localStorage.setItem('activeInventoryTab', event.target.id);
             });
         });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const swalFormHandler = (selector, title, text) => {
+            document.querySelectorAll(selector).forEach(function (form) {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: title,
+                        text: text,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Yes, continue",
+                        cancelButtonText: "Cancel",
+                        customClass: {
+                            confirmButton: "btn btn-sm btn-primary me-2",
+                            cancelButton: "btn btn-sm btn-secondary"
+                        },
+                        buttonsStyling: false
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            showLoader(); // Optional
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        };
+
+        // Bind each action with appropriate confirmation
+        swalFormHandler(".approve-form", "Approve request?", "Are you sure you want to approve this request?");
+        swalFormHandler(".undo-approve-form", "Undo approval?", "Are you sure you want to undo this approval?");
+        swalFormHandler(".reject-form", "Reject request?", "Are you sure you want to reject this request?");
+        swalFormHandler(".undo-reject-form", "Undo rejection?", "Are you sure you want to undo this rejection?");
     });
 </script>

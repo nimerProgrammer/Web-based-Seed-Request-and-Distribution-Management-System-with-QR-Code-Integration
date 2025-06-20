@@ -36,7 +36,8 @@
 				</div>
 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-sm btn-primary" id="add_seed_to_inventory">Save</button>
+					<button type="submit" class="btn btn-sm btn-primary" id="add_seed_to_inventory"
+						onclick="showLoader()">Save</button>
 					<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
 				</div>
 			</form>
@@ -79,7 +80,8 @@
 				</div>
 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-sm btn-primary" id="edit_update_button">Update</button>
+					<button type="submit" class="btn btn-sm btn-primary" id="edit_update_button"
+						onclick="showLoader()">Update</button>
 					<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"
 						id="edit_cancel_button">Cancel</button>
 				</div>

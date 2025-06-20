@@ -135,17 +135,15 @@
                                                             $beneficiaryId = $beneficiary[ 'beneficiaries_tbl_id' ];
                                                             ?>
 
-                                                            <?php if ( $isReceived ) : ?>
-                                                                <!-- Undo Receive Button -->
+                                                            <?php if ( $isReceived ) : ?><!-- Undo Receive Button -->
                                                                 <form method="post"
                                                                     action="<?= base_url( '/admin/beneficiaries/undoReceive/' . $beneficiaryId ) ?>"
-                                                                    style="display:inline;">
+                                                                    class="undo-receive-form" style="display:inline;">
                                                                     <?= csrf_field() ?>
                                                                     <input type="hidden" name="beneficiaries_tbl_id"
                                                                         value="<?= esc( $beneficiaryId ) ?>">
                                                                     <button type="submit" class="btn btn-sm btn-outline-secondary"
-                                                                        title="Undo Receive"
-                                                                        onclick="return confirm('Undo received status for this beneficiary?')">
+                                                                        title="Undo Receive">
                                                                         <i class="bi bi-arrow-counterclockwise"></i>
                                                                     </button>
                                                                 </form>
@@ -153,17 +151,17 @@
                                                                 <!-- Mark as Received Button -->
                                                                 <form method="post"
                                                                     action="<?= base_url( '/admin/beneficiaries/markReceived/' . $beneficiaryId ) ?>"
-                                                                    style="display:inline;">
+                                                                    class="mark-receive-form" style="display:inline;">
                                                                     <?= csrf_field() ?>
                                                                     <input type="hidden" name="beneficiaries_tbl_id"
                                                                         value="<?= esc( $beneficiaryId ) ?>">
                                                                     <button type="submit" class="btn btn-sm btn-outline-primary"
-                                                                        title="Mark as Received"
-                                                                        onclick="return confirm('Mark this beneficiary as received?')">
+                                                                        title="Mark as Received">
                                                                         <i class="bi bi-check-circle"></i>
                                                                     </button>
                                                                 </form>
                                                             <?php endif; ?>
+
                                                         </div>
                                                     </td>
 
@@ -206,5 +204,38 @@
                 localStorage.setItem('activeBeneficiariesInventoryTab', event.target.id);
             });
         });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function attachSwal(selector, title, text) {
+            document.querySelectorAll(selector).forEach(function (form) {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: title,
+                        text: text,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Yes, continue",
+                        cancelButtonText: "Cancel",
+                        customClass: {
+                            confirmButton: "btn btn-sm btn-primary me-2",
+                            cancelButton: "btn btn-sm btn-secondary"
+                        },
+                        buttonsStyling: false
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            showLoader(); // Optional loader
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        }
+
+        attachSwal(".mark-receive-form", "Mark as received?", "Confirm that this beneficiary has received the seeds?");
+        attachSwal(".undo-receive-form", "Undo received?", "Are you sure you want to undo the received status?");
     });
 </script>

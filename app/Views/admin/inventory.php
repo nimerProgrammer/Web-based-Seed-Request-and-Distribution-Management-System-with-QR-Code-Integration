@@ -62,8 +62,9 @@
                                         <td><?= esc( $item[ 'stock' ] - $item[ 'distributed' ] ) ?></td>
                                         <td><?= esc( $item[ 'distributed' ] ?? 0 ) ?></td>
                                         <td><?= esc( $item[ 'stock' ] + $item[ 'distributed' ] ) ?></td>
-                                        <td>
+                                        <td class="text-center">
                                             <?php if ( $item[ 'stock' ] > 0 ) : ?>
+                                                <?= esc( $item[ 'stock' ] - $item[ 'distributed' ] ) ?> <br>
                                                 <span class="badge bg-success">Available</span>
                                             <?php else : ?>
                                                 <span class="badge bg-danger">Out of Stock</span>
@@ -120,56 +121,31 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".delete-inventory-button").forEach((button) => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+                const href = this.getAttribute("href");
 
-    // document.querySelectorAll('.edit-inventory-button').forEach(button => {
-    //     button.addEventListener('click', function () {
-    //         document.getElementById('edit_inventory_id').value = this.dataset.id;
-    //         document.getElementById('edit_seed_name').value = this.dataset.name;
-    //         document.getElementById('edit_seed_class').value = this.dataset.class;
-    //         document.getElementById('edit_stock').value = this.dataset.stock;
-
-    //         // Set form action dynamically
-    //         document.getElementById('editSeedForm').action = `/admin/inventory/update/${this.dataset.id}`;
-    //     });
-    // });
-
-    // // Wait for DOM to load
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const form = document.getElementById('editSeedForm');
-    //     const updateBtn = document.getElementById('edit_update_button');
-    //     const cancelBtn = document.getElementById('edit_cancel_button');
-
-    //     form.addEventListener('submit', function () {
-    //         updateBtn.innerHTML = 'Updating...';
-    //         updateBtn.disabled = true;
-    //         cancelBtn.disabled = true;
-    //     });
-    // });
-</script>
-
-<script>
-    // document.querySelectorAll('.delete-button').forEach(button => {
-    //     button.addEventListener('click', function (event) {
-    //         event.preventDefault();
-    //         const href = this.getAttribute('href');
-
-    //         Swal.fire({
-    //             title: 'Are you sure?',
-    //             text: "You won't be able to revert this!",
-    //             icon: 'warning',
-    //             showCancelButton: true,
-    //             confirmButtonText: 'Yes, delete it!',
-    //             cancelButtonText: 'Cancel',
-    //             customClass: {
-    //                 confirmButton: 'btn btn-sm btn-primary mr-1',
-    //                 cancelButton: 'btn btn-sm btn-danger'
-    //             },
-    //             buttonsStyling: false
-    //         }).then((result) => {
-    //             if (result.isConfirmed) {
-    //                 window.location.href = href;
-    //             }
-    //         });
-    //     });
-    // });
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "Cancel",
+                    customClass: {
+                        confirmButton: "btn btn-sm btn-primary mr-1",
+                        cancelButton: "btn btn-sm btn-secondary",
+                    },
+                    buttonsStyling: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showLoader();
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
+    });
 </script>

@@ -180,29 +180,4 @@ $(document).ready(function () {
       cancelBtn.disabled = true;
     });
   });
-
-  document.querySelectorAll(".delete-inventory-button").forEach((button) => {
-    button.addEventListener("click", function (event) {
-      event.preventDefault();
-      const href = this.getAttribute("href");
-
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "Cancel",
-        customClass: {
-          confirmButton: "btn btn-sm btn-primary mr-1",
-          cancelButton: "btn btn-sm btn-danger",
-        },
-        buttonsStyling: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = href;
-        }
-      });
-    });
-  });
 });
