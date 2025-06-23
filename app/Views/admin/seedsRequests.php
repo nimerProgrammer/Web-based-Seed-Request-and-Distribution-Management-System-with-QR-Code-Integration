@@ -149,12 +149,17 @@
                                                             $qrCode = "{$season}-{$year}-{$seedName}-{$seedClass}-{$rsbsa}";
 
                                                             $formData = [ 
-                                                                'rsbsa'      => $rsbsa,
-                                                                'season'     => $season,
-                                                                'year'       => $year,
-                                                                'seed_name'  => $seedName,
-                                                                'seed_class' => $seedClass
+                                                                'rsbsa'          => $rsbsa,
+                                                                'season'         => $season,
+                                                                'year'           => $year,
+                                                                'seed_name'      => $seedName,
+                                                                'seed_class'     => $seedClass,
+                                                                'first_name'     => $request[ 'first_name' ],
+                                                                'middle_name'    => $request[ 'middle_name' ] ?? '',
+                                                                'last_name'      => $request[ 'last_name' ],
+                                                                'suffix_and_ext' => $request[ 'suffix_and_ext' ] ?? ''
                                                             ];
+
                                                             ?>
 
 
@@ -202,6 +207,10 @@
                                                                         action="<?= base_url( '/admin/seedrequests/reject/' . $request[ 'seed_requests_tbl_id' ] ) ?>"
                                                                         class="reject-form d-inline">
                                                                         <?= csrf_field() ?>
+                                                                        <?php foreach ( $formData as $name => $value ) : ?>
+                                                                            <input type="hidden" name="<?= esc( $name ) ?>"
+                                                                                value="<?= esc( $value ) ?>">
+                                                                        <?php endforeach; ?>
                                                                         <button type="submit" class="btn btn-sm btn-outline-danger"
                                                                             title="Reject">
                                                                             <i class="bi bi-x-circle"></i>
@@ -215,6 +224,10 @@
                                                                         action="<?= base_url( '/admin/seedrequests/undoRejected/' . $request[ 'seed_requests_tbl_id' ] ) ?>"
                                                                         class="undo-reject-form d-inline">
                                                                         <?= csrf_field() ?>
+                                                                        <?php foreach ( $formData as $name => $value ) : ?>
+                                                                            <input type="hidden" name="<?= esc( $name ) ?>"
+                                                                                value="<?= esc( $value ) ?>">
+                                                                        <?php endforeach; ?>
                                                                         <button type="submit" class="btn btn-sm btn-outline-secondary"
                                                                             title="Undo Reject">
                                                                             <i class="bi bi-arrow-counterclockwise"></i>
@@ -259,41 +272,5 @@
                 localStorage.setItem('activeInventoryTab', event.target.id);
             });
         });
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const swalFormHandler = (selector, title, text) => {
-            document.querySelectorAll(selector).forEach(function (form) {
-                form.addEventListener("submit", function (event) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: title,
-                        text: text,
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Yes, continue",
-                        cancelButtonText: "Cancel",
-                        customClass: {
-                            confirmButton: "btn btn-sm btn-primary me-2",
-                            cancelButton: "btn btn-sm btn-secondary"
-                        },
-                        buttonsStyling: false
-                    }).then(function (result) {
-                        if (result.isConfirmed) {
-                            showLoader(); // Optional
-                            form.submit();
-                        }
-                    });
-                });
-            });
-        };
-
-        // Bind each action with appropriate confirmation
-        swalFormHandler(".approve-form", "Approve request?", "Are you sure you want to approve this request?");
-        swalFormHandler(".undo-approve-form", "Undo approval?", "Are you sure you want to undo this approval?");
-        swalFormHandler(".reject-form", "Reject request?", "Are you sure you want to reject this request?");
-        swalFormHandler(".undo-reject-form", "Undo rejection?", "Are you sure you want to undo this rejection?");
     });
 </script>

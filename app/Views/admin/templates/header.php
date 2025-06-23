@@ -103,35 +103,6 @@
     </div>
 </div>
 
-<script>
-    function showLoader() {
-        const loader = document.getElementById("loading-spinner");
-        if (loader) {
-            loader.style.display = "flex";
-        }
-    }
-
-    function hideLoader() {
-        const loader = document.getElementById("loading-spinner");
-        if (loader) {
-            loader.style.display = "none";
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        // Sidebar link auto-show loader
-        document.querySelectorAll(".nav-sidebar .nav-link").forEach(link => {
-            link.addEventListener("click", function (e) {
-                if (!e.ctrlKey && !e.metaKey && !e.shiftKey && this.getAttribute("target") !== "_blank") {
-                    showLoader();
-                }
-            });
-        });
-
-        // Auto-hide loader when page fully loads
-        window.addEventListener("load", hideLoader);
-    });
-</script>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">

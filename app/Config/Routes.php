@@ -11,12 +11,18 @@ $routes->get( '/', 'Home::index' );
 // $routes->get('/home', 'Home::index');
 // $routes->get('/public', 'Home::index');
 
+
+/*** LOGIN ***/
+$routes->get( '/admin/login', 'Admin::login' );
+/*** SERVER REQUESTS ***/
+// User data API endpoints
+$routes->post( '/get_user_data', 'Admin::get_user_data' );
+
+
 /*** ADMIN PAGES ***/
 // Admin authentication and dashboard routes
 $routes->get( '/admin', 'Admin::index' );
-$routes->get( '/admin/login', 'Admin::login' );
 $routes->get( '/admin/dashboard', 'Admin::dashboard' );
-
 // Admin management pages
 $routes->get( '/admin/inventory', 'Admin::inventory' );
 $routes->get( '/admin/seedsRequests', 'Admin::seedsRequests' );
@@ -25,16 +31,13 @@ $routes->get( '/admin/reports', 'Admin::reports' );
 $routes->get( '/admin/logs', 'Admin::logs' );
 $routes->get( '/admin/logout', 'Admin::logout' );
 
-/*** SERVER REQUESTS ***/
-// User data API endpoints
-$routes->post( '/get_user_data', 'Admin::get_user_data' );
-$routes->post( '/get_user_data_by_id', 'Admin::get_user_data_by_id' );
 
 /*** INVENTORY CONTROLLER ACTIONS ***/
 // Save, update, and delete inventory items
 $routes->post( '/admin/inventory/save', 'Admin\InventoryController::saveInventory' );
 $routes->get( '/admin/inventory/delete/(:num)', 'Admin\InventoryController::deleteInventory/$1' );
 $routes->post( '/admin/inventory/update/(:num)', 'Admin\InventoryController::updateInventory/$1' );
+
 
 /*** SEED REQUESTS CONTROLLER ACTIONS ***/
 // Approve / Undo Approve
@@ -44,9 +47,18 @@ $routes->post( 'admin/seedrequests/undoApproved/(:num)', 'Admin\SeedRequestsCont
 $routes->post( 'admin/seedrequests/reject/(:num)', 'Admin\SeedRequestsController::reject/$1' );
 $routes->post( 'admin/seedrequests/undoRejected/(:num)', 'Admin\SeedRequestsController::undoRejected/$1' );
 
+
 /*** BENEFICIARIES CONTROLLER ACTIONS ***/
 // Route to mark a beneficiary as received
 $routes->post( 'admin/beneficiaries/markReceived/(:num)', 'Admin\BeneficiariesController::markReceived/$1' );
 // Route to undo a received beneficiary
 $routes->post( 'admin/beneficiaries/undoReceive/(:num)', 'Admin\BeneficiariesController::undoReceive/$1' );
+
+/*** REPORTS CONTROLLER ACTIONS ***/
+$routes->get( '/admin/reports/setListView/(:segment)', 'Admin\ReportsController::setListView/$1' );
+$routes->post( '/admin/reports/exportToExcel', 'Admin\ReportsController::exportToExcel' );
+
+/*** LOGS CONTROLLER ACTIONS ***/
+$routes->post( '/admin/logs/clearLogs', 'Admin\LogsController::clearLogs' );
+
 

@@ -54,7 +54,7 @@
                                                 <th>First Name</th>
                                                 <th>Middle Name</th>
                                                 <th>Suffix & Ext.</th>
-                                                <th>Street/Purok/Barangay</th>
+                                                <th>Barangay</th>
                                                 <th>Municipality</th>
                                                 <th>Province</th>
                                                 <th>Birthdate<br>(mm/dd/yyyy)</th>
@@ -83,7 +83,7 @@
                                                     <td class="align-middle">
                                                         <?= esc( $beneficiary[ 'suffix_and_ext' ] ?? '—' ) ?>
                                                     </td>
-                                                    <td class="align-middle"><?= esc( $beneficiary[ 'st_pk_brgy' ] ?? '—' ) ?>
+                                                    <td class="align-middle"><?= esc( $beneficiary[ 'brgy' ] ?? '—' ) ?>
                                                     </td>
                                                     <td class="align-middle"><?= esc( $beneficiary[ 'mun' ] ) ?></td>
                                                     <td class="align-middle"><?= esc( $beneficiary[ 'prov' ] ) ?></td>
@@ -118,8 +118,6 @@
                                                             <span class="text-muted">—</span>
                                                         <?php endif; ?>
                                                     </td>
-
-
                                                     <td class="align-middle">
                                                         <?php if ( $beneficiary[ 'status' ] === 'Received' ) : ?>
                                                             <span class="badge bg-success">Received</span>
@@ -136,30 +134,44 @@
                                                             ?>
 
                                                             <?php if ( $isReceived ) : ?><!-- Undo Receive Button -->
-                                                                <form method="post"
-                                                                    action="<?= base_url( '/admin/beneficiaries/undoReceive/' . $beneficiaryId ) ?>"
+                                                                <form method="post" action="<?= base_url( '/admin/beneficiaries/undoReceive/' . $beneficiaryId ) ?>"
                                                                     class="undo-receive-form" style="display:inline;">
                                                                     <?= csrf_field() ?>
-                                                                    <input type="hidden" name="beneficiaries_tbl_id"
-                                                                        value="<?= esc( $beneficiaryId ) ?>">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"
-                                                                        title="Undo Receive">
+                                                                    <input type="hidden" name="beneficiaries_tbl_id" value="<?= esc( $beneficiaryId ) ?>">
+                                                                    <input type="hidden" name="rsbsa_ref_no" value="<?= esc( $beneficiary[ 'rsbsa_ref_no' ] ) ?>">
+                                                                    <input type="hidden" name="first_name" value="<?= esc( $beneficiary[ 'first_name' ] ) ?>">
+                                                                    <input type="hidden" name="middle_name" value="<?= esc( $beneficiary[ 'middle_name' ] ?? '' ) ?>">
+                                                                    <input type="hidden" name="last_name" value="<?= esc( $beneficiary[ 'last_name' ] ) ?>">
+                                                                    <input type="hidden" name="suffix_and_ext" value="<?= esc( $beneficiary[ 'suffix_and_ext' ] ?? '' ) ?>">
+                                                                
+                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary" title="Undo Receive">
                                                                         <i class="bi bi-arrow-counterclockwise"></i>
                                                                     </button>
                                                                 </form>
                                                             <?php else : ?>
-                                                                <!-- Mark as Received Button -->
                                                                 <form method="post"
                                                                     action="<?= base_url( '/admin/beneficiaries/markReceived/' . $beneficiaryId ) ?>"
                                                                     class="mark-receive-form" style="display:inline;">
+
                                                                     <?= csrf_field() ?>
-                                                                    <input type="hidden" name="beneficiaries_tbl_id"
-                                                                        value="<?= esc( $beneficiaryId ) ?>">
+
+                                                                    <input type="hidden" name="rsbsa_ref_no"
+                                                                        value="<?= esc( $beneficiary[ 'rsbsa_ref_no' ] ) ?>">
+                                                                    <input type="hidden" name="first_name"
+                                                                        value="<?= esc( $beneficiary[ 'first_name' ] ) ?>">
+                                                                    <input type="hidden" name="middle_name"
+                                                                        value="<?= esc( $beneficiary[ 'middle_name' ] ?? '' ) ?>">
+                                                                    <input type="hidden" name="last_name"
+                                                                        value="<?= esc( $beneficiary[ 'last_name' ] ) ?>">
+                                                                    <input type="hidden" name="suffix_and_ext"
+                                                                        value="<?= esc( $beneficiary[ 'suffix_and_ext' ] ?? '' ) ?>">
+
                                                                     <button type="submit" class="btn btn-sm btn-outline-primary"
                                                                         title="Mark as Received">
                                                                         <i class="bi bi-check-circle"></i>
                                                                     </button>
                                                                 </form>
+
                                                             <?php endif; ?>
 
                                                         </div>
@@ -168,11 +180,6 @@
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
-
-
-
-
-
                                     </table>
                                 </div>
                             </div>
@@ -207,35 +214,3 @@
     });
 </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        function attachSwal(selector, title, text) {
-            document.querySelectorAll(selector).forEach(function (form) {
-                form.addEventListener("submit", function (event) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: title,
-                        text: text,
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Yes, continue",
-                        cancelButtonText: "Cancel",
-                        customClass: {
-                            confirmButton: "btn btn-sm btn-primary me-2",
-                            cancelButton: "btn btn-sm btn-secondary"
-                        },
-                        buttonsStyling: false
-                    }).then(function (result) {
-                        if (result.isConfirmed) {
-                            showLoader(); // Optional loader
-                            form.submit();
-                        }
-                    });
-                });
-            });
-        }
-
-        attachSwal(".mark-receive-form", "Mark as received?", "Confirm that this beneficiary has received the seeds?");
-        attachSwal(".undo-receive-form", "Undo received?", "Are you sure you want to undo the received status?");
-    });
-</script>

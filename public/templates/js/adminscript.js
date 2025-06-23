@@ -48,6 +48,37 @@ $(document).ready(function () {
     }, 1000);
   }
 
+  function showLoader() {
+    const loader = document.getElementById("loading-spinner");
+    if (loader) {
+      loader.style.display = "flex";
+    }
+  }
+
+  function hideLoader() {
+    const loader = document.getElementById("loading-spinner");
+    if (loader) {
+      loader.style.display = "none";
+    }
+  }
+
+  // Sidebar link auto-show loader
+  document.querySelectorAll(".nav-sidebar .nav-link").forEach((link) => {
+    link.addEventListener("click", function (e) {
+      if (
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.shiftKey &&
+        this.getAttribute("target") !== "_blank"
+      ) {
+        showLoader();
+      }
+    });
+  });
+
+  // Auto-hide loader when page fully loads
+  window.addEventListener("load", hideLoader);
+
   // Inventory Table
   $("#seedTable").DataTable({
     ordering: false,
@@ -145,15 +176,18 @@ $(document).ready(function () {
   });
 
   // Save New Seed to Inventory
-  const form = document.querySelector("#addSeedModal form");
-  const saveBtn = document.getElementById("add_seed_to_inventory");
-  const cancelBtn = document.querySelector("#addSeedModal .btn-secondary");
+  const addSeedForm = document.querySelector("#addSeedModal form");
+  if (addSeedForm) {
+    const saveBtn = document.getElementById("add_seed_to_inventory");
+    const cancelBtn = document.querySelector("#addSeedModal .btn-secondary");
 
-  form.addEventListener("submit", function () {
-    saveBtn.innerHTML = "Saving...";
-    saveBtn.disabled = true;
-    cancelBtn.disabled = true;
-  });
+    addSeedForm.addEventListener("submit", function () {
+      saveBtn.innerHTML = "Saving...";
+      saveBtn.disabled = true;
+      cancelBtn.disabled = true;
+      showLoader();
+    });
+  }
 
   // Edit Seed Inventory
   document.querySelectorAll(".edit-inventory-button").forEach((button) => {
@@ -178,6 +212,164 @@ $(document).ready(function () {
       updateBtn.innerHTML = "Updating...";
       updateBtn.disabled = true;
       cancelBtn.disabled = true;
+      showLoader();
+    });
+  });
+
+  document.querySelectorAll(".delete-inventory-button").forEach((button) => {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      const href = this.getAttribute("href");
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+        customClass: {
+          confirmButton: "btn btn-sm btn-primary mr-1",
+          cancelButton: "btn btn-sm btn-secondary",
+        },
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          showLoader();
+          window.location.href = href;
+        }
+      });
+    });
+  });
+
+  const swalFormHandler = (selector, title, text) => {
+    document.querySelectorAll(selector).forEach(function (form) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        Swal.fire({
+          title: title,
+          text: text,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, continue",
+          cancelButtonText: "Cancel",
+          customClass: {
+            confirmButton: "btn btn-sm btn-primary me-2",
+            cancelButton: "btn btn-sm btn-secondary",
+          },
+          buttonsStyling: false,
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            showLoader(); // Optional
+            form.submit();
+          }
+        });
+      });
+    });
+  };
+
+  // Bind each action with appropriate confirmation
+  swalFormHandler(
+    ".approve-form",
+    "Approve request?",
+    "Are you sure you want to approve this request?"
+  );
+  swalFormHandler(
+    ".undo-approve-form",
+    "Undo approval?",
+    "Are you sure you want to undo this approval?"
+  );
+  swalFormHandler(
+    ".reject-form",
+    "Reject request?",
+    "Are you sure you want to reject this request?"
+  );
+  swalFormHandler(
+    ".undo-reject-form",
+    "Undo rejection?",
+    "Are you sure you want to undo this rejection?"
+  );
+
+  function attachSwal(selector, title, text) {
+    document.querySelectorAll(selector).forEach(function (form) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        Swal.fire({
+          title: title,
+          text: text,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, continue",
+          cancelButtonText: "Cancel",
+          customClass: {
+            confirmButton: "btn btn-sm btn-primary me-2",
+            cancelButton: "btn btn-sm btn-secondary",
+          },
+          buttonsStyling: false,
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            showLoader();
+            form.submit();
+          }
+        });
+      });
+    });
+  }
+
+  attachSwal(
+    ".mark-receive-form",
+    "Mark as received?",
+    "Confirm that this beneficiary has received the seeds?"
+  );
+  attachSwal(
+    ".undo-receive-form",
+    "Undo received?",
+    "Are you sure you want to undo the received status?"
+  );
+
+  $(".dropdownListReports").on("click", function () {
+    showLoader();
+  });
+
+  $("#exportExcelBtn").on("click", function (e) {
+    e.preventDefault();
+
+    // Get the active tab
+    const activeTab = document.querySelector(
+      "#seedRequestsReportsTabs .nav-link.active"
+    );
+    if (!activeTab) return;
+
+    // Extract inventory ID from tab's data-bs-target
+    const targetId = activeTab.getAttribute("data-bs-target"); // e.g., "#tab-content-5"
+    const inventoryId = targetId.replace("#tab-content-", "");
+
+    // Set hidden input value and submit the form
+    $("#excelInventoryId").val(inventoryId);
+    $("#excelExportForm").submit();
+  });
+
+  /* Clear Logs Confirmation */
+  $("#clearLogsBtn").on("click", function (e) {
+    e.preventDefault();
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete all logs!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, clear logs!",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-sm btn-primary me-2",
+        cancelButton: "btn btn-sm btn-secondary",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        showLoader();
+        $("#clearLogsForm").submit();
+      }
     });
   });
 });

@@ -11,7 +11,8 @@
 				<div class="modal-body">
 					<div class="mb-3">
 						<label for="add_seed_name" class="form-label">Seed Name</label>
-						<input type="text" class="form-control" id="add_seed_name" name="add_seed_name" required>
+						<input type="text" class="form-control" id="add_seed_name" name="add_seed_name"
+							placeholder="e.g. RC18 (Rice)" required>
 					</div>
 
 					<div class="mb-3">
@@ -26,7 +27,8 @@
 
 					<div class="mb-3">
 						<label for="add_stock" class="form-label">Stock (kg)</label>
-						<input type="number" class="form-control" id="add_stock" name="add_stock" required min="0">
+						<input type="number" class="form-control" id="add_stock" name="add_stock" placeholder="e.g. 100"
+							required min="1">
 					</div>
 
 					<!-- Read-only input to show the season name and year -->
@@ -36,8 +38,7 @@
 				</div>
 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-sm btn-primary" id="add_seed_to_inventory"
-						onclick="showLoader()">Save</button>
+					<button type="submit" class="btn btn-sm btn-primary" id="add_seed_to_inventory">Save</button>
 					<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
 				</div>
 			</form>
@@ -60,7 +61,8 @@
 
 					<div class="mb-3">
 						<label for="edit_seed_name" class="form-label">Seed Name</label>
-						<input type="text" class="form-control" id="edit_seed_name" name="edit_seed_name" required>
+						<input type="text" class="form-control" id="edit_seed_name" name="edit_seed_name"
+							placeholder="e.g. RC18 (Rice)" required>
 					</div>
 
 					<div class="mb-3">
@@ -75,13 +77,13 @@
 
 					<div class="mb-3">
 						<label for="edit_stock" class="form-label">Stock (kg)</label>
-						<input type="number" class="form-control" id="edit_stock" name="edit_stock" required min="0">
+						<input type="number" class="form-control" id="edit_stock" name="edit_stock"
+							placeholder="e.g. 100" required min="0">
 					</div>
 				</div>
 
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-sm btn-primary" id="edit_update_button"
-						onclick="showLoader()">Update</button>
+					<button type="submit" class="btn btn-sm btn-primary" id="edit_update_button">Update</button>
 					<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal"
 						id="edit_cancel_button">Cancel</button>
 				</div>

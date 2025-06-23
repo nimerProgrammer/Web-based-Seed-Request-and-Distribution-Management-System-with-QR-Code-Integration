@@ -21,7 +21,7 @@
                     </div>
                 </div> -->
     <div class="text-center p-3 bg-secondary text-white">
-        © 2025 Seed Request and Distribution System with QR Integration | All rights reserved.
+        © 2025 Seed Request and Distribution System with QR Code Integration | All rights reserved.
     </div>
 </footer>
 
