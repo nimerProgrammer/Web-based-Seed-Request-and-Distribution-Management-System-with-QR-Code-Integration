@@ -34,6 +34,18 @@ class SeedRequestsController extends BaseController
         $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
         $formattedDate = $philTime->format( 'm-d-Y h:i A' );
 
+        // Generate date code (yyyymmdd) from Philippine time
+        $dateCode = $philTime->format( 'Ymd' );
+
+        // Generate random 6-character alphanumeric code
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $refArray   = str_split( $characters );
+        shuffle( $refArray );
+        $randomCode = implode( '', array_slice( $refArray, 0, 12 ) );
+
+        // Build final reference code
+        $refCode = 'REF-' . $dateCode . '-' . strtoupper( $seedName ) . '-' . $randomCode;
+
         $requestModel->update( $id, [ 
             'status'             => 'Approved',
             'date_time_approved' => $formattedDate
@@ -41,6 +53,7 @@ class SeedRequestsController extends BaseController
 
         $beneficiaryModel->insert( [ 
             'qr_code'              => $qrCode,
+            'ref_no'               => $refCode,
             'status'               => 'For Receiving',
             'seed_requests_tbl_id' => $id
         ] );

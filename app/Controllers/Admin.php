@@ -35,8 +35,9 @@ class Admin extends BaseController
         $email    = $this->request->getPost( 'email' );
         $password = $this->request->getPost( 'password' );
 
-        $model     = new UsersModel();
-        $logsModel = new LogsModel();
+        $model               = new UsersModel();
+        $logsModel           = new LogsModel();
+        $croppingSeasonModel = new CroppingSeasonModel();
 
         $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
         $formattedDate = $philTime->format( 'm-d-Y h:i A' );
@@ -100,8 +101,6 @@ class Admin extends BaseController
             'logged_in'           => true
         ] );
 
-
-
         $logData = [ 
             'timestamp'    => $formattedDate,
             'action'       => 'Login',
@@ -110,6 +109,18 @@ class Admin extends BaseController
         ];
 
         $logsModel->insert( $logData );
+
+        $currentSeason = $croppingSeasonModel
+            ->select( 'cropping_season_tbl_id, season, year' )
+            ->where( 'status', 'Current' )
+            ->first(); // Use `first()` since you expect only one
+
+        if ( $currentSeason ) {
+            session()->set( [ 
+                'current_season_id'   => $currentSeason[ 'cropping_season_tbl_id' ],
+                'current_season_name' => $currentSeason[ 'season' ] . ' ' . $currentSeason[ 'year' ]
+            ] );
+        }
 
         return $this->response->setJSON( [ 
             'success'      => true,
@@ -358,9 +369,32 @@ class Admin extends BaseController
         session()->set( "title", "Reports" );
         session()->set( "current_tab", "reports" );
 
-        $inventoryModel = new InventoryModel();
-        // $beneficiariesModel = new BeneficiariesModel();
-        $seedRequestsModel = new SeedRequestsModel();
+        // // Get from session
+        // $currentSeasonId   = session()->get( 'current_season_id' );
+        // $currentSeasonName = session()->get( 'current_season_name' );
+
+        // // Set to selected session values
+        // session()->set( [ 
+        //     'selected_cropping_season_id'   => $currentSeasonId,
+        //     'selected_cropping_season_name' => $currentSeasonName
+        // ] );
+        if ( !session()->has( 'selected_cropping_season_id' ) ) {
+            // Check if fallback cropping_season_id is available
+            if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
+                session()->set( [ 
+                    'selected_cropping_season_id'   => session()->get( 'current_season_id' ),
+                    'selected_cropping_season_name' => session()->get( 'current_season_name' )
+                ] );
+            }
+        }
+        $selectedSeasonId = session()->get( 'selected_cropping_season_id' );
+
+        $inventoryModel      = new InventoryModel();
+        $seedRequestsModel   = new SeedRequestsModel();
+        $beneficiariesModel  = new BeneficiariesModel();
+        $croppingSeasonModel = new CroppingSeasonModel();
+
+        $dataSeasons[ 'cropping_seasons' ] = $croppingSeasonModel->findAll();
 
         $dataInventory[ 'inventory' ] = $inventoryModel
             ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
@@ -368,36 +402,79 @@ class Admin extends BaseController
             ->orderBy( 'inventory.seed_name', 'ASC' )
             ->findAll();
 
-        $dataRequests[ 'seed_requests' ] = $seedRequestsModel
-            ->select( [ 
-                'seed_requests.*',
-                'client_info.last_name',
-                'client_info.first_name',
-                'client_info.middle_name',
-                'client_info.suffix_and_ext',
-                'client_info.brgy',
-                'client_info.name_land_owner',
-                'client_info.rsbsa_ref_no',
-                'client_info.farm_area',
-                'inventory.seed_name',
-                'inventory.seed_class',
-                'cropping_season.season',
-                'cropping_season.year',
-                'cropping_season.status AS cropping_status'
-            ] )
-            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
-            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
-            ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
-            ->where( 'cropping_season.status', 'Current' )
-            ->orderBy( 'client_info.brgy', 'ASC' )
-            ->orderBy( 'seed_requests.date_time_requested', 'ASC' )
-            ->findAll();
+        if ( !session()->has( 'selected_list' ) ) {
+            session()->set( 'selected_list', 'seedrequests' );
+        }
 
-        $data = array_merge( $dataInventory, $dataRequests );
+        if ( session()->get( 'selected_list' ) === 'seedrequests' ) {
+
+            $dataRequests[ 'seed_requests' ] = $seedRequestsModel
+                ->select( [ 
+                    'seed_requests.*',
+                    'client_info.last_name',
+                    'client_info.first_name',
+                    'client_info.middle_name',
+                    'client_info.suffix_and_ext',
+                    'client_info.brgy',
+                    'client_info.name_land_owner',
+                    'client_info.rsbsa_ref_no',
+                    'client_info.farm_area',
+                    'inventory.seed_name',
+                    'inventory.seed_class',
+                    'cropping_season.season',
+                    'cropping_season.year',
+                    'cropping_season.cropping_season_tbl_id'
+                ] )
+                ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+                ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+                ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+                ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
+                ->orderBy( 'client_info.brgy', 'ASC' )
+                ->orderBy( 'seed_requests.date_time_requested', 'ASC' )
+                ->findAll();
+        }
+
+        if ( session()->get( 'selected_list' ) === 'beneficiaries' ) {
+            $dataBeneficiaries[ 'beneficiaries' ] = $beneficiariesModel
+                ->select( [ 
+                    'beneficiaries.*',
+                    'client_info.rsbsa_ref_no',
+                    'client_info.last_name',
+                    'client_info.first_name',
+                    'client_info.middle_name',
+                    'client_info.suffix_and_ext',
+                    'client_info.brgy',
+                    'client_info.mun',
+                    'client_info.prov',
+                    'client_info.b_date',
+                    'client_info.gender',
+                    'client_info.farm_area',
+                    'client_info.name_land_owner',
+                    'users.contact_no',
+                    'inventory.inventory_tbl_id',
+                    'inventory.seed_name',
+                    'inventory.seed_class',
+                    'cropping_season.season',
+                    'cropping_season.year'
+                ] )
+                ->join( 'seed_requests', 'seed_requests.seed_requests_tbl_id = beneficiaries.seed_requests_tbl_id' )
+                ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+                ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id' )
+                ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+                ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+                ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
+                ->orderBy( 'beneficiaries.date_time_received', 'DESC' )
+                ->findAll();
+        }
+        $data = array_merge(
+            $dataInventory,
+            $dataSeasons,
+            session()->get( 'selected_list' ) === 'beneficiaries' ? $dataBeneficiaries : $dataRequests
+        );
+
 
         $header = view( 'admin/templates/header' );
         $body   = view( 'admin/reports', $data );
-        // $modals = view('_admin/modals/profile_modal');
         $footer = view( 'admin/templates/footer' );
 
         return $header . $body . $footer;

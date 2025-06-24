@@ -31,7 +31,6 @@
     <?php endif ?>
 
     <!-- Default Icon in the Head Section -->
-    <link rel="shortcut icon" href="<?= base_url( 'templates/img/icon.png' ) ?>" type="image/x-icon">
 
     <link rel="stylesheet" href="<?= base_url( 'templates/css/admin-style.css?v=4.4.4' ) ?>">
 

@@ -327,6 +327,19 @@ $(document).ready(function () {
     "Are you sure you want to undo the received status?"
   );
 
+  $(".select-season").on("click", function (e) {
+    e.preventDefault();
+
+    var selected = $(this).data("value"); // Get value from data-value
+    $("#seasonDataInput").val(selected); // Set hidden input
+
+    if (typeof showLoader === "function") {
+      showLoader(); // Optional: show loading spinner
+    }
+
+    $("#seasonForm").submit(); // Submit the form
+  });
+
   $(".dropdownListReports").on("click", function () {
     showLoader();
   });
@@ -347,6 +360,54 @@ $(document).ready(function () {
     // Set hidden input value and submit the form
     $("#excelInventoryId").val(inventoryId);
     $("#excelExportForm").submit();
+  });
+
+  $("#seedRequestExportPdfBtn").on("click", function (e) {
+    e.preventDefault();
+
+    // Get the active tab
+    const activeTab = document.querySelector(
+      "#seedRequestsReportsTabs .nav-link.active"
+    );
+    if (!activeTab) return;
+
+    // Extract inventory ID
+    const targetId = activeTab.getAttribute("data-bs-target");
+    const inventoryId = targetId.replace("#tab-content-", "");
+
+    // Get the seed name directly from the active tab
+    const seedName = activeTab.getAttribute("data-seed-name");
+
+    // Fill hidden inputs
+    $("#pdfInventoryId").val(inventoryId);
+    $("#pdfSeedName").val(seedName);
+
+    // Submit form
+    $("#seedRequestPDFExportForm").submit();
+  });
+
+  $("#beneficiariesExportPdfBtn").on("click", function (e) {
+    e.preventDefault();
+
+    // Get the active tab
+    const activeTab = document.querySelector(
+      "#beneficiariesReportsTabs .nav-link.active"
+    );
+    if (!activeTab) return;
+
+    // Extract inventory ID
+    const targetId = activeTab.getAttribute("data-bs-target");
+    const inventoryId = targetId.replace("#tab-content-", "");
+
+    // Get the seed name directly from the active tab
+    const seedName = activeTab.getAttribute("data-seed-name");
+
+    // Fill hidden inputs
+    $("#pdfInventoryId").val(inventoryId);
+    $("#pdfSeedName").val(seedName);
+
+    // Submit form
+    $("#beneficiariesPDFExportForm").submit();
   });
 
   /* Clear Logs Confirmation */

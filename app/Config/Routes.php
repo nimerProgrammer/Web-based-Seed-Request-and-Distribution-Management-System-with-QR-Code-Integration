@@ -56,7 +56,13 @@ $routes->post( 'admin/beneficiaries/undoReceive/(:num)', 'Admin\BeneficiariesCon
 
 /*** REPORTS CONTROLLER ACTIONS ***/
 $routes->get( '/admin/reports/setListView/(:segment)', 'Admin\ReportsController::setListView/$1' );
+$routes->post( '/admin/reports/setSeasonView', 'Admin\ReportsController::setSeasonView' );
+
+
+
 $routes->post( '/admin/reports/exportToExcel', 'Admin\ReportsController::exportToExcel' );
+$routes->post( '/admin/reports/seedRequestExportToPDF', 'Admin\ReportsController::seedRequestExportToPDF' );
+$routes->post( '/admin/reports/beneficiariesExportToPDF', 'Admin\ReportsController::beneficiariesExportToPDF' );
 
 /*** LOGS CONTROLLER ACTIONS ***/
 $routes->post( '/admin/logs/clearLogs', 'Admin\LogsController::clearLogs' );
