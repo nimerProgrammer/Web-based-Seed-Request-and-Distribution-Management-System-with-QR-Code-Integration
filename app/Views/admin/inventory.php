@@ -74,12 +74,12 @@
                                                 <td class="align-middle">
                                                     <?php
                                                     $rawStored = $item[ 'date_stored' ];
-                                                    $storedObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawStored );
+                                                    $storedObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawStored );
 
                                                     if ( $storedObj ) :
                                                         ?>
                                                         <?= $storedObj->format( 'F j, Y' ) ?><br>
-                                                        <small><?= $storedObj->format( 'h:i A' ) ?></small>
+                                                        <small><?= $storedObj->format( 'h:i:s A' ) ?></small>
                                                     <?php else : ?>
                                                         <span class="text-muted">—</span>
                                                     <?php endif; ?>

@@ -87,11 +87,11 @@
                                                     <td class="align-middle">
                                                         <?php
                                                         $rawRequested = $request[ 'date_time_requested' ];
-                                                        $requestedObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawRequested );
+                                                        $requestedObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawRequested );
                                                         if ( $requestedObj ) : ?>
                                                             <?= $requestedObj->format( 'F j, Y' ) ?><br>
                                                             <small>
-                                                                <?= $requestedObj->format( 'h:i A' ) ?>
+                                                                <?= $requestedObj->format( 'h:i:s A' ) ?>
                                                             </small>
                                                         <?php else : ?>
                                                             <span class="text-muted">—</span>
@@ -101,11 +101,11 @@
                                                     <td class="align-middle">
                                                         <?php
                                                         $rawApproved = $request[ 'date_time_approved' ];
-                                                        $approvedObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawApproved );
+                                                        $approvedObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawApproved );
                                                         if ( $approvedObj ) : ?>
                                                             <?= $approvedObj->format( 'F j, Y' ) ?><br>
                                                             <small>
-                                                                <?= $approvedObj->format( 'h:i A' ) ?>
+                                                                <?= $approvedObj->format( 'h:i:s A' ) ?>
                                                             </small> <?php else : ?>
                                                             <span class="text-muted">—</span>
                                                         <?php endif; ?>
@@ -114,10 +114,10 @@
                                                     <td class="align-middle">
                                                         <?php
                                                         $rawRejected = $request[ 'date_time_rejected' ];
-                                                        $rejectedObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawRejected );
+                                                        $rejectedObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawRejected );
                                                         if ( $rejectedObj ) : ?>
                                                             <?= $rejectedObj->format( 'F j, Y' ) ?><br>
-                                                            <small><?= $rejectedObj->format( 'h:i A' ) ?></small>
+                                                            <small><?= $rejectedObj->format( 'h:i:s A' ) ?></small>
                                                         <?php else : ?>
                                                             <span class="text-muted">—</span>
                                                         <?php endif; ?>

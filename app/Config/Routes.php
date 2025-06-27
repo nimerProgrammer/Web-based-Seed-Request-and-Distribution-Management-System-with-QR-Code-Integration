@@ -6,30 +6,32 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-/*** PUBLIC PAGES ***/
-$routes->get( '/', 'Home::index' );
-// $routes->get('/home', 'Home::index');
-// $routes->get('/public', 'Home::index');
-
 
 /*** LOGIN ***/
-$routes->get( '/admin/login', 'Admin::login' );
+$routes->get( '/admin/login', 'Admin\Admin::login' );
 /*** SERVER REQUESTS ***/
 // User data API endpoints
-$routes->post( '/get_user_data', 'Admin::get_user_data' );
+$routes->post( '/get_user_data', 'Admin\Admin::get_user_data' );
+
+/*** PUBLIC PAGES ***/
+$routes->get( '/', 'Public\Home::index' );
+$routes->get( '/public/home', 'Public\Home::home' );
+$routes->get( '/public/request_seed', 'Public\Home::request_seed' );
+// $routes->get('/public', 'Home::index');
+
 
 
 /*** ADMIN PAGES ***/
 // Admin authentication and dashboard routes
-$routes->get( '/admin', 'Admin::index' );
-$routes->get( '/admin/dashboard', 'Admin::dashboard' );
+$routes->get( '/admin', 'Admin\Admin::index' );
+$routes->get( '/admin/dashboard', 'Admin\Admin::dashboard' );
 // Admin management pages
-$routes->get( '/admin/inventory', 'Admin::inventory' );
-$routes->get( '/admin/seedsRequests', 'Admin::seedsRequests' );
-$routes->get( '/admin/beneficiaries', 'Admin::beneficiaries' );
-$routes->get( '/admin/reports', 'Admin::reports' );
-$routes->get( '/admin/logs', 'Admin::logs' );
-$routes->get( '/admin/logout', 'Admin::logout' );
+$routes->get( '/admin/inventory', 'Admin\Admin::inventory' );
+$routes->get( '/admin/seedsRequests', 'Admin\Admin::seedsRequests' );
+$routes->get( '/admin/beneficiaries', 'Admin\Admin::beneficiaries' );
+$routes->get( '/admin/reports', 'Admin\Admin::reports' );
+$routes->get( '/admin/logs', 'Admin\Admin::logs' );
+$routes->get( '/admin/logout', 'Admin\Admin::logout' );
 
 
 /*** INVENTORY CONTROLLER ACTIONS ***/

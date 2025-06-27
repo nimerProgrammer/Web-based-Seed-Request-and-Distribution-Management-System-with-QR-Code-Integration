@@ -39,7 +39,7 @@ class Autoload extends AutoloadConfig
      *
      * @var array<string, list<string>|string>
      */
-    public $psr4 = [
+    public $psr4 = [ 
         APP_NAMESPACE => APPPATH,
     ];
 
@@ -90,5 +90,5 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = [];
+    public $helpers = [ 'auth', 'date' ];
 }

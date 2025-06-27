@@ -161,7 +161,7 @@
                                 data-bs-toggle="dropdown">
                                 <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="User Avatar"
                                     class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
-                                <span>sdfsdf</span>
+                                <span><?= esc( session( 'user_fullname' ) ) ?></span>
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">

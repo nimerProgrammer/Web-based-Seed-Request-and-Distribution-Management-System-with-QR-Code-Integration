@@ -32,7 +32,7 @@ class SeedRequestsController extends BaseController
         $qrCode = "$season-$year-$seedName-$seedClass-$rsbsa";
 
         $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
+        $formattedDate = getPhilippineTimeFormatted();
 
         // Generate date code (yyyymmdd) from Philippine time
         $dateCode = $philTime->format( 'Ymd' );
@@ -58,12 +58,8 @@ class SeedRequestsController extends BaseController
             'seed_requests_tbl_id' => $id
         ] );
 
-        $staffFullName = ucwords( strtolower( trim(
-            session( 'user_firstname' ) . ' ' .
-            ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-            session( 'user_lastname' ) .
-            ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-        ) ) );
+        /* Staff Fullname */
+        $staffFullName = session( 'user_fullname' );
 
         $fullName = ucwords( strtolower( trim(
             $this->request->getPost( 'first_name' ) .
@@ -109,15 +105,10 @@ class SeedRequestsController extends BaseController
 
         $beneficiaryModel->where( 'qr_code', $qrCode )->delete();
 
-        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
+        $formattedDate = getPhilippineTimeFormatted();
 
-        $staffFullName = ucwords( strtolower( trim(
-            session( 'user_firstname' ) . ' ' .
-            ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-            session( 'user_lastname' ) .
-            ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-        ) ) );
+        /* Staff Fullname */
+        $staffFullName = session( 'user_fullname' );
 
         $fullName = ucwords( strtolower( trim(
             $this->request->getPost( 'first_name' ) .
@@ -144,24 +135,17 @@ class SeedRequestsController extends BaseController
      */
     public function reject( $id )
     {
-        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
-
-        $logsModel    = new LogsModel();
-        $requestModel = new SeedRequestsModel();
+        $formattedDate = getPhilippineTimeFormatted();
+        $logsModel     = new LogsModel();
+        $requestModel  = new SeedRequestsModel();
 
         $requestModel->update( $id, [ 
             'status'             => 'Rejected',
             'date_time_rejected' => $formattedDate
         ] );
 
-        // Staff Full Name
-        $staffFullName = ucwords( strtolower( trim(
-            session( 'user_firstname' ) . ' ' .
-            ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-            session( 'user_lastname' ) .
-            ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-        ) ) );
+        /* Staff Fullname */
+        $staffFullName = session( 'user_fullname' );
 
         // Client Full Name
         $fullName = ucwords( strtolower( trim(
@@ -191,24 +175,17 @@ class SeedRequestsController extends BaseController
      */
     public function undoRejected( $id )
     {
-        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
-
-        $model     = new SeedRequestsModel();
-        $logsModel = new LogsModel();
+        $formattedDate = getPhilippineTimeFormatted();
+        $model         = new SeedRequestsModel();
+        $logsModel     = new LogsModel();
 
         $model->update( $id, [ 
             'status'             => 'Pending',
             'date_time_rejected' => null,
         ] );
 
-        // Staff Full Name
-        $staffFullName = ucwords( strtolower( trim(
-            session( 'user_firstname' ) . ' ' .
-            ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-            session( 'user_lastname' ) .
-            ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-        ) ) );
+        /* Staff Fullname */
+        $staffFullName = session( 'user_fullname' );
 
         // Client Full Name
         $fullName = ucwords( strtolower( trim(

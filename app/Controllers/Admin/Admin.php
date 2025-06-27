@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -17,11 +17,21 @@ use App\Models\LogsModel;
 
 class Admin extends BaseController
 {
+    /**
+     * Redirects to the appropriate page based on user session.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function index()
     {
         return session()->get( "user_id" ) ? redirect()->to( base_url( '/admin/dashboard' ) ) : redirect()->to( base_url( '/admin/login' ) );
     }
 
+    /**
+     * Displays the login page.
+     *
+     * @return string
+     */
     public function login()
     {
         session()->set( "title", "Login" );
@@ -30,6 +40,11 @@ class Admin extends BaseController
         return view( 'admin/login' );
     }
 
+    /**
+     * Handles user login and retrieves user data.
+     *
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
     public function get_user_data()
     {
         $email    = $this->request->getPost( 'email' );
@@ -39,10 +54,11 @@ class Admin extends BaseController
         $logsModel           = new LogsModel();
         $croppingSeasonModel = new CroppingSeasonModel();
 
-        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
+        $formattedDate = getPhilippineTimeFormatted();
 
-        $user = $model->where( 'email', $email )->first();
+        $user = $model->where( 'email', $email )
+            ->where( 'user_type', 'admin' )
+            ->first();
 
         if ( !$user ) {
 
@@ -98,13 +114,19 @@ class Admin extends BaseController
             'user_firstname'      => $staff[ 'first_name' ],
             'user_middlename'     => $staff[ 'middle_name' ] ?? '',
             'user_suffix_and_ext' => $staff[ 'suffix_and_ext' ] ?? '',
-            'logged_in'           => true
+            'logged_in'           => true,
+            'user_fullname'       => ucwords( strtolower( trim(
+                $staff[ 'first_name' ] . ' ' .
+                ( !empty( $staff[ 'middle_name' ] ) ? $staff[ 'middle_name' ] . ' ' : '' ) .
+                $staff[ 'last_name' ] .
+                ( !empty( $staff[ 'suffix_and_ext' ] ) ? ' ' . $staff[ 'suffix_and_ext' ] : '' )
+            ) ) )
         ] );
 
         $logData = [ 
             'timestamp'    => $formattedDate,
             'action'       => 'Login',
-            'details'      => 'User logged in successfully.',
+            'details'      => 'User ' . esc( session( 'user_fullname' ) ) . ' logged in successfully.',
             'users_tbl_id' => session( 'user_id' ),
         ];
 
@@ -130,19 +152,16 @@ class Admin extends BaseController
 
     }
 
+    /**
+     * Displays the admin dashboard.
+     *
+     * @return string
+     */
     public function dashboard()
     {
-        if ( !session()->get( "user_id" ) ) {
-            session()->set( "redirect_after_login", base_url( uri_string() ) );
-
-            $response = [ 
-                "alert_type" => "danger",
-                "message"    => "You need to login first!"
-            ];
-
-            session()->setFlashdata( "response", $response );
-
-            return redirect()->to( base_url( '/admin/login' ) );
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
         }
 
         session()->set( "title", "Dashboard" );
@@ -160,19 +179,16 @@ class Admin extends BaseController
         return $header . $body . $footer;
     }
 
+    /**
+     * Displays the inventory page.
+     *
+     * @return string
+     */
     public function inventory()
     {
-        if ( !session()->get( "user_id" ) ) {
-            session()->set( "redirect_after_login", base_url( uri_string() ) );
-
-            $response = [ 
-                "alert_type" => "danger",
-                "message"    => "You need to login first!"
-            ];
-
-            session()->setFlashdata( "response", $response );
-
-            return redirect()->to( base_url( '/admin/login' ) );
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
         }
 
         session()->set( "title", "Inventory" );
@@ -201,17 +217,9 @@ class Admin extends BaseController
 
     public function seedsRequests()
     {
-        if ( !session()->get( "user_id" ) ) {
-            session()->set( "redirect_after_login", base_url( uri_string() ) );
-
-            $response = [ 
-                "alert_type" => "danger",
-                "message"    => "You need to login first!"
-            ];
-
-            session()->setFlashdata( "response", $response );
-
-            return redirect()->to( base_url( '/admin/login' ) );
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
         }
 
         session()->set( "title", "Seeds Requests" );
@@ -283,17 +291,9 @@ class Admin extends BaseController
 
     public function beneficiaries()
     {
-        if ( !session()->get( "user_id" ) ) {
-            session()->set( "redirect_after_login", base_url( uri_string() ) );
-
-            $response = [ 
-                "alert_type" => "danger",
-                "message"    => "You need to login first!"
-            ];
-
-            session()->setFlashdata( "response", $response );
-
-            return redirect()->to( base_url( '/admin/login' ) );
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
         }
 
         session()->set( "title", "Beneficiaries" );
@@ -353,17 +353,9 @@ class Admin extends BaseController
 
     public function reports()
     {
-        if ( !session()->get( "user_id" ) ) {
-            session()->set( "redirect_after_login", base_url( uri_string() ) );
-
-            $response = [ 
-                "alert_type" => "danger",
-                "message"    => "You need to login first!"
-            ];
-
-            session()->setFlashdata( "response", $response );
-
-            return redirect()->to( base_url( '/admin/login' ) );
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
         }
 
         session()->set( "title", "Reports" );
@@ -482,17 +474,9 @@ class Admin extends BaseController
 
     public function logs()
     {
-        if ( !session()->get( "user_id" ) ) {
-            session()->set( "redirect_after_login", base_url( uri_string() ) );
-
-            $response = [ 
-                "alert_type" => "danger",
-                "message"    => "You need to login first!"
-            ];
-
-            session()->setFlashdata( "response", $response );
-
-            return redirect()->to( base_url( '/admin/login' ) );
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
         }
 
         session()->set( "title", "Logs" );

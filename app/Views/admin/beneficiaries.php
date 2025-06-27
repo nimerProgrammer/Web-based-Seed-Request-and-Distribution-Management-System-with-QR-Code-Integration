@@ -109,11 +109,11 @@
                                                         $rawDate = $beneficiary[ 'date_time_received' ];
 
                                                         // Create DateTime from the exact format used in DB
-                                                        $dateObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawDate );
+                                                        $dateObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawDate );
 
                                                         if ( $dateObj ) : ?>
                                                             <?= $dateObj->format( 'F j, Y' ) ?><br>
-                                                            <small><?= $dateObj->format( 'h:i A' ) ?></small>
+                                                            <small><?= $dateObj->format( 'h:i:s A' ) ?></small>
                                                         <?php else : ?>
                                                             <span class="text-muted">—</span>
                                                         <?php endif; ?>

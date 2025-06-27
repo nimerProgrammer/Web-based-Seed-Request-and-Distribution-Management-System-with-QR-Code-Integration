@@ -51,7 +51,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <div class="btn-group float-end mb-3" role="group" aria-label="Export Buttons">
+                                        <div class="btn-group mb-3" role="group" aria-label="Export Buttons">
                                             <div class="mr-2 mt-1">
                                                 <?= esc( session( 'selected_cropping_season_name' ) ) ?>
                                             </div>
@@ -230,7 +230,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <div class="btn-group float-end mb-3" role="group" aria-label="Export Buttons">
+                                            <div class="btn-group mb-3" role="group" aria-label="Export Buttons">
                                                 <div class="mr-2 mt-1">
                                                     <?= esc( session( 'selected_cropping_season_name' ) ) ?>
                                                 </div>
@@ -430,11 +430,11 @@
                                                                                         $rawDate = $beneficiary[ 'date_time_received' ];
 
                                                                                         // Create DateTime from the exact format used in DB
-                                                                                        $dateObj = DateTime::createFromFormat( 'm-d-Y h:i A', $rawDate );
+                                                                                        $dateObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawDate );
 
                                                                                         if ( $dateObj ) : ?>
                                                                                             <?= $dateObj->format( 'F j, Y' ) ?><br>
-                                                                                            <small><?= $dateObj->format( 'h:i A' ) ?></small>
+                                                                                            <small><?= $dateObj->format( 'h:i:s A' ) ?></small>
                                                                                         <?php else : ?>
                                                                                             <span class="text-muted">—</span>
                                                                                         <?php endif; ?>

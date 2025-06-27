@@ -21,8 +21,7 @@ class InventoryController extends BaseController
         $logsModel      = new LogsModel();
 
         // Get Philippine time
-        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
+        $formattedDate = getPhilippineTimeFormatted();
 
         // Collect form data
         $data = [ 
@@ -35,19 +34,14 @@ class InventoryController extends BaseController
 
         $inventoryModel->insert( $data ); // Insert into the database
 
-        // Build user's full name (handle null middle name and suffix)
-        $fullName = ucwords( strtolower( trim(
-            session( 'user_firstname' ) . ' ' .
-            ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-            session( 'user_lastname' ) .
-            ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-        ) ) );
+        /* Staff Fullname */
+        $staffFullName = session( 'user_fullname' );
 
         // Insert log entry
         $logsModel->insert( [ 
             'timestamp'    => $formattedDate,
             'action'       => 'Add Inventory',
-            'details'      => $fullName . ' added new inventory: "' . $data[ 'seed_name' ] . '" (' . $data[ 'seed_class' ] . ') with stock ' . $data[ 'stock' ] . '.',
+            'details'      => $staffFullName . ' added new inventory: "' . $data[ 'seed_name' ] . '" (' . $data[ 'seed_class' ] . ') with stock ' . $data[ 'stock' ] . '.',
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
@@ -60,7 +54,6 @@ class InventoryController extends BaseController
 
         return redirect()->to( '/admin/inventory' );
     }
-
 
     /**
      * Updates an existing inventory item by ID.
@@ -99,17 +92,13 @@ class InventoryController extends BaseController
             $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
             $formattedDate = $philTime->format( 'm-d-Y h:i A' );
 
-            $fullName = ucwords( strtolower( trim(
-                session( 'user_firstname' ) . ' ' .
-                ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-                session( 'user_lastname' ) .
-                ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-            ) ) );
+            /* Staff Fullname */
+            $staffFullName = session( 'user_fullname' );
 
             $logsModel->insert( [ 
                 'timestamp'    => $formattedDate,
                 'action'       => 'Update Inventory',
-                'details'      => $fullName . ' updated inventory: ' . implode( '; ', $changes ) . '.',
+                'details'      => $staffFullName . ' updated inventory: ' . implode( '; ', $changes ) . '.',
                 'users_tbl_id' => session( 'user_id' ),
             ] );
 
@@ -146,17 +135,13 @@ class InventoryController extends BaseController
             $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
             $formattedDate = $philTime->format( 'm-d-Y h:i A' );
 
-            $fullName = ucwords( strtolower( trim(
-                session( 'user_firstname' ) . ' ' .
-                ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-                session( 'user_lastname' ) .
-                ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-            ) ) );
+            /* Staff Fullname */
+            $staffFullName = session( 'user_fullname' );
 
             $logsModel->insert( [ 
                 'timestamp'    => $formattedDate,
                 'action'       => 'Delete Inventory',
-                'details'      => $fullName . ' deleted seed "' . ( $seed[ 'seed_name' ] ?? 'Unknown' ) . '" (' . ( $seed[ 'seed_class' ] ?? '-' ) . ').',
+                'details'      => $staffFullName . ' deleted seed "' . ( $seed[ 'seed_name' ] ?? 'Unknown' ) . '" (' . ( $seed[ 'seed_class' ] ?? '-' ) . ').',
                 'users_tbl_id' => session( 'user_id' ),
             ] );
 

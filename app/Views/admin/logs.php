@@ -52,11 +52,11 @@
                                                 <td class="text-center"><?= $i++ ?></td>
                                                 <td>
                                                     <?php
-                                                    $dateObj = DateTime::createFromFormat( 'm-d-Y h:i A', $log[ 'timestamp' ] );
+                                                    $dateObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $log[ 'timestamp' ] );
                                                     if ( $dateObj ) :
                                                         ?>
                                                         <?= $dateObj->format( 'F j, Y' ) ?><br>
-                                                        <small><?= $dateObj->format( 'h:i A' ) ?></small>
+                                                        <small><?= $dateObj->format( 'h:i:s A' ) ?></small>
                                                     <?php else : ?>
                                                         <span class="text-muted">—</span>
                                                     <?php endif; ?>

@@ -25,8 +25,7 @@ class BeneficiariesController extends BaseController
         $logsModel          = new LogsModel();
 
         // Get Philippine time
-        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
+        $formattedDate = getPhilippineTimeFormatted();
 
         // Update the status to "Received" and set the current date/time
         $beneficiariesModel->update( $id, [ 
@@ -51,12 +50,7 @@ class BeneficiariesController extends BaseController
             ) ) );
 
             /* Staff Fullname */
-            $staffFullName = ucwords( strtolower( trim(
-                session( 'user_firstname' ) . ' ' .
-                ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-                session( 'user_lastname' ) .
-                ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-            ) ) );
+            $staffFullName = session( 'user_fullname' );
 
             // Prepare log data
             $logData = [ 
@@ -92,15 +86,13 @@ class BeneficiariesController extends BaseController
      * @param int $id The ID of the beneficiary to undo receive.
      * @return ResponseInterface
      */
-
     public function undoReceive( int $id ) : ResponseInterface
     {
         $beneficiariesModel = new BeneficiariesModel();
         $logsModel          = new LogsModel();
 
         // Get Philippine time
-        $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
-        $formattedDate = $philTime->format( 'm-d-Y h:i A' );
+        $formattedDate = getPhilippineTimeFormatted();
 
         // Get beneficiary info from form post
         $rsbsa     = $this->request->getPost( 'rsbsa_ref_no' );
@@ -118,13 +110,7 @@ class BeneficiariesController extends BaseController
         ) ) );
 
         /* Staff Fullname */
-        $staffFullName = ucwords( strtolower( trim(
-            session( 'user_firstname' ) . ' ' .
-            ( session( 'user_middlename' ) ? session( 'user_middlename' ) . ' ' : '' ) .
-            session( 'user_lastname' ) .
-            ( session( 'user_suffix_and_ext' ) ? ' ' . session( 'user_suffix_and_ext' ) : '' )
-        ) ) );
-
+        $staffFullName = session( 'user_fullname' );
 
         // Undo receive
         $beneficiariesModel->update( $id, [ 
