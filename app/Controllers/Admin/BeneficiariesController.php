@@ -10,6 +10,25 @@ use App\Models\LogsModel;
 class BeneficiariesController extends BaseController
 {
     /**
+     * Set the selected barangay in the session.
+     *
+     * This method processes the selected barangay data from the request,
+     * splits it into ID and name, and stores them in the session.
+     *
+     * @return ResponseInterface Redirects to the reports page after setting the barangay.
+     */
+    public function setBarangayView()
+    {
+        $data = $this->request->getPost( 'barangay_data' );
+
+        if ( $data ) {
+            session()->set( 'selected_beneficiaries_barangay_name', $data );
+        }
+
+        return redirect()->to( base_url( '/admin/beneficiaries' ) );
+    }
+
+    /**
      * Mark a beneficiary as "Received" and log the action.
      *
      * Updates the beneficiary's status and date-time received,

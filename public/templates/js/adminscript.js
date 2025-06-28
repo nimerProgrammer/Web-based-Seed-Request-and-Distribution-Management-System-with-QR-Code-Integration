@@ -290,6 +290,15 @@ $(document).ready(function () {
     "Are you sure you want to undo this rejection?"
   );
 
+  document.querySelectorAll(".select-barangay").forEach((item) => {
+    item.addEventListener("click", function (e) {
+      e.preventDefault();
+      const value = this.getAttribute("data-value");
+      document.getElementById("barangayDataInput").value = value;
+      document.getElementById("barangayForm").submit();
+    });
+  });
+
   function attachSwal(selector, title, text) {
     document.querySelectorAll(selector).forEach(function (form) {
       form.addEventListener("submit", function (event) {

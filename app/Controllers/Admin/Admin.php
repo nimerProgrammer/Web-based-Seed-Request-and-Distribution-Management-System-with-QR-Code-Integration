@@ -215,6 +215,11 @@ class Admin extends BaseController
         return $header . $body . $modals . $footer;
     }
 
+    /**
+     * Displays the seeds requests page.
+     *
+     * @return string
+     */
     public function seedsRequests()
     {
         $redirect = ifLogin();
@@ -289,6 +294,11 @@ class Admin extends BaseController
         return $header . $body . $footer;
     }
 
+    /**
+     * Displays the beneficiaries page.
+     *
+     * @return string
+     */
     public function beneficiaries()
     {
         $redirect = ifLogin();
@@ -298,6 +308,12 @@ class Admin extends BaseController
 
         session()->set( "title", "Beneficiaries" );
         session()->set( "current_tab", "beneficiaries" );
+
+        if ( !session()->has( 'selected_beneficiaries_barangay_name' ) ) {
+            session()->set( 'selected_beneficiaries_barangay_name', 'Agsam' );
+        }
+
+        $brgy = session()->get( 'selected_beneficiaries_barangay_name' );
 
         $inventoryModel     = new InventoryModel();
         $beneficiariesModel = new BeneficiariesModel();
@@ -332,7 +348,9 @@ class Admin extends BaseController
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
             ->where( 'cropping_season.status', 'Current' )
+            ->where( 'client_info.brgy', $brgy )
             ->orderBy( 'beneficiaries.date_time_received', 'DESC' )
+            ->orderBy( 'client_info.last_name', 'ASC' )
             ->findAll();
 
 
@@ -351,6 +369,11 @@ class Admin extends BaseController
         return $header . $body . $footer;
     }
 
+    /**
+     * Displays the reports page.
+     *
+     * @return string
+     */
     public function reports()
     {
         $redirect = ifLogin();
@@ -472,6 +495,11 @@ class Admin extends BaseController
         return $header . $body . $footer;
     }
 
+    /**
+     * Displays the logs page.
+     *
+     * @return string
+     */
     public function logs()
     {
         $redirect = ifLogin();
@@ -500,6 +528,11 @@ class Admin extends BaseController
         return $header . $body . $footer;
     }
 
+    /**
+     * Handles user logout and redirects to the login page.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function logout()
     {
         session()->destroy();
@@ -507,15 +540,5 @@ class Admin extends BaseController
         return redirect()->to( base_url( '/admin/login' ) );
     }
 
-    // public function searching()
-    // {
-    //     $search = $this->request->getPost("search");
 
-    //     $User_Model = new UsersModel();
-
-    //     $user_data = $User_Model->like("email", $search)->findAll(5);
-
-    //     return json_encode($user_data);
-
-    // }
 }

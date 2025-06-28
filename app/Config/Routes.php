@@ -51,6 +51,8 @@ $routes->post( 'admin/seedrequests/undoRejected/(:num)', 'Admin\SeedRequestsCont
 
 
 /*** BENEFICIARIES CONTROLLER ACTIONS ***/
+$routes->post( '/admin/beneficiaries/setBarangayView', 'Admin\BeneficiariesController::setBarangayView' );
+
 // Route to mark a beneficiary as received
 $routes->post( 'admin/beneficiaries/markReceived/(:num)', 'Admin\BeneficiariesController::markReceived/$1' );
 // Route to undo a received beneficiary
