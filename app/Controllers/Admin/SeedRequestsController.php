@@ -12,6 +12,25 @@ use App\Models\LogsModel;
 class SeedRequestsController extends BaseController
 {
     /**
+     * Sets the selected barangay for seed requests in the session.
+     *
+     * This method processes the selected barangay data from the request,
+     * splits it into ID and name, and stores them in the session.
+     *
+     * @return ResponseInterface Redirects to the seeds requests page after setting the barangay.
+     */
+    public function setBarangayView()
+    {
+        $data = $this->request->getPost( 'barangay_data' );
+
+        if ( $data ) {
+            session()->set( 'selected_seedrequests_barangay_name', $data );
+        }
+
+        return redirect()->to( base_url( '/admin/seedsRequests' ) );
+    }
+
+    /**
      * Approves a seed request by ID and records the beneficiary.
      *
      * @param int $id The ID of the seed request to approve.

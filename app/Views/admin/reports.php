@@ -29,9 +29,37 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <div class="btn-group mb-3" role="group" aria-label="Export Buttons">
-                                            <div class="mr-2 mt-1">
-                                                <?= esc( session( 'selected_cropping_season_name' ) ) ?>
+                                        <div class="btn-group mb-3 float-right" role="group" aria-label="Export Buttons">
+
+                                            <?php $barangays = getBarangayList(); ?>
+
+                                            <!-- Hidden form -->
+                                            <form id="barangayForm"
+                                                action="<?= base_url( '/admin/reports/setReportBarangayView' ) ?>"
+                                                method="post" style="display: none;">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="barangay_data" id="barangayDataInput">
+                                            </form>
+
+                                            <!-- Visible Dropdown -->
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle float-end"
+                                                    type="button" id="barangayDropdown" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    Barangay:
+                                                    <?= esc( session( 'selected_report_barangay_name' ) ?? 'Select a Barangay' ) ?>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="barangayDropdown"
+                                                    style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc;">
+                                                    <?php foreach ( $barangays as $b ) : ?>
+                                                        <li>
+                                                            <a href="#" class="dropdown-item select-barangay"
+                                                                data-value="<?= esc( $b[ 'barangay_name' ] ) ?>">
+                                                                <?= esc( $b[ 'barangay_name' ] ) ?>
+                                                            </a>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
                                             </div>
 
                                             <!-- Cropping Season Dropdown Form -->
@@ -43,10 +71,9 @@
 
                                             <!-- Visible Dropdown -->
                                             <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle float-end"
-                                                    type="button" id="seasonDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    Select Cropping Season
+                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                                    id="seasonDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <?= esc( session( 'selected_cropping_season_name' ) ) ?>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="seasonDropdown">
                                                     <?php foreach ( $cropping_seasons as $s ) : ?>
@@ -61,9 +88,8 @@
                                             </div>
 
                                             <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle float-end"
-                                                    type="button" id="listDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
+                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                                    id="listDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                                     View Lists
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="listDropdown">
@@ -206,11 +232,38 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <div class="btn-group mb-3" role="group" aria-label="Export Buttons">
-                                            <div class="mr-2 mt-1">
-                                                <?= esc( session( 'selected_cropping_season_name' ) ) ?>
-                                            </div>
 
+                                        <div class="btn-group mb-3 float-right" role="group" aria-label="Export Buttons">
+                                            <?php $barangays = getBarangayList(); ?>
+
+                                            <!-- Hidden form -->
+                                            <form id="barangayForm"
+                                                action="<?= base_url( '/admin/reports/setReportBarangayView' ) ?>"
+                                                method="post" style="display: none;">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="barangay_data" id="barangayDataInput">
+                                            </form>
+
+                                            <!-- Visible Dropdown -->
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle float-end"
+                                                    type="button" id="barangayDropdown" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    Barangay:
+                                                    <?= esc( session( 'selected_report_barangay_name' ) ?? 'Select a Barangay' ) ?>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="barangayDropdown"
+                                                    style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc;">
+                                                    <?php foreach ( $barangays as $b ) : ?>
+                                                        <li>
+                                                            <a href="#" class="dropdown-item select-barangay"
+                                                                data-value="<?= esc( $b[ 'barangay_name' ] ) ?>">
+                                                                <?= esc( $b[ 'barangay_name' ] ) ?>
+                                                            </a>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            </div>
                                             <!-- Cropping Season Dropdown Form -->
                                             <form id="seasonForm" action="<?= base_url( '/admin/reports/setSeasonView' ) ?>"
                                                 method="post" style="display: none;">
@@ -220,10 +273,9 @@
 
                                             <!-- Visible Dropdown -->
                                             <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle float-end"
-                                                    type="button" id="seasonDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    Select Cropping Season
+                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                                    id="seasonDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <?= esc( session( 'selected_cropping_season_name' ) ) ?>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="seasonDropdown">
                                                     <?php foreach ( $cropping_seasons as $s ) : ?>
@@ -238,9 +290,8 @@
                                             </div>
 
                                             <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle float-end"
-                                                    type="button" id="listDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
+                                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                                    id="listDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                                     View Lists
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="listDropdown">

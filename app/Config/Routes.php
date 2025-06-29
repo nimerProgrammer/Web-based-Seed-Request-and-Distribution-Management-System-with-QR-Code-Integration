@@ -42,6 +42,7 @@ $routes->post( '/admin/inventory/update/(:num)', 'Admin\InventoryController::upd
 
 
 /*** SEED REQUESTS CONTROLLER ACTIONS ***/
+$routes->post( '/admin/seedrequests/setBarangayView', 'Admin\SeedRequestsController::setBarangayView' );
 // Approve / Undo Approve
 $routes->post( 'admin/seedrequests/approve/(:num)', 'Admin\SeedRequestsController::approve/$1' );
 $routes->post( 'admin/seedrequests/undoApproved/(:num)', 'Admin\SeedRequestsController::undoApproved/$1' );
@@ -59,6 +60,8 @@ $routes->post( 'admin/beneficiaries/markReceived/(:num)', 'Admin\BeneficiariesCo
 $routes->post( 'admin/beneficiaries/undoReceive/(:num)', 'Admin\BeneficiariesController::undoReceive/$1' );
 
 /*** REPORTS CONTROLLER ACTIONS ***/
+$routes->post( '/admin/reports/setReportBarangayView', 'Admin\ReportsController::setReportBarangayView' );
+
 $routes->get( '/admin/reports/setListView/(:segment)', 'Admin\ReportsController::setListView/$1' );
 $routes->post( '/admin/reports/setSeasonView', 'Admin\ReportsController::setSeasonView' );
 

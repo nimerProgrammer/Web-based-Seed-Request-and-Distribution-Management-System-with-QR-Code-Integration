@@ -29,7 +29,7 @@
 
                             <div class="btn-group mb-3" role="group" aria-label="Export Buttons">
                                 <div class="mr-3 mt-1 text-bold">
-                                    Barangay
+                                    Barangay:
                                     <?= esc( session( 'selected_beneficiaries_barangay_name' ) ?? 'Select a Barangay' ) ?>
                                 </div>
 
@@ -98,23 +98,27 @@
                                                     <table class="set-Table table table-bordered table-hover">
                                                         <thead class="table-secondary">
                                                             <tr>
-                                                                <th>No.</th>
-                                                                <th>RSBSA Reference No.</th>
+                                                                <th rowspan="2">No.</th>
+                                                                <th rowspan="2">RSBSA Reference No.</th>
+                                                                <th colspan="4" class="text-center">Name of Farmer</th>
+
+                                                                <th rowspan="2">Barangay</th>
+                                                                <th rowspan="2">Municipality</th>
+                                                                <th rowspan="2">Province</th>
+                                                                <th rowspan="2">Birthdate<br>(mm/dd/yyyy)</th>
+                                                                <th rowspan="2">Gender<br>Male/Female</th>
+                                                                <th rowspan="2">Contact No.<br>(Mobile No.)</th>
+                                                                <th rowspan="2">Farm Area<br>(Hectares)</th>
+                                                                <th rowspan="2">Province</th>
+                                                                <th rowspan="2">Date & Time Received</th>
+                                                                <th rowspan="2" class="text-center">Status</th>
+                                                                <th rowspan="2" class="text-center">Action</th>
+                                                            </tr>
+                                                            <tr>
                                                                 <th>Last Name</th>
                                                                 <th>First Name</th>
                                                                 <th>Middle Name</th>
                                                                 <th>Suffix & Ext.</th>
-                                                                <th>Barangay</th>
-                                                                <th>Municipality</th>
-                                                                <th>Province</th>
-                                                                <th>Birthdate<br>(mm/dd/yyyy)</th>
-                                                                <th>Gender<br>Male/Female</th>
-                                                                <th>Contact No.<br>(Mobile No.)</th>
-                                                                <th>Farm Area<br>(Hectares)</th>
-                                                                <th>Province</th>
-                                                                <th>Date & Time Received</th>
-                                                                <th class="text-center">Status</th>
-                                                                <th class="text-center">Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>

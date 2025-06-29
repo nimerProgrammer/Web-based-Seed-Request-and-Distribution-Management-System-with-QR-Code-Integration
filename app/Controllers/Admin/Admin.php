@@ -227,6 +227,13 @@ class Admin extends BaseController
             return $redirect;
         }
 
+
+        if ( !session()->has( 'selected_seedrequests_barangay_name' ) ) {
+            session()->set( 'selected_seedrequests_barangay_name', 'Agsam' );
+        }
+
+        $brgy = session()->get( 'selected_seedrequests_barangay_name' );
+
         session()->set( "title", "Seeds Requests" );
         session()->set( "current_tab", "seeds_requests" );
 
@@ -247,6 +254,7 @@ class Admin extends BaseController
                 'client_info.first_name',
                 'client_info.middle_name',
                 'client_info.suffix_and_ext',
+                'client_info.brgy',
                 'client_info.name_land_owner',
                 'client_info.rsbsa_ref_no',
                 'client_info.farm_area',
@@ -259,6 +267,7 @@ class Admin extends BaseController
             ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->where( 'client_info.brgy', $brgy )
             ->where( 'cropping_season.status', 'Current' )
             ->orderBy( 'seed_requests.date_time_requested', 'ASC' )
             ->findAll();
@@ -393,6 +402,14 @@ class Admin extends BaseController
         //     'selected_cropping_season_id'   => $currentSeasonId,
         //     'selected_cropping_season_name' => $currentSeasonName
         // ] );
+
+        if ( !session()->has( 'selected_report_barangay_name' ) ) {
+            session()->set( 'selected_report_barangay_name', 'Agsam' );
+        }
+
+        $brgy = session()->get( 'selected_report_barangay_name' );
+
+
         if ( !session()->has( 'selected_cropping_season_id' ) ) {
             // Check if fallback cropping_season_id is available
             if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
@@ -402,6 +419,7 @@ class Admin extends BaseController
                 ] );
             }
         }
+
         $selectedSeasonId = session()->get( 'selected_cropping_season_id' );
 
         $inventoryModel      = new InventoryModel();
@@ -420,7 +438,6 @@ class Admin extends BaseController
         if ( !session()->has( 'selected_list' ) ) {
             session()->set( 'selected_list', 'seedrequests' );
         }
-
         if ( session()->get( 'selected_list' ) === 'seedrequests' ) {
 
             $dataRequests[ 'seed_requests' ] = $seedRequestsModel
@@ -444,6 +461,7 @@ class Admin extends BaseController
                 ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
                 ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
                 ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
+                ->where( 'client_info.brgy', $brgy )
                 ->orderBy( 'client_info.brgy', 'ASC' )
                 ->orderBy( 'seed_requests.date_time_requested', 'ASC' )
                 ->findAll();
@@ -487,7 +505,6 @@ class Admin extends BaseController
             session()->get( 'selected_list' ) === 'beneficiaries' ? $dataBeneficiaries : $dataRequests
         );
 
-
         $header = view( 'admin/templates/header' );
         $body   = view( 'admin/reports', $data );
         $footer = view( 'admin/templates/footer' );
@@ -517,7 +534,7 @@ class Admin extends BaseController
         $data[ 'logs' ] = $logsModel
             ->select( 'logs.*, users.user_type' )
             ->join( 'users', 'users.users_tbl_id = logs.users_tbl_id', 'left' ) // ← Use 'left' join
-            ->orderBy( 'logs.timestamp', 'DESC' )
+            ->orderBy( 'logs.logs_tbl_id', 'DESC' )
             ->findAll();
 
         $header = view( 'admin/templates/header' );

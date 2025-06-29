@@ -19,6 +19,26 @@ use \DateTimeZone;
 
 class ReportsController extends BaseController
 {
+
+    /**
+     * Sets the selected barangay for seed requests report in the session.
+     *
+     * This method processes the selected barangay data from the request,
+     * and stores it in the session for later use in generating reports.
+     *
+     * @return ResponseInterface Redirects to the seed requests reports page after setting the barangay.
+     */
+    public function setReportBarangayView()
+    {
+        $barangay = $this->request->getPost( 'barangay_data' );
+
+        if ( $barangay ) {
+            session()->set( 'selected_report_barangay_name', $barangay );
+        }
+
+        return redirect()->to( base_url( '/admin/reports' ) );
+    }
+
     /**
      * Displays the reports page.
      *
