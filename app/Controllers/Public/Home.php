@@ -45,6 +45,13 @@ class Home extends BaseController
         return $header . $body . $footer;
     }
 
+    /**
+     * Displays the seed request page.
+     *
+     * This method sets session variables for the public user and renders the seed request view.
+     *
+     * @return string The rendered view of the seed request page.
+     */
     public function request_seed()
     {
         // Ensure the user is not logged in
@@ -58,6 +65,19 @@ class Home extends BaseController
         $header = view( 'public/templates/header' );
         $body   = view( 'public/request_seed' );
         // $modals = view('_admin/modals/profile_modal');
+        $footer = view( 'public/templates/footer' );
+
+        return $header . $body . $footer;
+    }
+
+    public function signUp()
+    {
+
+        session()->set( "public_title", "Sign Up" );
+        session()->set( "public_current_tab", "Sign Up" );
+
+        $header = view( 'public/templates/header' );
+        $body   = view( 'public/signUp' );
         $footer = view( 'public/templates/footer' );
 
         return $header . $body . $footer;

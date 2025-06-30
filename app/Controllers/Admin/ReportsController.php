@@ -508,7 +508,7 @@ class ReportsController extends BaseController
             }
             th, td {
                 border: 1px solid #333;
-                padding: 2px 4px;
+                padding: 1px 4px;
                 vertical-align: middle;
             }
             th {
@@ -551,10 +551,7 @@ class ReportsController extends BaseController
                             <tr>
                                 <th rowspan="2">No.</th>
                                 <th rowspan="2">RSBSA Reference No.</th>
-                                <th rowspan="2">Last Name</th>
-                                <th rowspan="2">First Name</th>
-                                <th rowspan="2">Middle Name</th>
-                                <th rowspan="2">Suffix & Ext.</th>
+                                <th colspan="4" class="text-center">Name of Farmer</th>
                                 <th rowspan="2">Barangay</th>
                                 <th rowspan="2">Municipality</th>
                                 <th rowspan="2">Province</th>
@@ -565,6 +562,10 @@ class ReportsController extends BaseController
                                 <th colspan="2" style="text-align: center;">Voucher</th>
                             </tr>
                             <tr>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Suffix & Ext.</th>
                                 <th>Reference No</th>
                                 <th>Date Received</th>
                             </tr>

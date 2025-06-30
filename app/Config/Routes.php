@@ -17,6 +17,7 @@ $routes->post( '/get_user_data', 'Admin\Admin::get_user_data' );
 $routes->get( '/', 'Public\Home::index' );
 $routes->get( '/public/home', 'Public\Home::home' );
 $routes->get( '/public/request_seed', 'Public\Home::request_seed' );
+$routes->get( '/public/signUp', 'Public\Home::signUp' );
 // $routes->get('/public', 'Home::index');
 
 

@@ -168,14 +168,18 @@
                                                                 <table class="set-Table table table-bordered table-hover">
                                                                     <thead class="table-secondary">
                                                                         <tr>
-                                                                            <th>No.</th>
+                                                                            <th rowspan="2">No.</th>
+                                                                            <th colspan="4" class="text-center">Name of Farmer
+                                                                            </th>
+                                                                            <th rowspan="2">RSBSA Reference No.</th>
+                                                                            <th rowspan="2">Name of Land Owner</th>
+                                                                            <th rowspan="2">Verified Farm Area (Hectares)</th>
+                                                                        </tr>
+                                                                        <tr>
                                                                             <th>Last Name</th>
                                                                             <th>First Name</th>
                                                                             <th>Middle Name</th>
                                                                             <th>Suffix & Ext.</th>
-                                                                            <th>RSBSA Reference No.</th>
-                                                                            <th>Name of Land Owner</th>
-                                                                            <th>Verified Farm Area (Hectares)</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -377,10 +381,9 @@
                                                                         <tr>
                                                                             <th rowspan="2">No.</th>
                                                                             <th rowspan="2">RSBSA Reference No.</th>
-                                                                            <th rowspan="2">Last Name</th>
-                                                                            <th rowspan="2">First Name</th>
-                                                                            <th rowspan="2">Middle Name</th>
-                                                                            <th rowspan="2">Suffix & Ext.</th>
+                                                                            <th colspan="4" class="text-center">Name of Farmer
+                                                                            </th>
+
                                                                             <th rowspan="2">Barangay</th>
                                                                             <th rowspan="2">Municipality</th>
                                                                             <th rowspan="2">Province</th>
@@ -391,6 +394,10 @@
                                                                             <th class="text-center" colspan="2">Voucher</th>
                                                                         </tr>
                                                                         <tr>
+                                                                            <th>Last Name</th>
+                                                                            <th>First Name</th>
+                                                                            <th>Middle Name</th>
+                                                                            <th>Suffix & Ext.</th>
                                                                             <th>Reference No</th>
                                                                             <th>Date Received</th>
                                                                         </tr>

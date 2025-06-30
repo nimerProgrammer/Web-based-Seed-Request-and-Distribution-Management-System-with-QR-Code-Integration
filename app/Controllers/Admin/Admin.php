@@ -393,16 +393,6 @@ class Admin extends BaseController
         session()->set( "title", "Reports" );
         session()->set( "current_tab", "reports" );
 
-        // // Get from session
-        // $currentSeasonId   = session()->get( 'current_season_id' );
-        // $currentSeasonName = session()->get( 'current_season_name' );
-
-        // // Set to selected session values
-        // session()->set( [ 
-        //     'selected_cropping_season_id'   => $currentSeasonId,
-        //     'selected_cropping_season_name' => $currentSeasonName
-        // ] );
-
         if ( !session()->has( 'selected_report_barangay_name' ) ) {
             session()->set( 'selected_report_barangay_name', 'Agsam' );
         }
@@ -463,7 +453,7 @@ class Admin extends BaseController
                 ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
                 ->where( 'client_info.brgy', $brgy )
                 ->orderBy( 'client_info.brgy', 'ASC' )
-                ->orderBy( 'seed_requests.date_time_requested', 'ASC' )
+                ->orderBy( 'client_info.last_name', 'ASC' )
                 ->findAll();
         }
 
@@ -496,7 +486,8 @@ class Admin extends BaseController
                 ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
                 ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
                 ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
-                ->orderBy( 'beneficiaries.date_time_received', 'DESC' )
+                ->where( 'client_info.brgy', $brgy )
+                ->orderBy( 'client_info.last_name', 'ASC' )
                 ->findAll();
         }
         $data = array_merge(

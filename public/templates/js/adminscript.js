@@ -295,6 +295,7 @@ $(document).ready(function () {
       e.preventDefault();
       const value = this.getAttribute("data-value");
       document.getElementById("barangayDataInput").value = value;
+      showLoader(); // Optional: show loading spinner
       document.getElementById("barangayForm").submit();
     });
   });
