@@ -21,7 +21,7 @@
                 </div>
             </div> -->
     <div class="text-center p-3 bg-secondary text-white">
-        © 2025 Seed Request and Distribution System with QR Integration | All rights reserved.
+        © 2025 Seed Request and Distribution System with QR Code Integration | All rights reserved.
     </div>
 </footer>
 
@@ -41,7 +41,20 @@
 
 <script src="<?= base_url( 'templates/js/publicScript.js?v=6.6.6' ) ?>"></script>
 
-
+<?php if ( session()->has( 'swal' ) ) : ?>
+    <script>
+        Swal.fire({
+            title: '<?= esc( session( 'swal' )[ 'title' ] ) ?>',
+            text: '<?= esc( session( 'swal' )[ 'text' ] ) ?>',
+            icon: '<?= esc( session( 'swal' )[ 'icon' ] ) ?>',
+            confirmButtonText: '<?= esc( session( 'swal' )[ 'confirmButtonText' ] ?? 'OK' ) ?>',
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            },
+            buttonsStyling: false
+        });
+    </script>
+<?php endif; ?>
 </body>
 
 </html>

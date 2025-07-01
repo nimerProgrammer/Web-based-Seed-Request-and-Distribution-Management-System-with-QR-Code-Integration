@@ -18,7 +18,74 @@
     <!-- Default Icon in the Head Section -->
     <link rel="shortcut icon" href="<?= base_url( 'templates/img/icon.png' ) ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?= base_url( 'templates/css/admin-style.css?v=1.1.1' ) ?>">
+
+    <style>
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.2);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner-with-logo {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .gradient-spinner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.2) 20%,
+                    rgba(255, 255, 255, 0.4) 40%,
+                    rgba(255, 255, 255, 0.8) 70%,
+                    rgba(255, 255, 255, 1) 100%);
+
+            /* Make the ring thin (just a small line on the edge) */
+            mask: radial-gradient(farthest-side, transparent 89%, black 90%);
+            -webkit-mask: radial-gradient(farthest-side, transparent 89%, black 90%);
+
+            animation: spin 1s linear infinite;
+            transform-origin: center;
+        }
+
+        .spinner-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            object-fit: contain;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
 </head>
+<div class="spinner-overlay" id="loading-spinner" style="display: none;">
+    <div class="spinner-with-logo">
+        <div class="gradient-spinner"></div>
+        <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="Logo" class="spinner-logo">
+    </div>
+</div>
 
 <body class="hold-transition layout-top-nav">
     <div class="wrapper">
