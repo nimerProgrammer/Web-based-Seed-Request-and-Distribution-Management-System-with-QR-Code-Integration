@@ -63,7 +63,7 @@ $(document).ready(function () {
   }
 
   // Sidebar link auto-show loader
-  document.querySelectorAll(".nav-link").forEach((link) => {
+  document.querySelectorAll(".top-loader").forEach((link) => {
     link.addEventListener("click", function (e) {
       if (
         !e.ctrlKey &&
@@ -135,6 +135,42 @@ $(document).ready(function () {
     });
   });
 
+  $("#last_name").on("input", function () {
+    checkFormValidity();
+  });
+
+  $("#first_name").on("input", function () {
+    checkFormValidity();
+  });
+
+  $("#middle_name").on("input", function () {
+    checkFormValidity();
+  });
+
+  $("#suffix").on("input", function () {
+    checkFormValidity();
+  });
+
+  $("#gender").on("input", function () {
+    checkFormValidity();
+  });
+
+  $("#barangay").on("input", function () {
+    checkFormValidity();
+  });
+
+  $("#farm_area").on("input", function () {
+    checkFormValidity();
+  });
+
+  $("#land_owner").on("input", function () {
+    checkFormValidity();
+  });
+
+  // $("#username").on("input", function () {
+  //   checkFormValidity();
+  // });
+
   $("#birthdate").on("input", function () {
     const value = $(this).val();
     const input = $(this);
@@ -173,6 +209,8 @@ $(document).ready(function () {
       input.removeClass("is-invalid");
       input.next(".invalid-feedback").hide();
     }
+
+    checkFormValidity();
   });
 
   $("#rsbsa_no").on("input", function () {
@@ -344,16 +382,18 @@ $(document).ready(function () {
         .next(".invalid-feedback")
         .text("Username must be at least 8 characters long.")
         .show();
+      checkFormValidity();
       return;
     }
 
     // Disallow the literal word "username"
-    if (value.toLowerCase() === "username") {
+    else if (value.toLowerCase() === "username") {
       input.addClass("is-invalid");
       input
         .next(".invalid-feedback")
         .text("Username cannot be 'username'.")
         .show();
+      checkFormValidity();
       return;
     }
 
@@ -375,6 +415,7 @@ $(document).ready(function () {
         } else {
           input.removeClass("is-invalid");
           input.next(".invalid-feedback").hide();
+          checkFormValidity();
         }
       },
       "json"
@@ -520,4 +561,13 @@ $(document).ready(function () {
       $("#signUpForm").submit(); // Manually trigger form submit
     }
   });
+
+  const toggle = document.getElementById("togglePassword");
+  const password = document.getElementById("login_password");
+
+  if (toggle && password) {
+    toggle.addEventListener("change", function () {
+      password.type = this.checked ? "text" : "password";
+    });
+  }
 });

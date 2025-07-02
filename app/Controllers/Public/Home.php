@@ -39,10 +39,10 @@ class Home extends BaseController
 
         $header = view( 'public/templates/header' );
         $body   = view( 'public/home' );
-        // $modals = view('_admin/modals/profile_modal');
+        $modals = view( 'public/dialog/loginModalDialog' );
         $footer = view( 'public/templates/footer' );
 
-        return $header . $body . $footer;
+        return $header . $body . $modals . $footer;
     }
 
     /**

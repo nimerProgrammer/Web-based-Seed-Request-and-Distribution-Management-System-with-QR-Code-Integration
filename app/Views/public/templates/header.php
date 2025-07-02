@@ -132,7 +132,8 @@
                                 </div>
                             </form>
                         </li>
-                        <li class="nav-item ms-1"><a class="nav-link active" href="<?= base_url( '/' ) ?>">Home</a></li>
+                        <li class="nav-item ms-1 top-loader"><a class="nav-link active"
+                                href="<?= base_url( '/' ) ?>">Home</a></li>
                         <li class="nav-item ms-1">
                             <a href="#" class="nav-link" id="publicRequestSeedLink"
                                 data-is-logged-in="<?= session()->get( 'public_user_id' ) ? '1' : '0' ?>"
@@ -143,7 +144,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item ms-1">
+                        <li class="nav-item ms-1 top-loader">
                             <a class="nav-link" href="#" id="testSweetAlert">Sent Request</a>
                         </li>
                         <li class="nav-item ms-1"><a class="nav-link" href="#">About</a></li>
@@ -153,13 +154,13 @@
                     <!-- Right content -->
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
 
-                        <li class="nav-item mr-2 mb-2">
-                            <a href="login" class="btn btn-outline-primary
-                             btn-sm">Log in</a>
+                        <li class="nav-item ml-1 mr-1 mb-2">
+                            <a href="javascript(0)" class="btn btn-outline-primary w-100
+                             btn-sm" data-bs-toggle="modal" data-bs-target="#loginModalDialog">Log in</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url( 'public/signUp' ) ?>" class="btn btn-outline-primary
-                             btn-sm">Sign up</a>
+                        <li class="nav-item ml-1 mr-1">
+                            <a href="<?= base_url( 'public/signUp' ) ?>" class="btn btn-outline-primary 
+                            w-100 btn-sm">Sign up</a>
                         </li>
                     </ul>
                 </div>
