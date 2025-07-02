@@ -11,6 +11,14 @@ use App\Models\LogsModel;
 
 class SignUpController extends BaseController
 {
+    /**
+     * Checks if a value already exists in a specified table and field.
+     *
+     * This method is used to check for duplicate entries in the database.
+     * It returns a JSON response indicating whether the value exists or not.
+     *
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
     public function checker()
     {
         $table = $this->request->getPost( 'table' );
@@ -26,6 +34,14 @@ class SignUpController extends BaseController
         ] );
     }
 
+    /**
+     * Handles the sign-up form submission.
+     *
+     * This method processes the sign-up form data, validates it, and saves the user information
+     * to the database. It also logs the action and sets a success message in the session.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function submitSignUp()
     {
         $request     = service( 'request' );
