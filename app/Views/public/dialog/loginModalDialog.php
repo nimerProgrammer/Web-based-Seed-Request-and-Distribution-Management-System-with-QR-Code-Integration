@@ -1,9 +1,13 @@
+<script>
+    const LOGIN_URL = "<?= base_url( 'public/login/check_credentials' ) ?>";
+</script>
+
 <!-- Locked Login Modal -->
 <div class="modal fade" id="loginModalDialog" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true"
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content">
-            <form action="<?= base_url( 'public/login/submit' ) ?>" method="post">
+            <form id="loginForm" action="javascript:void(0)" method="post">
                 <div class="modal-header">
                     <div>
                         <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="Logo" class="img-fluid"
@@ -22,14 +26,26 @@
                     </div>
                     <div class="mb-3">
                         <label for="login_username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="login_username" name="username"
-                            placeholder="Enter username" required>
+                        <div class="input-group input-group-md">
+                            <input type="text" class="form-control" id="login_username" name="username"
+                                placeholder="Enter username" required>
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                        </div>
+                        <div class="invalid-feedback" id="username_error"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="login_password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="login_password" name="password"
-                            placeholder="Enter password" required>
+
+                        <div class="input-group input-group-md">
+                            <input type="password" class="form-control" id="login_password" name="password"
+                                placeholder="Enter password" required>
+
+
+                            <span class="input-group-text"><i class="bi bi-key"></i></span>
+                        </div>
+                        <div class="invalid-feedback" id="password_error"></div>
+
                         <div class="form-check mt-2 ml-1">
                             <input class="form-check-input" type="checkbox" id="togglePassword">
                             <label class="form-check-label" for="togglePassword">show password</label>
@@ -41,7 +57,8 @@
                     </div>
 
                     <div class="mb-0">
-                        <button type="submit" class="btn btn-md btn-primary rounded-5 w-100">Log in</button>
+                        <button id="login-btn" type="submit" class="btn btn-md btn-primary rounded-5 w-100">Log
+                            in</button>
                     </div>
                 </div>
 

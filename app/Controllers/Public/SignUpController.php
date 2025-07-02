@@ -7,8 +7,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UsersModel;
 use App\Models\ClientInfoModel;
 use App\Models\LogsModel;
-
-
 class SignUpController extends BaseController
 {
     /**

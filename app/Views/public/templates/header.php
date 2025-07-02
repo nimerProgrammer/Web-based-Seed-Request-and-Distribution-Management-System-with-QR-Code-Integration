@@ -140,7 +140,7 @@
                                 data-request-url="<?= base_url( 'public/request_seed' ) ?>"
                                 data-login-url="<?= base_url( 'public/login' ) ?>"
                                 data-signup-url="<?= base_url( 'public/signUp' ) ?>">
-                                Request Seeds
+                                Request Seed
                             </a>
                         </li>
 
@@ -153,15 +153,25 @@
 
                     <!-- Right content -->
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                        <?php if ( session()->get( 'public_logged_in' ) === true ) : ?>
+                            <li class="nav-item ml-1 mr-1">
+                                <a href="<?= base_url( 'public/logout' ) ?>" class="btn btn-outline-primary 
+                            w-100 btn-sm">Log out</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ( session()->get( 'public_logged_in' ) === false ) : ?>
+                            <li class="nav-item ml-1 mr-1 mb-2">
+                                <a href="javascript(0)" class="btn btn-outline-primary w-100
+                                                         btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#loginModalDialog">Log in</a>
+                            </li>
+                            <li class="nav-item ml-1 mr-1">
+                                <a href="<?= base_url( 'public/signUp' ) ?>" class="btn btn-outline-primary 
+                                                        w-100 btn-sm">Sign up</a>
+                            </li>
+                        <?php endif; ?>
 
-                        <li class="nav-item ml-1 mr-1 mb-2">
-                            <a href="javascript(0)" class="btn btn-outline-primary w-100
-                             btn-sm" data-bs-toggle="modal" data-bs-target="#loginModalDialog">Log in</a>
-                        </li>
-                        <li class="nav-item ml-1 mr-1">
-                            <a href="<?= base_url( 'public/signUp' ) ?>" class="btn btn-outline-primary 
-                            w-100 btn-sm">Sign up</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>

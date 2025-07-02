@@ -30,11 +30,8 @@
 
 <?php if ( is_internet_available() ) : ?>
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"
-        integrity="sha384-rHxJuSO4eAGYnLjV2BLfndcudTiVBpNRJsOOLMtkX48TMZ5lefUhbpBJ6t8u/3nH"
-        crossorigin="anonymous"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"
-        integrity="sha384-DxDtEIln4C1A8HO+Hl7k1gffM6vcIFY8nyKN8UnTAxl7zwq22NklnYZCc1rnazSh"
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27"
+        integrity="sha384-mdoL/5UxiiM5ctOnxLuxKDJy3T8r0cDATSr/QEK/m5xMEgwzfimGt2OK0hjqJp9S"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
         integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"

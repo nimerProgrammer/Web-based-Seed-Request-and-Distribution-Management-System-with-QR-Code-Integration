@@ -135,432 +135,432 @@ $(document).ready(function () {
     });
   });
 
-  $("#last_name").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#first_name").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#middle_name").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#suffix").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#gender").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#barangay").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#farm_area").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#land_owner").on("input", function () {
-    checkFormValidity();
-  });
-
-  // $("#username").on("input", function () {
+  // $("#last_name").on("input", function () {
   //   checkFormValidity();
   // });
 
-  $("#birthdate").on("input", function () {
-    const value = $(this).val();
-    const input = $(this);
+  // $("#first_name").on("input", function () {
+  //   checkFormValidity();
+  // });
 
-    if (!value) {
-      input.removeClass("is-invalid");
-      input.next(".invalid-feedback").hide();
-      return;
-    }
+  // $("#middle_name").on("input", function () {
+  //   checkFormValidity();
+  // });
 
-    const birthdate = new Date(value + "T00:00:00+08:00"); // treat input as PH time
-    const nowPH = new Date(
-      new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" })
-    );
+  // $("#suffix").on("input", function () {
+  //   checkFormValidity();
+  // });
 
-    let age = nowPH.getFullYear() - birthdate.getFullYear();
-    let hasHadBirthday =
-      nowPH.getMonth() > birthdate.getMonth() ||
-      (nowPH.getMonth() === birthdate.getMonth() &&
-        nowPH.getDate() >= birthdate.getDate());
+  // $("#gender").on("input", function () {
+  //   checkFormValidity();
+  // });
 
-    let isAtLeast18 = age > 18 || (age === 18 && hasHadBirthday);
+  // $("#barangay").on("input", function () {
+  //   checkFormValidity();
+  // });
 
-    if (!isAtLeast18) {
-      input.addClass("is-invalid");
+  // $("#farm_area").on("input", function () {
+  //   checkFormValidity();
+  // });
 
-      if (!input.next(".invalid-feedback").length) {
-        input.after('<div class="invalid-feedback"></div>');
-      }
+  // $("#land_owner").on("input", function () {
+  //   checkFormValidity();
+  // });
 
-      input
-        .next(".invalid-feedback")
-        .text("You must be at least 18 years old to sign up.")
-        .show();
-    } else {
-      input.removeClass("is-invalid");
-      input.next(".invalid-feedback").hide();
-    }
+  // // $("#username").on("input", function () {
+  // //   checkFormValidity();
+  // // });
 
-    checkFormValidity();
-  });
+  // $("#birthdate").on("input", function () {
+  //   const value = $(this).val();
+  //   const input = $(this);
 
-  $("#rsbsa_no").on("input", function () {
-    let value = $(this).val().trim();
-    let input = $(this);
+  //   if (!value) {
+  //     input.removeClass("is-invalid");
+  //     input.next(".invalid-feedback").hide();
+  //     return;
+  //   }
 
-    if (!value) return; // Skip empty input
+  //   const birthdate = new Date(value + "T00:00:00+08:00"); // treat input as PH time
+  //   const nowPH = new Date(
+  //     new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" })
+  //   );
 
-    $.post(
-      BASE_URL + "public/signUp/checker",
-      {
-        table: "client_info",
-        field: "rsbsa_ref_no",
-        value: value,
-      },
-      function (res) {
-        if (res.exists) {
-          input.addClass("is-invalid");
-          input
-            .next(".invalid-feedback")
-            .text("This RSBSA number is already in use.")
-            .removeClass("d-none");
-        } else {
-          input.removeClass("is-invalid");
-          input.next(".invalid-feedback").addClass("d-none");
-        }
-      },
-      "json"
-    );
+  //   let age = nowPH.getFullYear() - birthdate.getFullYear();
+  //   let hasHadBirthday =
+  //     nowPH.getMonth() > birthdate.getMonth() ||
+  //     (nowPH.getMonth() === birthdate.getMonth() &&
+  //       nowPH.getDate() >= birthdate.getDate());
 
-    checkFormValidity();
-  });
+  //   let isAtLeast18 = age > 18 || (age === 18 && hasHadBirthday);
 
-  $("#contact_no").on("keypress", function (e) {
-    const char = String.fromCharCode(e.which);
-    const value = $(this).val();
+  //   if (!isAtLeast18) {
+  //     input.addClass("is-invalid");
 
-    // Allow digits
-    if (/\d/.test(char)) return;
+  //     if (!input.next(".invalid-feedback").length) {
+  //       input.after('<div class="invalid-feedback"></div>');
+  //     }
 
-    // Allow "+" only at the start and only once
-    if (char === "+" && this.selectionStart === 0 && !value.includes("+"))
-      return;
+  //     input
+  //       .next(".invalid-feedback")
+  //       .text("You must be at least 18 years old to sign up.")
+  //       .show();
+  //   } else {
+  //     input.removeClass("is-invalid");
+  //     input.next(".invalid-feedback").hide();
+  //   }
 
-    e.preventDefault(); // Block everything else
-  });
+  //   checkFormValidity();
+  // });
 
-  // Input length limiter and validation
-  $("#contact_no").on("input", function () {
-    let value = $(this).val().trim();
-    let input = $(this);
+  // $("#rsbsa_no").on("input", function () {
+  //   let value = $(this).val().trim();
+  //   let input = $(this);
 
-    if (!value) return;
+  //   if (!value) return; // Skip empty input
 
-    // Slice value based on prefix
-    if (value.startsWith("+639")) {
-      value = value.slice(0, 13);
-    } else if (value.startsWith("09")) {
-      value = value.slice(0, 11);
-    } else {
-      value = value.slice(0, 13);
-    }
+  //   $.post(
+  //     BASE_URL + "public/signUp/checker",
+  //     {
+  //       table: "client_info",
+  //       field: "rsbsa_ref_no",
+  //       value: value,
+  //     },
+  //     function (res) {
+  //       if (res.exists) {
+  //         input.addClass("is-invalid");
+  //         input
+  //           .next(".invalid-feedback")
+  //           .text("This RSBSA number is already in use.")
+  //           .removeClass("d-none");
+  //       } else {
+  //         input.removeClass("is-invalid");
+  //         input.next(".invalid-feedback").addClass("d-none");
+  //       }
+  //     },
+  //     "json"
+  //   );
 
-    $(this).val(value);
+  //   checkFormValidity();
+  // });
 
-    // Validate pattern
-    let isValid = false;
-    if (/^09\d{9}$/.test(value)) {
-      isValid = true;
-    } else if (/^\+639\d{9}$/.test(value)) {
-      isValid = true;
-    } else {
-      isValid = false;
-    }
+  // $("#contact_no").on("keypress", function (e) {
+  //   const char = String.fromCharCode(e.which);
+  //   const value = $(this).val();
 
-    if (!isValid) {
-      input.addClass("is-invalid");
-      input
-        .next(".invalid-feedback")
-        .text("Must start with 09 (11 digits) or +639 (13 characters).");
-    } else {
-      $.post(
-        BASE_URL + "public/signUp/checker",
-        {
-          table: "users",
-          field: "contact_no",
-          value: value,
-        },
-        function (res) {
-          if (res.exists) {
-            input.addClass("is-invalid");
-            input
-              .next(".invalid-feedback")
-              .text("This contact number is already in use.");
-          } else {
-            input.removeClass("is-invalid");
-          }
-        },
-        "json"
-      );
-    }
+  //   // Allow digits
+  //   if (/\d/.test(char)) return;
 
-    checkFormValidity();
-  });
+  //   // Allow "+" only at the start and only once
+  //   if (char === "+" && this.selectionStart === 0 && !value.includes("+"))
+  //     return;
 
-  $("#email").on("input", function () {
-    let value = $(this).val().trim();
-    let input = $(this);
+  //   e.preventDefault(); // Block everything else
+  // });
 
-    if (!value) {
-      input.removeClass("is-invalid");
-      input.next(".invalid-feedback").hide();
-      return;
-    }
+  // // Input length limiter and validation
+  // $("#contact_no").on("input", function () {
+  //   let value = $(this).val().trim();
+  //   let input = $(this);
 
-    // Allow only specific domains
-    let allowedDomains = ["@gmail.com", "@email.com", "@yahoo.com"];
-    let isValidDomain = allowedDomains.some((domain) => value.endsWith(domain));
+  //   if (!value) return;
 
-    if (!isValidDomain) {
-      input.addClass("is-invalid");
-      input
-        .next(".invalid-feedback")
-        .text("Email must end with @gmail.com, @email.com, or @yahoo.com.")
-        .show();
-      return;
-    }
+  //   // Slice value based on prefix
+  //   if (value.startsWith("+639")) {
+  //     value = value.slice(0, 13);
+  //   } else if (value.startsWith("09")) {
+  //     value = value.slice(0, 11);
+  //   } else {
+  //     value = value.slice(0, 13);
+  //   }
 
-    // Proceed to AJAX duplicate check
-    $.post(
-      BASE_URL + "public/signUp/checker",
-      {
-        table: "users",
-        field: "email",
-        value: value,
-      },
-      function (res) {
-        if (res.exists) {
-          input.addClass("is-invalid");
-          input
-            .next(".invalid-feedback")
-            .text("This email address is already in use.")
-            .show();
-        } else {
-          input.removeClass("is-invalid");
-          input.next(".invalid-feedback").hide();
-        }
-      },
-      "json"
-    );
+  //   $(this).val(value);
 
-    checkFormValidity();
-  });
+  //   // Validate pattern
+  //   let isValid = false;
+  //   if (/^09\d{9}$/.test(value)) {
+  //     isValid = true;
+  //   } else if (/^\+639\d{9}$/.test(value)) {
+  //     isValid = true;
+  //   } else {
+  //     isValid = false;
+  //   }
 
-  $("#username").on("input", function () {
-    let value = $(this).val().trim();
-    let input = $(this);
+  //   if (!isValid) {
+  //     input.addClass("is-invalid");
+  //     input
+  //       .next(".invalid-feedback")
+  //       .text("Must start with 09 (11 digits) or +639 (13 characters).");
+  //   } else {
+  //     $.post(
+  //       BASE_URL + "public/signUp/checker",
+  //       {
+  //         table: "users",
+  //         field: "contact_no",
+  //         value: value,
+  //       },
+  //       function (res) {
+  //         if (res.exists) {
+  //           input.addClass("is-invalid");
+  //           input
+  //             .next(".invalid-feedback")
+  //             .text("This contact number is already in use.");
+  //         } else {
+  //           input.removeClass("is-invalid");
+  //         }
+  //       },
+  //       "json"
+  //     );
+  //   }
 
-    if (!value) {
-      input.removeClass("is-invalid");
-      input.next(".invalid-feedback").hide();
-      return;
-    }
+  //   checkFormValidity();
+  // });
 
-    // Check for minimum length
-    if (value.length <= 7) {
-      input.addClass("is-invalid");
-      input
-        .next(".invalid-feedback")
-        .text("Username must be at least 8 characters long.")
-        .show();
-      checkFormValidity();
-      return;
-    }
+  // $("#email").on("input", function () {
+  //   let value = $(this).val().trim();
+  //   let input = $(this);
 
-    // Disallow the literal word "username"
-    else if (value.toLowerCase() === "username") {
-      input.addClass("is-invalid");
-      input
-        .next(".invalid-feedback")
-        .text("Username cannot be 'username'.")
-        .show();
-      checkFormValidity();
-      return;
-    }
+  //   if (!value) {
+  //     input.removeClass("is-invalid");
+  //     input.next(".invalid-feedback").hide();
+  //     return;
+  //   }
 
-    // AJAX duplicate check
-    $.post(
-      BASE_URL + "public/signUp/checker",
-      {
-        table: "users", // Fixed typo here
-        field: "username",
-        value: value,
-      },
-      function (res) {
-        if (res.exists) {
-          input.addClass("is-invalid");
-          input
-            .next(".invalid-feedback")
-            .text("This username is already in use.")
-            .show();
-        } else {
-          input.removeClass("is-invalid");
-          input.next(".invalid-feedback").hide();
-          checkFormValidity();
-        }
-      },
-      "json"
-    );
+  //   // Allow only specific domains
+  //   let allowedDomains = ["@gmail.com", "@email.com", "@yahoo.com"];
+  //   let isValidDomain = allowedDomains.some((domain) => value.endsWith(domain));
 
-    checkFormValidity();
-  });
+  //   if (!isValidDomain) {
+  //     input.addClass("is-invalid");
+  //     input
+  //       .next(".invalid-feedback")
+  //       .text("Email must end with @gmail.com, @email.com, or @yahoo.com.")
+  //       .show();
+  //     return;
+  //   }
 
-  $("#password").on("input", function () {
-    let value = $(this).val().trim();
-    let input = $(this);
-    let desc = input.closest(".col-md-6").find(".description");
+  //   // Proceed to AJAX duplicate check
+  //   $.post(
+  //     BASE_URL + "public/signUp/checker",
+  //     {
+  //       table: "users",
+  //       field: "email",
+  //       value: value,
+  //     },
+  //     function (res) {
+  //       if (res.exists) {
+  //         input.addClass("is-invalid");
+  //         input
+  //           .next(".invalid-feedback")
+  //           .text("This email address is already in use.")
+  //           .show();
+  //       } else {
+  //         input.removeClass("is-invalid");
+  //         input.next(".invalid-feedback").hide();
+  //       }
+  //     },
+  //     "json"
+  //   );
 
-    // Rule checks
-    let hasUppercase = /[A-Z]/.test(value);
-    let hasNumber = /[0-9]/.test(value);
-    let hasSymbol = /[^A-Za-z0-9]/.test(value);
-    let isLongEnough = value.length >= 8;
+  //   checkFormValidity();
+  // });
 
-    // Final HTML message
-    let html = `
-      <div><strong>Password must be contains the following:</strong></div>
-      <ul class="list-unstyled mb-0">
-        <li class="d-flex align-items-center">
-          <i class="bi me-2 ${
-            hasSymbol
-              ? "bi-check-circle-fill text-success"
-              : "bi-x-circle-fill text-danger"
-          }"></i>
-          At least one special symbol <small class="text-muted">(e.g. !@#$)</small>
-        </li>
-        <li class="d-flex align-items-center">
-          <i class="bi me-2 ${
-            hasUppercase
-              ? "bi-check-circle-fill text-success"
-              : "bi-x-circle-fill text-danger"
-          }"></i>
-          At least one uppercase letter <small class="text-muted">(e.g. A-Z)</small>
-        </li>
-        <li class="d-flex align-items-center">
-          <i class="bi me-2 ${
-            hasNumber
-              ? "bi-check-circle-fill text-success"
-              : "bi-x-circle-fill text-danger"
-          }"></i>
-          At least one number <small class="text-muted">(e.g. 0–9)</small>
-        </li>
-        <li class="d-flex align-items-center"> 
-          <i class="bi me-2 ${
-            isLongEnough
-              ? "bi-check-circle-fill text-success"
-              : "bi-x-circle-fill text-danger"
-          }"></i>
-          At least 8 characters
-        </li>
-      </ul>
-    `;
+  // $("#username").on("input", function () {
+  //   let value = $(this).val().trim();
+  //   let input = $(this);
 
-    desc.html(html);
+  //   if (!value) {
+  //     input.removeClass("is-invalid");
+  //     input.next(".invalid-feedback").hide();
+  //     return;
+  //   }
 
-    // Input border color
-    if (hasSymbol && hasUppercase && hasNumber && isLongEnough) {
-      input.removeClass("is-invalid");
-    } else {
-      input.addClass("is-invalid");
-    }
+  //   // Check for minimum length
+  //   if (value.length <= 7) {
+  //     input.addClass("is-invalid");
+  //     input
+  //       .next(".invalid-feedback")
+  //       .text("Username must be at least 8 characters long.")
+  //       .show();
+  //     checkFormValidity();
+  //     return;
+  //   }
 
-    checkFormValidity();
-  });
+  //   // Disallow the literal word "username"
+  //   else if (value.toLowerCase() === "username") {
+  //     input.addClass("is-invalid");
+  //     input
+  //       .next(".invalid-feedback")
+  //       .text("Username cannot be 'username'.")
+  //       .show();
+  //     checkFormValidity();
+  //     return;
+  //   }
 
-  function checkFormValidity() {
-    const form = $("form");
+  //   // AJAX duplicate check
+  //   $.post(
+  //     BASE_URL + "public/signUp/checker",
+  //     {
+  //       table: "users", // Fixed typo here
+  //       field: "username",
+  //       value: value,
+  //     },
+  //     function (res) {
+  //       if (res.exists) {
+  //         input.addClass("is-invalid");
+  //         input
+  //           .next(".invalid-feedback")
+  //           .text("This username is already in use.")
+  //           .show();
+  //       } else {
+  //         input.removeClass("is-invalid");
+  //         input.next(".invalid-feedback").hide();
+  //         checkFormValidity();
+  //       }
+  //     },
+  //     "json"
+  //   );
 
-    // Check if all required fields (input + select) are filled
-    const requiredFieldsFilled = form
-      .find("input[required], select[required]")
-      .toArray()
-      .every((field) => {
-        return $(field).val().trim() !== "";
-      });
+  //   checkFormValidity();
+  // });
 
-    // Get target fields for custom validation
-    const rsbsa = $("#rsbsa_no");
-    const contact = $("#contact_no");
-    const email = $("#email");
-    const username = $("#username");
-    const password = $("#password");
+  // $("#password").on("input", function () {
+  //   let value = $(this).val().trim();
+  //   let input = $(this);
+  //   let desc = input.closest(".col-md-6").find(".description");
 
-    // Field-specific validation
-    const isRSBSAValid =
-      !rsbsa.hasClass("is-invalid") && rsbsa.val().trim() !== "";
-    const isContactValid =
-      !contact.hasClass("is-invalid") && contact.val().trim() !== "";
-    const isEmailValid =
-      !email.hasClass("is-invalid") && email.val().trim() !== "";
-    const isUsernameValid =
-      !username.hasClass("is-invalid") &&
-      username.val().trim().length >= 8 &&
-      username.val().toLowerCase() !== "username";
+  //   // Rule checks
+  //   let hasUppercase = /[A-Z]/.test(value);
+  //   let hasNumber = /[0-9]/.test(value);
+  //   let hasSymbol = /[^A-Za-z0-9]/.test(value);
+  //   let isLongEnough = value.length >= 8;
 
-    // Password rules
-    const pw = password.val().trim();
-    const hasUppercase = /[A-Z]/.test(pw);
-    const hasNumber = /[0-9]/.test(pw);
-    const hasSymbol = /[^A-Za-z0-9]/.test(pw);
-    const isLongEnough = pw.length >= 8;
-    const isPasswordValid =
-      hasUppercase && hasNumber && hasSymbol && isLongEnough;
+  //   // Final HTML message
+  //   let html = `
+  //     <div><strong>Password must be contains the following:</strong></div>
+  //     <ul class="list-unstyled mb-0">
+  //       <li class="d-flex align-items-center">
+  //         <i class="bi me-2 ${
+  //           hasSymbol
+  //             ? "bi-check-circle-fill text-success"
+  //             : "bi-x-circle-fill text-danger"
+  //         }"></i>
+  //         At least one special symbol <small class="text-muted">(e.g. !@#$)</small>
+  //       </li>
+  //       <li class="d-flex align-items-center">
+  //         <i class="bi me-2 ${
+  //           hasUppercase
+  //             ? "bi-check-circle-fill text-success"
+  //             : "bi-x-circle-fill text-danger"
+  //         }"></i>
+  //         At least one uppercase letter <small class="text-muted">(e.g. A-Z)</small>
+  //       </li>
+  //       <li class="d-flex align-items-center">
+  //         <i class="bi me-2 ${
+  //           hasNumber
+  //             ? "bi-check-circle-fill text-success"
+  //             : "bi-x-circle-fill text-danger"
+  //         }"></i>
+  //         At least one number <small class="text-muted">(e.g. 0–9)</small>
+  //       </li>
+  //       <li class="d-flex align-items-center">
+  //         <i class="bi me-2 ${
+  //           isLongEnough
+  //             ? "bi-check-circle-fill text-success"
+  //             : "bi-x-circle-fill text-danger"
+  //         }"></i>
+  //         At least 8 characters
+  //       </li>
+  //     </ul>
+  //   `;
 
-    // Final check — all required fields filled & no .is-invalid fields
-    const noInvalids = form.find(".is-invalid").length === 0;
+  //   desc.html(html);
 
-    if (
-      requiredFieldsFilled &&
-      isRSBSAValid &&
-      isContactValid &&
-      isEmailValid &&
-      isUsernameValid &&
-      isPasswordValid &&
-      noInvalids
-    ) {
-      $("#submitBtn").prop("disabled", false);
-    } else {
-      $("#submitBtn").prop("disabled", true);
-    }
-  }
+  //   // Input border color
+  //   if (hasSymbol && hasUppercase && hasNumber && isLongEnough) {
+  //     input.removeClass("is-invalid");
+  //   } else {
+  //     input.addClass("is-invalid");
+  //   }
 
-  $("#submitBtn").on("click", function (e) {
-    e.preventDefault(); // Prevent default form submission
+  //   checkFormValidity();
+  // });
 
-    if (typeof checkFormValidity === "function") {
-      checkFormValidity(); // Optional re-check before submit
-    }
+  // function checkFormValidity() {
+  //   const form = $("form");
 
-    if (!$(this).prop("disabled")) {
-      if (typeof showLoader === "function") {
-        showLoader();
-      }
+  //   // Check if all required fields (input + select) are filled
+  //   const requiredFieldsFilled = form
+  //     .find("input[required], select[required]")
+  //     .toArray()
+  //     .every((field) => {
+  //       return $(field).val().trim() !== "";
+  //     });
 
-      showLoader();
-      $(this).text("Submitting...").prop("disabled", true);
+  //   // Get target fields for custom validation
+  //   const rsbsa = $("#rsbsa_no");
+  //   const contact = $("#contact_no");
+  //   const email = $("#email");
+  //   const username = $("#username");
+  //   const password = $("#password");
 
-      $("#signUpForm").submit(); // Manually trigger form submit
-    }
-  });
+  //   // Field-specific validation
+  //   const isRSBSAValid =
+  //     !rsbsa.hasClass("is-invalid") && rsbsa.val().trim() !== "";
+  //   const isContactValid =
+  //     !contact.hasClass("is-invalid") && contact.val().trim() !== "";
+  //   const isEmailValid =
+  //     !email.hasClass("is-invalid") && email.val().trim() !== "";
+  //   const isUsernameValid =
+  //     !username.hasClass("is-invalid") &&
+  //     username.val().trim().length >= 8 &&
+  //     username.val().toLowerCase() !== "username";
+
+  //   // Password rules
+  //   const pw = password.val().trim();
+  //   const hasUppercase = /[A-Z]/.test(pw);
+  //   const hasNumber = /[0-9]/.test(pw);
+  //   const hasSymbol = /[^A-Za-z0-9]/.test(pw);
+  //   const isLongEnough = pw.length >= 8;
+  //   const isPasswordValid =
+  //     hasUppercase && hasNumber && hasSymbol && isLongEnough;
+
+  //   // Final check — all required fields filled & no .is-invalid fields
+  //   const noInvalids = form.find(".is-invalid").length === 0;
+
+  //   if (
+  //     requiredFieldsFilled &&
+  //     isRSBSAValid &&
+  //     isContactValid &&
+  //     isEmailValid &&
+  //     isUsernameValid &&
+  //     isPasswordValid &&
+  //     noInvalids
+  //   ) {
+  //     $("#submitBtn").prop("disabled", false);
+  //   } else {
+  //     $("#submitBtn").prop("disabled", true);
+  //   }
+  // }
+
+  // $("#submitBtn").on("click", function (e) {
+  //   e.preventDefault(); // Prevent default form submission
+
+  //   if (typeof checkFormValidity === "function") {
+  //     checkFormValidity(); // Optional re-check before submit
+  //   }
+
+  //   if (!$(this).prop("disabled")) {
+  //     if (typeof showLoader === "function") {
+  //       showLoader();
+  //     }
+
+  //     showLoader();
+  //     $(this).text("Submitting...").prop("disabled", true);
+
+  //     $("#signUpForm").submit(); // Manually trigger form submit
+  //   }
+  // });
 
   const toggle = document.getElementById("togglePassword");
   const password = document.getElementById("login_password");

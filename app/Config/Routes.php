@@ -18,6 +18,11 @@ $routes->get( '/', 'Public\Home::index' );
 $routes->get( '/public/home', 'Public\Home::home' );
 $routes->get( '/public/request_seed', 'Public\Home::request_seed' );
 $routes->get( '/public/signUp', 'Public\Home::signUp' );
+$routes->post( '/public/login', 'Public\LoginController::login' );
+/* login credentials */
+$routes->post( '/public/login/check_credentials', 'Public\LoginController::check_credentials' );
+$routes->get( '/public/logout', 'Public\Home::logout' );
+
 $routes->post( '/public/signUp/submitSignUp', 'Public\SignUpController::submitSignUp' );
 $routes->post( '/public/signUp/checker', 'Public\SignUpController::checker' );
 

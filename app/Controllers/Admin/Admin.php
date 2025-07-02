@@ -543,7 +543,7 @@ class Admin extends BaseController
      */
     public function logout()
     {
-        session()->destroy();
+        session()->remove( 'user_id' );
 
         return redirect()->to( base_url( '/admin/login' ) );
     }

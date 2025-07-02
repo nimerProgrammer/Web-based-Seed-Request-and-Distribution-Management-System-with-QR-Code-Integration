@@ -30,8 +30,8 @@ class Home extends BaseController
     public function home()
     {
         // Ensure the user is not logged in
-        if ( !session()->get( "public_user_id" ) ) {
-            session()->set( "public_user_id", "not_logged_in" );
+        if ( !session()->get( "public_logged_in" ) ) {
+            session()->set( "public_logged_in", false );
         }
 
         session()->set( "public_title", "home" );
@@ -55,8 +55,8 @@ class Home extends BaseController
     public function request_seed()
     {
         // Ensure the user is not logged in
-        if ( !session()->get( "public_user_id" ) ) {
-            session()->set( "public_user_id", "not_logged_in" );
+        if ( !session()->get( "public_logged_in" ) ) {
+            session()->set( "public_logged_in", false );
         }
 
         session()->set( "public_title", "request_seed" );
@@ -81,5 +81,12 @@ class Home extends BaseController
         $footer = view( 'public/templates/footer' );
 
         return $header . $body . $footer;
+    }
+
+    public function logout()
+    {
+        session()->remove( 'public_logged_in' );
+
+        return redirect()->to( base_url( '/' ) );
     }
 }
