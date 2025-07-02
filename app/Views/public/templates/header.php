@@ -140,7 +140,7 @@
                                 data-request-url="<?= base_url( 'public/request_seed' ) ?>"
                                 data-login-url="<?= base_url( 'public/login' ) ?>"
                                 data-signup-url="<?= base_url( 'public/signUp' ) ?>">
-                                Request Seeds
+                                Request Seed
                             </a>
                         </li>
 
