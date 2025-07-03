@@ -64,10 +64,10 @@ class SignUpController extends BaseController
         $birthdate = $request->getPost( 'birthdate' );
         $age       = date_diff( date_create( $birthdate ), date_create() )->y;
 
-        $firstName    = $this->request->getPost( 'first_name' );
-        $middleName   = $this->request->getPost( 'middle_name' ) ?: null;
-        $lastName     = $this->request->getPost( 'last_name' );
-        $suffixAndExt = $this->request->getPost( 'suffix' ) ?: null;
+        $firstName    = ucwords( strtolower( $this->request->getPost( 'first_name' ) ) );
+        $middleName   = $this->request->getPost( 'middle_name' ) ? ucwords( strtolower( $this->request->getPost( 'middle_name' ) ) ) : null;
+        $lastName     = ucwords( strtolower( $this->request->getPost( 'last_name' ) ) );
+        $suffixAndExt = $this->request->getPost( 'suffix' ) ? ucwords( strtolower( $this->request->getPost( 'suffix' ) ) ) : null;
 
         $fullNameParts = [ $firstName ];
 
@@ -95,7 +95,7 @@ class SignUpController extends BaseController
             'mun'             => $this->request->getPost( 'municipality' ),
             'prov'            => $this->request->getPost( 'province' ),
             'farm_area'       => $this->request->getPost( 'farm_area' ),
-            'name_land_owner' => $this->request->getPost( 'land_owner' ),
+            'name_land_owner' => ucwords( strtolower( $this->request->getPost( 'land_owner' ) ) ),
             'rsbsa_ref_no'    => $this->request->getPost( 'rsbsa_no' ),
             'users_tbl_id'    => $userID,
         ] );

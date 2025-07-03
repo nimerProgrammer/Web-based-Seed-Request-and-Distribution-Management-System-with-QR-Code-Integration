@@ -75,6 +75,7 @@ class LoginController extends BaseController
             session()->set( [ 
                 'public_user_id'             => $user[ 'users_tbl_id' ],
                 'public_user_email'          => $user[ 'email' ],
+                'public_user_rsbsa_no'       => $farmer[ 'rsbsa_ref_no' ],
                 'public_user_lastname'       => $farmer[ 'last_name' ],
                 'public_user_firstname'      => $farmer[ 'first_name' ],
                 'public_user_middlename'     => $farmer[ 'middle_name' ] ?? '',

@@ -48,6 +48,12 @@
 
                                 <!-- Visible Dropdown -->
                                 <div class="dropdown">
+                                    <!-- <style>
+                                        .dropdown-item:hover {
+                                            background-color: var(--bs-secondary);
+                                            color: #fff;
+                                        }
+                                    </style> -->
                                     <button class="btn btn-sm btn-outline-primary dropdown-toggle float-end"
                                         type="button" id="barangayDropdown" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -56,8 +62,12 @@
                                     <ul style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc;"
                                         class="dropdown-menu" aria-labelledby="barangayDropdown">
                                         <?php foreach ( $barangays as $b ) : ?>
+                                            <?php
+                                            $isActive = session( 'selected_seedrequests_barangay_name' ) === $b[ 'barangay_name' ];
+                                            ?>
                                             <li>
-                                                <a href="#" class="dropdown-item select-barangay"
+                                                <a href="#"
+                                                    class="dropdown-item select-barangay <?= $isActive ? 'active' : '' ?>"
                                                     data-value="<?= esc( $b[ 'barangay_name' ] ) ?>">
                                                     <?= esc( $b[ 'barangay_name' ] ) ?>
                                                 </a>

@@ -51,8 +51,12 @@
                                     <ul style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc;"
                                         class="dropdown-menu" aria-labelledby="barangayDropdown">
                                         <?php foreach ( $barangays as $b ) : ?>
+                                            <?php
+                                            $isActive = session( 'selected_beneficiaries_barangay_name' ) === $b[ 'barangay_name' ];
+                                            ?>
                                             <li>
-                                                <a href="#" class="dropdown-item select-barangay"
+                                                <a href="#"
+                                                    class="dropdown-item select-barangay <?= $isActive ? 'active' : '' ?>"
                                                     data-value="<?= esc( $b[ 'barangay_name' ] ) ?>">
                                                     <?= esc( $b[ 'barangay_name' ] ) ?>
                                                 </a>

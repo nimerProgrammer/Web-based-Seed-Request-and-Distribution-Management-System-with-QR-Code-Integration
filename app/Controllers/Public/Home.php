@@ -40,6 +40,8 @@ class Home extends BaseController
         $header = view( 'public/templates/header' );
         $body   = view( 'public/home' );
         $modals = view( 'public/dialog/loginModalDialog' );
+        $modals .= view( 'public/dialog/requestSeedModalDialog' );
+
         $footer = view( 'public/templates/footer' );
 
         return $header . $body . $modals . $footer;
@@ -64,10 +66,10 @@ class Home extends BaseController
 
         $header = view( 'public/templates/header' );
         $body   = view( 'public/request_seed' );
-        // $modals = view('_admin/modals/profile_modal');
+        $modals = view( 'public/dialog/loginModalDialog' );
         $footer = view( 'public/templates/footer' );
 
-        return $header . $body . $footer;
+        return $header . $body . $modals . $footer;
     }
 
     public function signUp()
@@ -78,9 +80,10 @@ class Home extends BaseController
 
         $header = view( 'public/templates/header' );
         $body   = view( 'public/signUp' );
+        $modals = view( 'public/dialog/loginModalDialog' );
         $footer = view( 'public/templates/footer' );
 
-        return $header . $body . $footer;
+        return $header . $body . $modals . $footer;
     }
 
     public function logout()

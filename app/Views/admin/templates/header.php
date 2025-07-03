@@ -92,6 +92,16 @@
                 transform: rotate(360deg);
             }
         }
+
+        .dropdown-item:hover {
+            background-color: var(--bs-secondary);
+            color: #fff;
+        }
+
+        .dropdown-item.active {
+            background-color: var(--bs-secondary);
+            color: #fff;
+        }
     </style>
 
 </head>

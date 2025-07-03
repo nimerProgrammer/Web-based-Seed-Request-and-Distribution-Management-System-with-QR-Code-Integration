@@ -2,6 +2,7 @@
 
 use App\Models\ClientInfoModel;
 use App\Models\UsersModel;
+use App\Models\SeedRequestsModel;
 
 /**
  * Check if a value exists in a specific field in the users table.
@@ -22,6 +23,16 @@ function isDuplicate( string $table, string $field, string $value ) : bool
         return $model->where( $field, $value )->first() !== null;
     }
 }
+
+function isSeedRequestedByUser( $inventoryId, $userId )
+{
+    $model = new SeedRequestsModel();
+    return $model
+        ->where( 'inventory_tbl_id', $inventoryId )
+        ->where( 'client_info_tbl_id', $userId )
+        ->countAllResults() > 0;
+}
+
 
 
 

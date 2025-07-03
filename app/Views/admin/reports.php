@@ -52,8 +52,12 @@
                                                 <ul class="dropdown-menu" aria-labelledby="barangayDropdown"
                                                     style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc;">
                                                     <?php foreach ( $barangays as $b ) : ?>
+                                                        <?php
+                                                        $isActive = session( 'selected_report_barangay_name' ) === $b[ 'barangay_name' ];
+                                                        ?>
                                                         <li>
-                                                            <a href="#" class="dropdown-item select-barangay"
+                                                            <a href="#"
+                                                                class="dropdown-item select-barangay <?= $isActive ? 'active' : '' ?>"
                                                                 data-value="<?= esc( $b[ 'barangay_name' ] ) ?>">
                                                                 <?= esc( $b[ 'barangay_name' ] ) ?>
                                                             </a>
@@ -77,8 +81,12 @@
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="seasonDropdown">
                                                     <?php foreach ( $cropping_seasons as $s ) : ?>
+                                                        <?php
+                                                        $isActive = session( 'selected_cropping_season_name' ) === $s[ 'season' ] . ' ' . $s[ 'year' ];
+                                                        ?>
                                                         <li>
-                                                            <a href="#" class="dropdown-item select-season"
+                                                            <a href="#"
+                                                                class="dropdown-item select-season <?= $isActive ? 'active' : '' ?>"
                                                                 data-value="<?= $s[ 'cropping_season_tbl_id' ] . '|' . esc( $s[ 'season' ] ) . '|' . esc( $s[ 'year' ] ) ?>">
                                                                 <?= esc( $s[ 'season' ] ) . ' ' . esc( $s[ 'year' ] ) ?>
                                                             </a>
@@ -93,7 +101,7 @@
                                                     View Lists
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="listDropdown">
-                                                    <li><a class="dropdown-item dropdownListReports"
+                                                    <li><a class="dropdown-item dropdownListReports active"
                                                             href="<?= base_url( '/admin/reports/setListView/seedrequests' ) ?>">Seed
                                                             Request
                                                             List</a>
@@ -259,8 +267,12 @@
                                                 <ul class="dropdown-menu" aria-labelledby="barangayDropdown"
                                                     style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc;">
                                                     <?php foreach ( $barangays as $b ) : ?>
+                                                        <?php
+                                                        $isActive = session( 'selected_report_barangay_name' ) === $b[ 'barangay_name' ];
+                                                        ?>
                                                         <li>
-                                                            <a href="#" class="dropdown-item select-barangay"
+                                                            <a href="#"
+                                                                class="dropdown-item select-barangay <?= $isActive ? 'active' : '' ?>"
                                                                 data-value="<?= esc( $b[ 'barangay_name' ] ) ?>">
                                                                 <?= esc( $b[ 'barangay_name' ] ) ?>
                                                             </a>
@@ -283,8 +295,12 @@
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="seasonDropdown">
                                                     <?php foreach ( $cropping_seasons as $s ) : ?>
+                                                        <?php
+                                                        $isActive = session( 'selected_cropping_season_name' ) === $s[ 'season' ] . ' ' . $s[ 'year' ];
+                                                        ?>
                                                         <li>
-                                                            <a href="#" class="dropdown-item select-season"
+                                                            <a href="#"
+                                                                class="dropdown-item select-season <?= $isActive ? 'active' : '' ?>"
                                                                 data-value="<?= $s[ 'cropping_season_tbl_id' ] . '|' . esc( $s[ 'season' ] ) . '|' . esc( $s[ 'year' ] ) ?>">
                                                                 <?= esc( $s[ 'season' ] ) . ' ' . esc( $s[ 'year' ] ) ?>
                                                             </a>
@@ -304,7 +320,7 @@
                                                             Request
                                                             List</a>
                                                     </li>
-                                                    <li><a class="dropdown-item dropdownListReports"
+                                                    <li><a class="dropdown-item dropdownListReports active"
                                                             href="<?= base_url( '/admin/reports/setListView/beneficiaries' ) ?>">Beneficiaries
                                                             List</a>
                                                     </li>

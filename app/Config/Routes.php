@@ -25,6 +25,7 @@ $routes->get( '/public/logout', 'Public\Home::logout' );
 
 $routes->post( '/public/signUp/submitSignUp', 'Public\SignUpController::submitSignUp' );
 $routes->post( '/public/signUp/checker', 'Public\SignUpController::checker' );
+$routes->post( '/public/request_seed/submit', 'Public\RequestSeedController::requestSeedSubmit' );
 
 
 

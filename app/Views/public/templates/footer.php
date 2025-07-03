@@ -45,6 +45,7 @@
 
 <script src="<?= base_url( 'templates/js/publicScript.js?v=6.6.6' ) ?>"></script>
 <script src="<?= base_url( 'templates/js/publicLoginScript.js?v=4.4.4' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/publicRequestSeedScript.js?v=4.4.4' ) ?>"></script>
 
 <?php if ( session()->get( 'public_title' ) === 'Sign Up' && session()->get( 'public_current_tab' ) === 'Sign Up' ) : ?>
 

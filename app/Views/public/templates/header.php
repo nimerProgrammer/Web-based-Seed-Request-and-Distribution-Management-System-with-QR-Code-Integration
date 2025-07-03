@@ -132,20 +132,19 @@
                                 </div>
                             </form>
                         </li>
-                        <li class="nav-item ms-1 top-loader"><a class="nav-link active"
-                                href="<?= base_url( '/' ) ?>">Home</a></li>
+                        <li class="nav-item ms-1 top-loader">
+                            <a class="nav-link active" href="<?= base_url( '/' ) ?>">Home</a>
+                        </li>
                         <li class="nav-item ms-1">
                             <a href="#" class="nav-link" id="publicRequestSeedLink"
-                                data-is-logged-in="<?= session()->get( 'public_user_id' ) ? '1' : '0' ?>"
-                                data-request-url="<?= base_url( 'public/request_seed' ) ?>"
-                                data-login-url="<?= base_url( 'public/login' ) ?>"
+                                data-is-logged-in="<?= session()->get( 'public_logged_in' ) ? 'true' : 'false' ?>"
                                 data-signup-url="<?= base_url( 'public/signUp' ) ?>">
                                 Request Seed
                             </a>
                         </li>
 
                         <li class="nav-item ms-1 top-loader">
-                            <a class="nav-link" href="#" id="testSweetAlert">Sent Request</a>
+                            <a class="nav-link" href="#" id="testSweetAlert">Sent Requests</a>
                         </li>
                         <li class="nav-item ms-1"><a class="nav-link" href="#">About</a></li>
                         <li class="nav-item ms-1"><a class="nav-link" href="#">Profile</a></li>
