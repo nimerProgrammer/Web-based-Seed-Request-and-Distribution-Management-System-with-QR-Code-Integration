@@ -16,7 +16,10 @@ $routes->post( '/get_user_data', 'Admin\Admin::get_user_data' );
 /*** PUBLIC PAGES ***/
 $routes->get( '/', 'Public\Home::index' );
 $routes->get( '/public/home', 'Public\Home::home' );
-$routes->get( '/public/request_seed', 'Public\Home::request_seed' );
+
+$routes->get( '/public/sentRequests', 'Public\Home::sentRequests' );
+$routes->post( '/public/downloadVoucher', 'Public\SentRequestsController::downloadVoucher' );
+
 $routes->get( '/public/signUp', 'Public\Home::signUp' );
 $routes->post( '/public/login', 'Public\LoginController::login' );
 /* login credentials */
@@ -53,20 +56,20 @@ $routes->post( '/admin/inventory/update/(:num)', 'Admin\InventoryController::upd
 /*** SEED REQUESTS CONTROLLER ACTIONS ***/
 $routes->post( '/admin/seedrequests/setBarangayView', 'Admin\SeedRequestsController::setBarangayView' );
 // Approve / Undo Approve
-$routes->post( 'admin/seedrequests/approve/(:num)', 'Admin\SeedRequestsController::approve/$1' );
-$routes->post( 'admin/seedrequests/undoApproved/(:num)', 'Admin\SeedRequestsController::undoApproved/$1' );
+$routes->post( '/admin/seedrequests/approve/(:num)', 'Admin\SeedRequestsController::approve/$1' );
+$routes->post( '/admin/seedrequests/undoApproved/(:num)', 'Admin\SeedRequestsController::undoApproved/$1' );
 // Reject / Undo Reject
-$routes->post( 'admin/seedrequests/reject/(:num)', 'Admin\SeedRequestsController::reject/$1' );
-$routes->post( 'admin/seedrequests/undoRejected/(:num)', 'Admin\SeedRequestsController::undoRejected/$1' );
+$routes->post( '/admin/seedrequests/reject/(:num)', 'Admin\SeedRequestsController::reject/$1' );
+$routes->post( '/admin/seedrequests/undoRejected/(:num)', 'Admin\SeedRequestsController::undoRejected/$1' );
 
 
 /*** BENEFICIARIES CONTROLLER ACTIONS ***/
 $routes->post( '/admin/beneficiaries/setBarangayView', 'Admin\BeneficiariesController::setBarangayView' );
 
 // Route to mark a beneficiary as received
-$routes->post( 'admin/beneficiaries/markReceived/(:num)', 'Admin\BeneficiariesController::markReceived/$1' );
+$routes->post( '/admin/beneficiaries/markReceived/(:num)', 'Admin\BeneficiariesController::markReceived/$1' );
 // Route to undo a received beneficiary
-$routes->post( 'admin/beneficiaries/undoReceive/(:num)', 'Admin\BeneficiariesController::undoReceive/$1' );
+$routes->post( '/admin/beneficiaries/undoReceive/(:num)', 'Admin\BeneficiariesController::undoReceive/$1' );
 
 /*** REPORTS CONTROLLER ACTIONS ***/
 $routes->post( '/admin/reports/setReportBarangayView', 'Admin\ReportsController::setReportBarangayView' );

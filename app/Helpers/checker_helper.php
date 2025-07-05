@@ -24,12 +24,12 @@ function isDuplicate( string $table, string $field, string $value ) : bool
     }
 }
 
-function isSeedRequestedByUser( $inventoryId, $userId )
+function isSeedRequestedByUser( $inventoryId, $userClientId )
 {
     $model = new SeedRequestsModel();
     return $model
         ->where( 'inventory_tbl_id', $inventoryId )
-        ->where( 'client_info_tbl_id', $userId )
+        ->where( 'client_info_tbl_id', $userClientId )
         ->countAllResults() > 0;
 }
 

@@ -131,13 +131,63 @@ $(document).ready(function () {
     }
   });
 
-  $("#testSweetAlert").on("click", function (e) {
+  $("#publicSentRequestLink").on("click", function (e) {
     e.preventDefault();
+
+    const isLoggedIn = $(this).data("is-logged-in"); // boolean true/false
+    const signupUrl = $(this).data("signup-url");
+    const targetUrl = $(this).attr("data-sentRequests-url");
+
+    hideLoader();
+
+    if (isLoggedIn) {
+      showLoader();
+      window.location.href = targetUrl;
+    } else {
+      // ❌ Not logged in — show SweetAlert with Login + Signup + Cancel
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        html: `
+          <p>You must log in before requesting seeds.</p>
+          <div class="d-flex justify-content-center mt-3">
+            <button id="swal-login" class="btn btn-sm btn-primary me-2">Login</button>
+            <button id="swal-signup" class="btn btn-sm btn-success me-2">Sign Up</button>
+            <button id="swal-cancel" class="btn btn-sm btn-secondary">Cancel</button>
+          </div>
+        `,
+        showConfirmButton: false,
+        showCancelButton: false,
+        buttonsStyling: false,
+        didOpen: () => {
+          $("#swal-login").on("click", () => {
+            showLoader();
+            const loginModal = new bootstrap.Modal(
+              document.getElementById("loginModalDialog")
+            );
+            Swal.close();
+            loginModal.show();
+            hideLoader();
+          });
+          $("#swal-signup").on("click", () => {
+            showLoader();
+            window.location.href = signupUrl;
+          });
+          $("#swal-cancel").on("click", () => {
+            Swal.close();
+          });
+        },
+      });
+    }
+  });
+
+  $("#sample_btn").on("click", function (e) {
+    e.preventDefault();
+
     Swal.fire({
       icon: "info",
-      title: "Test Successful",
-      text: "SweetAlert is working!",
-      confirmButtonText: "OK",
+      title: "Test Alert",
+      text: "This is a simple test message.",
     });
   });
 

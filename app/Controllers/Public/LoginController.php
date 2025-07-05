@@ -74,6 +74,7 @@ class LoginController extends BaseController
             // ✅ Set session with user + staff data
             session()->set( [ 
                 'public_user_id'             => $user[ 'users_tbl_id' ],
+                'public_user_client_id'      => $farmer[ 'client_info_tbl_id' ],
                 'public_user_email'          => $user[ 'email' ],
                 'public_user_rsbsa_no'       => $farmer[ 'rsbsa_ref_no' ],
                 'public_user_lastname'       => $farmer[ 'last_name' ],

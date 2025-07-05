@@ -4,6 +4,7 @@ namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\SeedRequestsModel;
 
 class Home extends BaseController
 {
@@ -40,8 +41,9 @@ class Home extends BaseController
         $header = view( 'public/templates/header' );
         $body   = view( 'public/home' );
         $modals = view( 'public/dialog/loginModalDialog' );
-        $modals .= view( 'public/dialog/requestSeedModalDialog' );
-
+        if ( session()->get( "public_logged_in" ) === true ) {
+            $modals .= view( 'public/dialog/requestSeedModalDialog' );
+        }
         $footer = view( 'public/templates/footer' );
 
         return $header . $body . $modals . $footer;
@@ -54,19 +56,44 @@ class Home extends BaseController
      *
      * @return string The rendered view of the seed request page.
      */
-    public function request_seed()
+    public function sentRequests()
     {
         // Ensure the user is not logged in
-        if ( !session()->get( "public_logged_in" ) ) {
-            session()->set( "public_logged_in", false );
+        if ( session()->get( "public_logged_in" ) === false ) {
+            return redirect()->to( base_url( '/public/home' ) );
         }
 
-        session()->set( "public_title", "request_seed" );
-        session()->set( "public_current_tab", "request_seed" );
+
+        session()->set( "public_title", "sentRequests" );
+        session()->set( "public_current_tab", "sentRequests" );
+
+        $selectedSeason = session()->get( 'current_season_id' );
+        $clientId       = session()->get( 'public_user_client_id' );
+
+        $seedRequestModel = new SeedRequestsModel();
+
+        $data[ 'seed_requests' ] = $seedRequestModel
+            ->select( '
+            seed_requests.*,
+            inventory.seed_name,
+            inventory.seed_class,
+            cropping_season.season,
+            cropping_season.year
+        ' )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id', 'left' )
+            ->where( [ 
+                // 'cropping_season.cropping_season_tbl_id' => $selectedSeason,     // e.g., 'Wet'
+                'cropping_season.cropping_season_tbl_id' => $selectedSeason,     // e.g., 'Wet'
+                'seed_requests.client_info_tbl_id'       => $clientId  // e.g., 12
+            ] )
+            ->orderBy( 'seed_requests.date_time_requested', 'DESC' )
+            ->findAll();
+
 
         $header = view( 'public/templates/header' );
-        $body   = view( 'public/request_seed' );
-        $modals = view( 'public/dialog/loginModalDialog' );
+        $body   = view( 'public/sentRequests', $data );
+        $modals = view( 'public/dialog/requestSeedModalDialog' );
         $footer = view( 'public/templates/footer' );
 
         return $header . $body . $modals . $footer;

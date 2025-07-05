@@ -20,7 +20,7 @@
 						<select class="form-select" id="add_seed_class" name="add_seed_class" required>
 							<option value="" selected disabled>Select a seed class</option>
 							<option value="Hybrid">Hybrid</option>
-							<option value="Improved">Improved</option>
+							<option value="Inbred">Inbred</option>
 							<option value="Foundation">Foundation</option>
 						</select>
 					</div>

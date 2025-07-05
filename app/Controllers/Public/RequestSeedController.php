@@ -13,10 +13,11 @@ class RequestSeedController extends BaseController
 {
     public function requestSeedSubmit()
     {
-        $seedID   = $this->request->getPost( 'seed_name' );
-        $userID   = session()->get( 'public_user_id' );
-        $rsbsa_no = session()->get( 'public_user_rsbsa_no' );
-        $fullname = session()->get( 'public_user_fullname' );
+        $seedID       = $this->request->getPost( 'seed_name' );
+        $userID       = session()->get( 'public_user_id' );
+        $userClientID = session()->get( 'public_user_client_id' );
+        $rsbsa_no     = session()->get( 'public_user_rsbsa_no' );
+        $fullname     = session()->get( 'public_user_fullname' );
 
         $model          = new SeedRequestsModel();
         $logsModel      = new LogsModel();
@@ -35,7 +36,7 @@ class RequestSeedController extends BaseController
             'date_time_rejected'  => null,
             'status'              => 'Pending',
             'inventory_tbl_id'    => $seedID,
-            'client_info_tbl_id'  => $userID,
+            'client_info_tbl_id'  => $userClientID,
         ] );
 
         // Optional: Insert log

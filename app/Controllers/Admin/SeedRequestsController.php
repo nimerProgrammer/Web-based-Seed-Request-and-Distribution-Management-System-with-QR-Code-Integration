@@ -54,7 +54,7 @@ class SeedRequestsController extends BaseController
         $formattedDate = getPhilippineTimeFormatted();
 
         // Generate date code (yyyymmdd) from Philippine time
-        $dateCode = $philTime->format( 'Ymd' );
+        $dateCode = $philTime->format( 'mdY' );
 
         // Generate random 6-character alphanumeric code
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

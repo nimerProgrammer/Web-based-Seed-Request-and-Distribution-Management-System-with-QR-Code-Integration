@@ -30,7 +30,20 @@ class Session extends BaseConfig
      *
      * The session cookie name, must contain only [0-9a-z_-] characters
      */
-    public string $cookieName = 'ci_session';
+    // public string $cookieName = 'ci_session';
+    public string $cookieName;
+
+    public function __construct()
+    {
+        $uri          = service( 'uri' );
+        $firstSegment = $uri->getSegment( 1 );
+
+        if ( $firstSegment === 'public' ) {
+            $this->cookieName = 'public_session';
+        } else {
+            $this->cookieName = 'ci_session'; // fallback
+        }
+    }
 
     /**
      * --------------------------------------------------------------------------
@@ -124,4 +137,6 @@ class Session extends BaseConfig
      * seconds.
      */
     public int $lockMaxRetries = 300;
+
+
 }

@@ -133,7 +133,8 @@
                             </form>
                         </li>
                         <li class="nav-item ms-1 top-loader">
-                            <a class="nav-link active" href="<?= base_url( '/' ) ?>">Home</a>
+                            <a class="nav-link <?= session()->get( "public_current_tab" ) == "home" ? "active fw-bold" : null ?>"
+                                href="<?= base_url( '/' ) ?>">Home</a>
                         </li>
                         <li class="nav-item ms-1">
                             <a href="#" class="nav-link" id="publicRequestSeedLink"
@@ -143,11 +144,21 @@
                             </a>
                         </li>
 
-                        <li class="nav-item ms-1 top-loader">
-                            <a class="nav-link" href="#" id="testSweetAlert">Sent Requests</a>
+                        <li class="nav-item ms-1">
+                            <a class="nav-link <?= session()->get( "public_current_tab" ) == "sentRequests" ? "active fw-bold" : null ?>"
+                                id="publicSentRequestLink" href="#"
+                                data-is-logged-in="<?= session()->get( 'public_logged_in' ) ? 'true' : 'false' ?>"
+                                data-signup-url="<?= base_url( 'public/signUp' ) ?>"
+                                data-sentRequests-url="<?= base_url( 'public/sentRequests' ) ?>">Sent
+                                Requests</a>
                         </li>
-                        <li class="nav-item ms-1"><a class="nav-link" href="#">About</a></li>
-                        <li class="nav-item ms-1"><a class="nav-link" href="#">Profile</a></li>
+
+                        <li class="nav-item ms-1"><a
+                                class="nav-link <?= session()->get( "public_current_tab" ) == "about" ? "active fw-bold" : null ?>"
+                                href="#">About</a></li>
+                        <li class="nav-item ms-1"><a
+                                class="nav-link <?= session()->get( "public_current_tab" ) == "profile" ? "active fw-bold" : null ?>"
+                                href="#">Profile</a></li>
                     </ul>
 
                     <!-- Right content -->
