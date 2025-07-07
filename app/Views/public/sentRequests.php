@@ -92,7 +92,7 @@
 
                                 <?php if ( $request[ 'status' ] !== 'Approved' ) : ?>
                                     <!-- Show Edit and Cancel only if NOT Approved -->
-                                    <button type="button" class="btn btn-outline-secondary btn-md edit-request-btn"
+                                    <button type="button" class="btn btn-outline-success btn-md edit-request-btn"
                                         data-id="<?= esc( $request[ 'seed_requests_tbl_id' ] ) ?>"
                                         data-current-seed-id="<?= esc( $request[ 'inventory_tbl_id' ] ) ?>" data-bs-toggle="modal"
                                         data-bs-target="#editSentRequestsModal">

@@ -2,6 +2,10 @@ $(document).ready(function () {
   preventDevTools(false);
   // preventMobileAccess();
 
+  window.addEventListener("pageshow", function () {
+    hideLoader(); // Your custom function to hide the loader
+  });
+
   function preventDevTools(enable) {
     if (!enable) return;
 

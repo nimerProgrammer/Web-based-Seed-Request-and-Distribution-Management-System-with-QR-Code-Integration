@@ -45,12 +45,12 @@
                             <div class="col-md-4 mb-3">
                                 <label for="middle_name" class="form-label">Middle Name</label>
                                 <input type="text" class="form-control" id="middle_name" name="middle_name"
-                                    placeholder="e.g. Santos">
+                                    placeholder="e.g. Santos (optional)">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="suffix" class="form-label">Suffix / Extension</label>
                                 <input type="text" class="form-control" id="suffix" name="suffix"
-                                    placeholder="e.g. Jr., Sr., III">
+                                    placeholder="e.g. Jr., Sr., III (optional)">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="birthdate" class="form-label">Birthdate</label>

@@ -95,7 +95,7 @@
                                                             data-id="<?= $item[ 'inventory_tbl_id' ] ?>"
                                                             data-name="<?= esc( $item[ 'seed_name' ] ) ?>"
                                                             data-class="<?= esc( $item[ 'seed_class' ] ) ?>"
-                                                            data-stock="<?= esc( $item[ 'stock' ] ) ?>">
+                                                            data-stock="<?= esc( $item[ 'stock' ] ) ?>" title="Edit">
                                                             <i class="bi bi-pencil-square"></i>
                                                         </button>
 

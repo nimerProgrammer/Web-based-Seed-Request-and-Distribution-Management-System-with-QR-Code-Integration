@@ -3,6 +3,7 @@
 namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
+use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\SeedRequestsModel;
 
@@ -102,6 +103,63 @@ class Home extends BaseController
         return $header . $body . $modals . $footer;
     }
 
+    /**
+     * Displays the profile page.
+     *
+     * This method sets session variables for the public user and renders the profile view.
+     *
+     * @return string The rendered view of the profile page.
+     */
+    public function profile()
+    {
+        if ( !session()->get( "public_logged_in" ) ) {
+            return redirect()->to( base_url( '/public/home' ) );
+        }
+        // Ensure the user is not logged in
+        if ( session()->get( "public_logged_in" ) === false ) {
+            return redirect()->to( base_url( '/public/home' ) );
+        }
+
+        $usersModel = new UsersModel();
+
+        $userID = session()->get( 'public_user_id' );
+
+        $data[ 'users' ] = $usersModel
+            ->select( 'users.*, client_info.*' )
+            ->join( 'client_info', 'users.users_tbl_id = client_info.users_tbl_id' )
+            ->where( 'users.users_tbl_id', $userID )
+            ->first();
+
+        $fullName = ucwords( strtolower( trim(
+            $data[ 'users' ][ 'first_name' ] . ' ' .
+            ( !empty( $data[ 'users' ][ 'middle_name' ] ) ? $data[ 'users' ][ 'middle_name' ] . ' ' : '' ) .
+            $data[ 'users' ][ 'last_name' ] .
+            ( !empty( $data[ 'users' ][ 'suffix_and_ext' ] ) ? ' ' . $data[ 'users' ][ 'suffix_and_ext' ] : '' )
+        ) ) );
+
+        session()->set( 'public_user_fullname', $fullName );
+
+
+
+        session()->set( "public_title", "profile" );
+        session()->set( "public_current_tab", "profile" );
+
+        $header = view( 'public/templates/header' );
+        $body   = view( 'public/profile', $data );
+        $modals = view( 'public/dialog/requestSeedModalDialog' );
+        $modals .= view( 'public/dialog/editSentRequestsModalDialog' );
+        $footer = view( 'public/templates/footer' );
+
+        return $header . $body . $modals . $footer;
+    }
+
+    /**
+     * Displays the sign-up page.
+     *
+     * This method sets session variables for the public user and renders the sign-up view.
+     *
+     * @return string The rendered view of the sign-up page.
+     */
     public function signUp()
     {
 
@@ -116,6 +174,14 @@ class Home extends BaseController
         return $header . $body . $modals . $footer;
     }
 
+    /**
+     * Logs out the user by removing the session variable.
+     *
+     * This method is called when the user clicks the logout button.
+     * It removes the 'public_logged_in' session variable and redirects to the home page.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function logout()
     {
         session()->remove( 'public_logged_in' );

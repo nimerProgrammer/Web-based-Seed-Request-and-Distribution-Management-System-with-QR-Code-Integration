@@ -1,6 +1,10 @@
 $(document).ready(function () {
   preventDevTools(false);
 
+  window.addEventListener("pageshow", function () {
+    hideLoader(); // Your custom function to hide the loader
+  });
+
   function preventDevTools(enable) {
     if (!enable) return;
 
@@ -204,6 +208,7 @@ $(document).ready(function () {
       buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        showLoader();
         const logoutUrl = $(this).data("url");
         window.location.href = logoutUrl;
       }

@@ -168,9 +168,9 @@
                             </a>
                         </li>
                         <?php if ( session()->get( "public_logged_in" ) === true && session()->get( "public_user_id" ) ) : ?>
-                            <li class="nav-item ms-1">
+                            <li class="nav-item ms-1 top-loader">
                                 <a class="nav-link <?= session()->get( "public_current_tab" ) == "profile" ? "active fw-bold" : null ?>"
-                                    href="#">
+                                    href="<?= base_url( 'public/profile' ) ?>">
                                     <i class="bi bi-person-circle me-1"></i>Profile
                                 </a>
                             </li>

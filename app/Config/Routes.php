@@ -18,6 +18,8 @@ $routes->get( '/', 'Public\Home::index' );
 $routes->get( '/public/home', 'Public\Home::home' );
 
 $routes->get( '/public/sentRequests', 'Public\Home::sentRequests' );
+$routes->get( '/public/profile', 'Public\Home::profile' );
+
 $routes->post( '/public/downloadVoucher', 'Public\SentRequestsController::downloadVoucher' );
 $routes->post( '/public/sentRequest/edit', 'Public\SentRequestsController::editSentRequest' );
 $routes->post( 'public/sentRequests/cancel', 'Public\SentRequestsController::cancelRequest' );
