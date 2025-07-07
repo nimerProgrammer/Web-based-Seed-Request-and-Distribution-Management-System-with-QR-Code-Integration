@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf_token_name" content="<?= csrf_token() ?>">
+    <meta name="csrf_token" content="<?= csrf_hash() ?>">
+
     <title>Seed Request & Distribution</title>
     <?php if ( is_internet_available() ) : ?>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -132,15 +135,19 @@
                                 </div>
                             </form>
                         </li>
+
                         <li class="nav-item ms-1 top-loader">
                             <a class="nav-link <?= session()->get( "public_current_tab" ) == "home" ? "active fw-bold" : null ?>"
-                                href="<?= base_url( '/' ) ?>">Home</a>
+                                href="<?= base_url( '/' ) ?>">
+                                <i class="bi bi-house-door me-1"></i>Home
+                            </a>
                         </li>
+
                         <li class="nav-item ms-1">
                             <a href="#" class="nav-link" id="publicRequestSeedLink"
                                 data-is-logged-in="<?= session()->get( 'public_logged_in' ) ? 'true' : 'false' ?>"
                                 data-signup-url="<?= base_url( 'public/signUp' ) ?>">
-                                Request Seed
+                                <i class="bi bi-box-arrow-in-down me-1"></i>Request Seed
                             </a>
                         </li>
 
@@ -149,39 +156,53 @@
                                 id="publicSentRequestLink" href="#"
                                 data-is-logged-in="<?= session()->get( 'public_logged_in' ) ? 'true' : 'false' ?>"
                                 data-signup-url="<?= base_url( 'public/signUp' ) ?>"
-                                data-sentRequests-url="<?= base_url( 'public/sentRequests' ) ?>">Sent
-                                Requests</a>
+                                data-sentRequests-url="<?= base_url( 'public/sentRequests' ) ?>">
+                                <i class="bi bi-send-check me-1"></i>Sent Requests
+                            </a>
                         </li>
 
-                        <li class="nav-item ms-1"><a
-                                class="nav-link <?= session()->get( "public_current_tab" ) == "about" ? "active fw-bold" : null ?>"
-                                href="#">About</a></li>
-                        <li class="nav-item ms-1"><a
-                                class="nav-link <?= session()->get( "public_current_tab" ) == "profile" ? "active fw-bold" : null ?>"
-                                href="#">Profile</a></li>
+                        <li class="nav-item ms-1">
+                            <a class="nav-link <?= session()->get( "public_current_tab" ) == "about" ? "active fw-bold" : null ?>"
+                                href="#">
+                                <i class="bi bi-info-circle me-1"></i>About
+                            </a>
+                        </li>
+                        <?php if ( session()->get( "public_logged_in" ) === true && session()->get( "public_user_id" ) ) : ?>
+                            <li class="nav-item ms-1">
+                                <a class="nav-link <?= session()->get( "public_current_tab" ) == "profile" ? "active fw-bold" : null ?>"
+                                    href="#">
+                                    <i class="bi bi-person-circle me-1"></i>Profile
+                                </a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
+
 
                     <!-- Right content -->
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                         <?php if ( session()->get( 'public_logged_in' ) === true ) : ?>
                             <li class="nav-item ml-1 mr-1">
-                                <a href="<?= base_url( 'public/logout' ) ?>" class="btn btn-outline-primary 
-                            w-100 btn-sm">Log out</a>
+                                <a href="javascript:void(0)" class="btn btn-outline-primary w-100 btn-sm" id="logoutBtn"
+                                    data-url="<?= base_url( 'public/logout' ) ?>">
+                                    <i class="bi bi-box-arrow-right me-1"></i> Log out
+                                </a>
                             </li>
+
                         <?php endif; ?>
+
                         <?php if ( session()->get( 'public_logged_in' ) === false ) : ?>
-                            <li class="nav-item ml-1 mr-1 mb-2">
-                                <a href="javascript(0)" class="btn btn-outline-primary w-100
-                                                         btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#loginModalDialog">Log in</a>
+                            <li class="nav-item ml-1 mb-2 mr-1">
+                                <a href="javascript(0)" class="btn btn-outline-primary w-100 btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#loginModalDialog">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Log in
+                                </a>
                             </li>
                             <li class="nav-item ml-1 mr-1">
-                                <a href="<?= base_url( 'public/signUp' ) ?>" class="btn btn-outline-primary 
-                                                        w-100 btn-sm">Sign up</a>
+                                <a href="<?= base_url( 'public/signUp' ) ?>" class="btn btn-outline-primary w-100 btn-sm">
+                                    <i class="bi bi-person-plus me-1"></i> Sign up
+                                </a>
                             </li>
                         <?php endif; ?>
-
-
                     </ul>
                 </div>
             </div>

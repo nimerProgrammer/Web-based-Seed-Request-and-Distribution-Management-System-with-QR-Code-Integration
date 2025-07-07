@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\InventoryModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BeneficiariesModel;
+use App\Models\SeedRequestsModel;
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
@@ -16,6 +17,11 @@ use Endroid\QrCode\Label\Label;
 
 class SentRequestsController extends BaseController
 {
+    /**
+     * Handles the download of a voucher for a seed request.
+     *
+     * @return ResponseInterface
+     */
     public function downloadVoucher()
     {
         $requestID = $this->request->getPost( 'seed_requests_tbl_id' );
@@ -142,6 +148,47 @@ class SentRequestsController extends BaseController
             ->setHeader( 'Content-Type', 'image/png' )
             ->setHeader( 'Content-Disposition', 'attachment; filename="' . $seedName . ' — seeds — voucher_' . $requestID . '.png"' )
             ->setBody( $imageData );
+    }
+
+    /**
+     * Updates the seed associated with an existing seed request.
+     *
+     * This method retrieves the request ID and the newly selected inventory ID (seed)
+     * from POST data and updates the seed request in the database accordingly.
+     *
+     * @return RedirectResponse Redirects back to the sent requests page after update.
+     */
+    public function editSentRequest()
+    {
+        $requestId   = $this->request->getPost( 'seed_requests_tbl_id' );
+        $inventoryId = $this->request->getPost( 'edit_seed_name' );
+
+        $seedRequestModel = new SeedRequestsModel();
+
+        $updateData = [ 
+            'inventory_tbl_id' => $inventoryId,
+        ];
+
+        $success = $seedRequestModel->update( $requestId, $updateData );
+
+        if ( $success ) {
+            return redirect()->to( base_url( 'public/sentRequests' ) );
+        }
+    }
+
+    public function cancelRequest()
+    {
+        $requestId = $this->request->getPost( 'seed_requests_tbl_id' );
+
+        $seedRequestModel = new SeedRequestsModel();
+
+
+
+        $success = $seedRequestModel->delete( $requestId );
+
+        if ( $success ) {
+            return redirect()->to( base_url( 'public/sentRequests' ) );
+        }
     }
 
 }

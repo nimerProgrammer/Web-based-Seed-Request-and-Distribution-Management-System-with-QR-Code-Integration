@@ -11,6 +11,14 @@ use App\Models\InventoryModel;
 
 class RequestSeedController extends BaseController
 {
+    /**
+     * Handles the submission of a seed request.
+     *
+     * This method processes the seed request submitted by the user,
+     * logs the action, and sets a success message in the session.
+     *
+     * @return ResponseInterface Redirects back to the previous page with a success message.
+     */
     public function requestSeedSubmit()
     {
         $seedID       = $this->request->getPost( 'seed_name' );

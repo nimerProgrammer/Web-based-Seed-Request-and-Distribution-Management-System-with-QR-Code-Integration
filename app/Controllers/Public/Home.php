@@ -58,11 +58,13 @@ class Home extends BaseController
      */
     public function sentRequests()
     {
+        if ( !session()->get( "public_logged_in" ) ) {
+            return redirect()->to( base_url( '/public/home' ) );
+        }
         // Ensure the user is not logged in
         if ( session()->get( "public_logged_in" ) === false ) {
             return redirect()->to( base_url( '/public/home' ) );
         }
-
 
         session()->set( "public_title", "sentRequests" );
         session()->set( "public_current_tab", "sentRequests" );
@@ -94,6 +96,7 @@ class Home extends BaseController
         $header = view( 'public/templates/header' );
         $body   = view( 'public/sentRequests', $data );
         $modals = view( 'public/dialog/requestSeedModalDialog' );
+        $modals .= view( 'public/dialog/editSentRequestsModalDialog' );
         $footer = view( 'public/templates/footer' );
 
         return $header . $body . $modals . $footer;

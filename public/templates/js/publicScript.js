@@ -1,6 +1,5 @@
 $(document).ready(function () {
   preventDevTools(false);
-  // preventMobileAccess();
 
   function preventDevTools(enable) {
     if (!enable) return;
@@ -181,16 +180,6 @@ $(document).ready(function () {
     }
   });
 
-  $("#sample_btn").on("click", function (e) {
-    e.preventDefault();
-
-    Swal.fire({
-      icon: "info",
-      title: "Test Alert",
-      text: "This is a simple test message.",
-    });
-  });
-
   const toggle = document.getElementById("togglePassword");
   const password = document.getElementById("login_password");
 
@@ -199,4 +188,25 @@ $(document).ready(function () {
       password.type = this.checked ? "text" : "password";
     });
   }
+
+  $("#logoutBtn").on("click", function () {
+    Swal.fire({
+      title: "Log Out?",
+      text: "Are you sure you want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-md btn-primary mr-2",
+        cancelButton: "btn btn-md btn-secondary",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const logoutUrl = $(this).data("url");
+        window.location.href = logoutUrl;
+      }
+    });
+  });
 });

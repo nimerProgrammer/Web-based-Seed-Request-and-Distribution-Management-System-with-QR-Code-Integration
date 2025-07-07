@@ -82,3 +82,12 @@
 </body>
 
 </html>
+
+<script>
+    // Optional: expose CSRF vars globally (if using CodeIgniter 4 CSRF protection)
+    const csrfTokenName =
+        $('meta[name="csrf_token_name"]').attr("content") || "<?= csrf_token() ?>";
+    const csrfHash =
+        $('meta[name="csrf_token"]').attr("content") || "<?= csrf_hash() ?>";
+
+</script>

@@ -29,7 +29,20 @@ $(document).ready(function () {
 
   $("#submitRequestSeedBtn").on("click", function (e) {
     e.preventDefault();
-    showLoader();
-    $("#submitRequestSeedForm").submit();
+    const selected = $("#seed_name").val();
+    if (selected) {
+      showLoader();
+      $("#submitRequestSeedForm").submit();
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "Oops...",
+        text: "Please select seed type.",
+        customClass: {
+          confirmButton: "btn btn-md btn-primary",
+        },
+        buttonsStyling: false,
+      });
+    }
   });
 });

@@ -12,9 +12,11 @@ use App\Models\LogsModel;
 
 class LoginController extends BaseController
 {
-
-    public function login() {}
-
+    /**
+     * Handles the login process by checking user credentials.
+     *
+     * @return ResponseInterface
+     */
     public function check_credentials()
     {
         $username = $this->request->getPost( 'username' );

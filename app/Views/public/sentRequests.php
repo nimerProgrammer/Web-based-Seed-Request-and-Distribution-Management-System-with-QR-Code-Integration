@@ -81,17 +81,28 @@
                             </div>
 
                             <div class="btn-group mt-3" role="group" aria-label="Voucher Actions">
-                                <button type="button" class="btn btn-outline-primary btn-md download-voucher-btn"
-                                    data-id="<?= esc( $request[ 'seed_requests_tbl_id' ] ) ?>"
-                                    data-download-url="<?= base_url( 'public/downloadVoucher' ) ?>">
-                                    <i class="bi bi-download me-1"></i> Download Voucher
-                                </button>
-                                <button class="btn btn-outline-secondary btn-md">
-                                    <i class="bi bi-pencil-square me-1"></i> Edit
-                                </button>
-                                <button class="btn btn-outline-danger btn-md">
-                                    <i class="bi bi-x-circle me-1"></i> Cancel Request
-                                </button>
+                                <?php if ( $request[ 'status' ] === 'Approved' ) : ?>
+                                    <!-- Show Download button only if Approved -->
+                                    <button type="button" class="btn btn-outline-primary btn-md download-voucher-btn"
+                                        data-id="<?= esc( $request[ 'seed_requests_tbl_id' ] ) ?>"
+                                        data-download-url="<?= base_url( 'public/downloadVoucher' ) ?>">
+                                        <i class="bi bi-download me-1"></i> Download Voucher
+                                    </button>
+                                <?php endif; ?>
+
+                                <?php if ( $request[ 'status' ] !== 'Approved' ) : ?>
+                                    <!-- Show Edit and Cancel only if NOT Approved -->
+                                    <button type="button" class="btn btn-outline-secondary btn-md edit-request-btn"
+                                        data-id="<?= esc( $request[ 'seed_requests_tbl_id' ] ) ?>"
+                                        data-current-seed-id="<?= esc( $request[ 'inventory_tbl_id' ] ) ?>" data-bs-toggle="modal"
+                                        data-bs-target="#editSentRequestsModal">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-md cancel-request-btn"
+                                        data-id="<?= esc( $request[ 'seed_requests_tbl_id' ] ) ?>">
+                                        <i class="bi bi-x-circle me-1"></i> Cancel Request
+                                    </button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

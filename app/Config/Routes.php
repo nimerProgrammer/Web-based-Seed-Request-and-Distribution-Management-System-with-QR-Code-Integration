@@ -19,6 +19,9 @@ $routes->get( '/public/home', 'Public\Home::home' );
 
 $routes->get( '/public/sentRequests', 'Public\Home::sentRequests' );
 $routes->post( '/public/downloadVoucher', 'Public\SentRequestsController::downloadVoucher' );
+$routes->post( '/public/sentRequest/edit', 'Public\SentRequestsController::editSentRequest' );
+$routes->post( 'public/sentRequests/cancel', 'Public\SentRequestsController::cancelRequest' );
+
 
 $routes->get( '/public/signUp', 'Public\Home::signUp' );
 $routes->post( '/public/login', 'Public\LoginController::login' );
