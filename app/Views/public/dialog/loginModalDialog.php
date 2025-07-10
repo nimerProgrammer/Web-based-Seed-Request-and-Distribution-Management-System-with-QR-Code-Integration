@@ -40,8 +40,6 @@
                         <div class="input-group input-group-md">
                             <input type="password" class="form-control" id="login_password" name="password"
                                 placeholder="Enter password" required>
-
-
                             <span class="input-group-text"><i class="bi bi-key"></i></span>
                         </div>
                         <div class="invalid-feedback" id="password_error"></div>

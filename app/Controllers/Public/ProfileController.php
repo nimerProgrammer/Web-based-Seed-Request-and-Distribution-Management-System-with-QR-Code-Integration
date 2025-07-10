@@ -9,6 +9,7 @@ use App\Models\ClientInfoModel;
 
 class ProfileController extends BaseController
 {
+
     public function checker()
     {
         $table    = $this->request->getPost( 'table' );
@@ -287,4 +288,48 @@ class ProfileController extends BaseController
 
         return redirect()->to( base_url( 'public/profile' ) );
     }
+
+    public function checkCurrentPassword()
+    {
+        $currentPassword = $this->request->getPost( 'currentPassword' );
+        $session         = session();
+        $userId          = $session->get( 'public_user_id' ); // or however you're storing logged-in ID
+
+        $model = new UsersModel();
+        $user  = $model->find( $userId );
+
+        if ( $user && password_verify( $currentPassword, $user[ 'password' ] ) ) {
+            return $this->response->setJSON( [ 'valid' => true ] );
+        }
+
+        return $this->response->setJSON( [ 'valid' => false ] );
+    }
+
+
+    public function changePassword()
+    {
+        $session     = session();
+        $userId      = $session->get( 'public_user_id' ); // adjust if needed
+        $newPassword = $this->request->getPost( 'newPassword' );
+
+        // Hash the new password
+        $hashedPassword = password_hash( $newPassword, PASSWORD_DEFAULT );
+
+        // Update the user's password
+        $userModel = new UsersModel();
+        $userModel->update( $userId, [ 
+            'password' => $hashedPassword,
+        ] );
+
+        // Set SweetAlert flashdata
+        session()->setFlashdata( 'swal', [ 
+            'title' => 'Success!',
+            'text'  => 'Your password has been changed successfully.',
+            'icon'  => 'success',
+        ] );
+
+        return redirect()->to( base_url( 'public/profile' ) );
+    }
+
+
 }

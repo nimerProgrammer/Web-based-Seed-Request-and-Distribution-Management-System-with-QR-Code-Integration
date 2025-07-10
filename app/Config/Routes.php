@@ -30,6 +30,9 @@ $routes->post( '/public/updateRSBSA', 'Public\ProfileController::updateRSBSA' );
 $routes->post( '/public/updateContactNo', 'Public\ProfileController::updateContactNo' );
 $routes->post( '/public/updateEmail', 'Public\ProfileController::updateEmail' );
 $routes->post( '/public/updateUsername', 'Public\ProfileController::updateUsername' );
+$routes->post( '/public/checkCurrentPassword', 'Public\ProfileController::checkCurrentPassword' );
+$routes->post( '/public/changePassword', 'Public\ProfileController::changePassword' );
+
 
 
 $routes->post( '/public/downloadVoucher', 'Public\SentRequestsController::downloadVoucher' );

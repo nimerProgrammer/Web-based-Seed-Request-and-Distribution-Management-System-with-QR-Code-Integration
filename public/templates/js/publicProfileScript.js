@@ -308,6 +308,120 @@ $(document).ready(function () {
     $("#editUsernameModal").modal("show");
   });
 
+  $("#toggleCurrentPassword").on("click", function () {
+    toggleVisibility($("#currentPassword"), $(this).find("i"));
+  });
+
+  $("#toggleNewPassword").on("click", function () {
+    toggleVisibility($("#newPassword"), $(this).find("i"));
+  });
+
+  $("#toggleConfirmPassword").on("click", function () {
+    toggleVisibility($("#confirmPassword"), $(this).find("i"));
+  });
+
+  function toggleVisibility(input, icon) {
+    const isPassword = input.attr("type") === "password";
+    input.attr("type", isPassword ? "text" : "password");
+    icon.toggleClass("fa-eye fa-eye-slash");
+  }
+
+  $("#currentPassword").on("input", function () {
+    $("#currentPassword").removeClass("is-invalid");
+    $(".invalid-feedback").text("").hide();
+  });
+  /* Password match checker on blur */
+  $("#newPassword, #confirmPassword").on("blur", function () {
+    const newPassword = $("#newPassword").val().trim();
+    const confirmPassword = $("#confirmPassword").val().trim();
+
+    if (newPassword && confirmPassword) {
+      if (newPassword !== confirmPassword) {
+        $("#newPassword").addClass("is-invalid");
+        $("#confirmPassword").addClass("is-invalid");
+        $("#confirmPasswordFeedback")
+          .text("Please make sure both passwords match.")
+          .show();
+      } else {
+        $("#newPassword").removeClass("is-invalid");
+        $("#confirmPassword").removeClass("is-invalid");
+        $("#confirmPasswordFeedback").text("").hide();
+      }
+    } else {
+      $("#newPassword").removeClass("is-invalid");
+      $("#confirmPassword").removeClass("is-invalid");
+      $("#confirmPasswordFeedback").text("").hide();
+    }
+  });
+
+  $("#confirmPassword").on("input", function () {
+    $("#newPassword").removeClass("is-invalid");
+    $("#confirmPassword").removeClass("is-invalid");
+    $("#confirmPasswordFeedback").text("").hide();
+  });
+
+  $("#newPassword").on("input", function () {
+    let value = $(this).val().trim();
+    let input = $(this);
+    let desc = input.closest(".mb-3").find(".description");
+
+    // Rule checks
+    let hasUppercase = /[A-Z]/.test(value);
+    let hasNumber = /[0-9]/.test(value);
+    let hasSymbol = /[^A-Za-z0-9]/.test(value);
+    let isLongEnough = value.length >= 8;
+
+    // Password rule output
+    let html = `
+      <div><strong>Password must contain the following:</strong></div>
+      <ul class="list-unstyled mb-0">
+        <li class="d-flex align-items-center">
+          <i class="bi me-2 ${
+            hasSymbol
+              ? "bi-check-circle-fill text-success"
+              : "bi-x-circle-fill text-danger"
+          }"></i>
+          At least one special symbol <small class="text-muted">(e.g. !@#$)</small>
+        </li>
+        <li class="d-flex align-items-center">
+          <i class="bi me-2 ${
+            hasUppercase
+              ? "bi-check-circle-fill text-success"
+              : "bi-x-circle-fill text-danger"
+          }"></i>
+          At least one uppercase letter <small class="text-muted">(e.g. A-Z)</small>
+        </li>
+        <li class="d-flex align-items-center">
+          <i class="bi me-2 ${
+            hasNumber
+              ? "bi-check-circle-fill text-success"
+              : "bi-x-circle-fill text-danger"
+          }"></i>
+          At least one number <small class="text-muted">(e.g. 0–9)</small>
+        </li>
+        <li class="d-flex align-items-center"> 
+          <i class="bi me-2 ${
+            isLongEnough
+              ? "bi-check-circle-fill text-success"
+              : "bi-x-circle-fill text-danger"
+          }"></i>
+          At least 8 characters
+        </li>
+      </ul>
+    `;
+
+    desc.html(html);
+
+    // Input border styling
+    if (hasSymbol && hasUppercase && hasNumber && isLongEnough) {
+      input.removeClass("is-invalid");
+      $("#confirmPassword").removeClass("is-invalid");
+      $("#confirmPasswordFeedback").text("").hide();
+    } else {
+      input.addClass("is-invalid");
+    }
+  });
+
   /* forms */
   $("#editFullnameForm").on("submit", function (e) {
     $(".btn").text("Saving...");
@@ -477,5 +591,87 @@ $(document).ready(function () {
     this.submit(); // Submit the form normally
     $(".btn").text("Saving...");
     showLoader();
+  });
+
+  $("#changePasswordForm").on("submit", function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const form = $(this);
+    let hasError = false;
+
+    // Check invalid-feedback visibility
+    form.find(".invalid-feedback").each(function () {
+      if ($(this).is(":visible") && $(this).text().trim() !== "") {
+        hasError = true;
+      }
+    });
+
+    // Check for .is-invalid inputs
+    if (form.find(".is-invalid").length > 0) {
+      hasError = true;
+    }
+
+    if (hasError) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: "Some fields are invalid. Please correct them before saving.",
+        timer: 3000,
+        showConfirmButton: false,
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+      return;
+    }
+
+    // 🔐 Validate current password via AJAX
+    const currentPassword = $("#currentPassword").val().trim();
+
+    $.post(
+      "checkCurrentPassword",
+      { currentPassword },
+      function (res) {
+        if (res.valid) {
+          // If valid, disable submit and show loader
+          form
+            .find("button[type='submit']")
+            .prop("disabled", true)
+            .text("Saving...");
+          showLoader();
+          form.off("submit").submit(); // remove handler and submit
+        } else {
+          // Show invalid error
+          $("#currentPassword").addClass("is-invalid");
+          $("#currentPassword")
+            .closest(".mb-3")
+            .find(".invalid-feedback")
+            .text("Incorrect current password.")
+            .show();
+
+          Swal.fire({
+            icon: "error",
+            title: "Authentication Failed",
+            text: "Your current password is incorrect.",
+            timer: 3000,
+            showConfirmButton: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+            buttonsStyling: false,
+          });
+        }
+      },
+      "json"
+    ).fail(function () {
+      Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text: "Could not verify your current password. Please try again.",
+        timer: 3000,
+        showConfirmButton: false,
+      });
+    });
   });
 });

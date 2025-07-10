@@ -94,6 +94,12 @@ class SeedRequestsController extends BaseController
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
+        session()->setFlashdata( 'swal', [ 
+            'title' => 'Success!',
+            'text'  => 'Request approved.',
+            'icon'  => 'success',
+        ] );
+
         return redirect()->back()->with( 'message', 'Request approved and beneficiary recorded.' );
     }
 
@@ -143,6 +149,12 @@ class SeedRequestsController extends BaseController
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
+        session()->setFlashdata( 'swal', [ 
+            'title' => 'Success!',
+            'text'  => 'Undo successful.',
+            'icon'  => 'success',
+        ] );
+
         return redirect()->back()->with( 'message', 'Approval undone and beneficiary removed.' );
     }
 
@@ -183,6 +195,12 @@ class SeedRequestsController extends BaseController
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
+        session()->setFlashdata( 'swal', [ 
+            'title' => 'Success!',
+            'text'  => 'Rejected.',
+            'icon'  => 'success',
+        ] );
+
         return redirect()->back()->with( 'message', 'Request rejected successfully.' );
     }
 
@@ -221,6 +239,12 @@ class SeedRequestsController extends BaseController
             'action'       => 'Undo Rejection',
             'details'      => "$staffFullName undid rejection of \"$fullName\" (RSBSA: $rsbsa).",
             'users_tbl_id' => session( 'user_id' ),
+        ] );
+
+        session()->setFlashdata( 'swal', [ 
+            'title' => 'Success!',
+            'text'  => 'Undo successful.',
+            'icon'  => 'success',
         ] );
 
         return redirect()->back()->with( 'message', 'Rejection has been undone.' );

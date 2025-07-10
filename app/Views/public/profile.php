@@ -273,8 +273,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" class="align-middle" data-bs-toggle="modal" data-bs-target="#editPasswordModal"
-                            style="cursor: pointer;">
+                        <td colspan="2" class="align-middle" data-bs-toggle="modal"
+                            data-bs-target="#changePasswordModal" style="cursor: pointer;">
                             <div
                                 style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                 <span>Change password</span>

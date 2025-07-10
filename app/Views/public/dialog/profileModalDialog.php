@@ -267,22 +267,53 @@
 </div>
 
 <!-- Edit for Password -->
-<div class="modal fade" id="editPasswordModal" tabindex="-1" aria-labelledby="editEmailModalLabel"
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePassordModalLabel"
     data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Email</h5>
+                <h5 class="modal-title">Change Password</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editEmailForm" method="post" action="<?= base_url( 'public/updateEmail' ) ?>">
+            <form id="changePasswordForm" method="post" action="<?= base_url( 'public/changePassword' ) ?>">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="editEmail" class="form-label">Email</label>
-                        <input type="hidden" id="originalEmail" name="originalEmail">
-                        <input type="text" class="form-control" id="editEmail" name="editEmail"
-                            placeholder="e.g. example@mail.com" required>
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <div class="input-group input-group-md">
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword"
+                                placeholder="Enter current password" required>
+                            <span class="input-group-text" id="toggleCurrentPassword" style="cursor: pointer;">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </span>
+                        </div>
                         <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <div class="input-group input-group-md">
+                            <input type="password" class="form-control" id="newPassword" name="newPassword"
+                                placeholder="Enter new password" required>
+                            <span class="input-group-text" id="toggleNewPassword" style="cursor: pointer;">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </span>
+                        </div>
+
+                        <!-- 🔽 Description output area -->
+                        <div class="description mt-2 text-secondary small"></div>
+                    </div>
+
+
+                    <!-- ✅ Confirm Password Field -->
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group input-group-md">
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                placeholder="Confirm new password" required>
+                            <span class="input-group-text" id="toggleConfirmPassword" style="cursor: pointer;">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </span>
+                        </div>
+                        <div class="invalid-feedback" id="confirmPasswordFeedback"></div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 mt-3">Save</button>
                 </div>

@@ -64,7 +64,8 @@
             title: '<?= esc( session( 'swal' )[ 'title' ] ) ?>',
             text: '<?= esc( session( 'swal' )[ 'text' ] ) ?>',
             icon: '<?= esc( session( 'swal' )[ 'icon' ] ) ?>',
-            confirmButtonText: '<?= esc( session( 'swal' )[ 'confirmButtonText' ] ?? 'OK' ) ?>',
+            timer: 2000, // 3 seconds
+            showConfirmButton: false,
             customClass: {
                 confirmButton: 'btn btn-primary'
             },

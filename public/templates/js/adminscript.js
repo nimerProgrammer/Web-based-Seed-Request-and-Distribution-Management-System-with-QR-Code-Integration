@@ -1,3 +1,21 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // 1. Apply saved state
+  if (localStorage.getItem("sidebar-collapsed") === "true") {
+    document.body.classList.add("sidebar-collapse");
+  }
+
+  // 2. Toggle and save state
+  document
+    .querySelectorAll("[data-widget='pushmenu']")
+    .forEach(function (toggleBtn) {
+      toggleBtn.addEventListener("click", function () {
+        const isCollapsed =
+          document.body.classList.contains("sidebar-collapse");
+        localStorage.setItem("sidebar-collapsed", !isCollapsed); // save opposite (it will collapse now)
+      });
+    });
+});
+
 $(document).ready(function () {
   preventDevTools(false);
   // preventMobileAccess();
