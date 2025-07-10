@@ -19,6 +19,18 @@ $routes->get( '/public/home', 'Public\Home::home' );
 
 $routes->get( '/public/sentRequests', 'Public\Home::sentRequests' );
 $routes->get( '/public/profile', 'Public\Home::profile' );
+$routes->post( '/public/checker', 'Public\ProfileController::checker' );
+$routes->post( '/public/updateFullname', 'Public\ProfileController::updateFullname' );
+$routes->post( '/public/updateGender', 'Public\ProfileController::updateGender' );
+$routes->post( '/public/updateBirthdate', 'Public\ProfileController::updateBirthdate' );
+$routes->post( '/public/updateBarangay', 'Public\ProfileController::updateBarangay' );
+$routes->post( '/public/updateFarmArea', 'Public\ProfileController::updateFarmArea' );
+$routes->post( '/public/updateLandOwner', 'Public\ProfileController::updateLandOwner' );
+$routes->post( '/public/updateRSBSA', 'Public\ProfileController::updateRSBSA' );
+$routes->post( '/public/updateContactNo', 'Public\ProfileController::updateContactNo' );
+$routes->post( '/public/updateEmail', 'Public\ProfileController::updateEmail' );
+$routes->post( '/public/updateUsername', 'Public\ProfileController::updateUsername' );
+
 
 $routes->post( '/public/downloadVoucher', 'Public\SentRequestsController::downloadVoucher' );
 $routes->post( '/public/sentRequest/edit', 'Public\SentRequestsController::editSentRequest' );

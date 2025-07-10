@@ -34,7 +34,9 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
         integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 <?php else : ?>
     <script src="<?= base_url( 'templates/js/jquery@3.6.0.min.js?v=2.2.2' ) ?>"></script>
@@ -50,6 +52,12 @@
 <?php if ( session()->get( 'public_logged_in' ) === true ) : ?>
 
     <script src="<?= base_url( 'templates/js/publicRequestSeedScript.js?v=4.4.4' ) ?>"></script>
+
+<?php endif; ?>
+
+<?php if ( session()->get( 'public_title' ) === 'profile' && session()->get( 'public_current_tab' ) === 'profile' ) : ?>
+
+    <script src="<?= base_url( 'templates/js/publicProfileScript.js?v=5.5.5' ) ?>"></script>
 
 <?php endif; ?>
 
@@ -71,7 +79,8 @@
             title: '<?= esc( session( 'swal' )[ 'title' ] ) ?>',
             text: '<?= esc( session( 'swal' )[ 'text' ] ) ?>',
             icon: '<?= esc( session( 'swal' )[ 'icon' ] ) ?>',
-            confirmButtonText: '<?= esc( session( 'swal' )[ 'confirmButtonText' ] ?? 'OK' ) ?>',
+            timer: 3000, // 3 seconds
+            showConfirmButton: false,
             customClass: {
                 confirmButton: 'btn btn-primary'
             },

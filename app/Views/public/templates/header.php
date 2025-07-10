@@ -9,6 +9,8 @@
 
     <title>Seed Request & Distribution</title>
     <?php if ( is_internet_available() ) : ?>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+            integrity="sha384-/o6I2CkkWC//PSjvWC/eYN7l3xM3tJm8ZzVkCOfp//W05QcE3mlGskpoHB6XqI+B" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
@@ -106,11 +108,6 @@
                     </div>
                 </a>
 
-                <!-- Toggler -->
-                <!-- <button class="navbar-toggler ms-1 mb-2 mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button> -->
-
                 <ul class="navbar-nav ms-1 d-lg-none"> <!-- d-lg-none hides this on large screens -->
                     <li class="nav-item">
                         <a class="nav-link" href="#" role="button" data-bs-toggle="collapse"
@@ -198,7 +195,8 @@
                                 </a>
                             </li>
                             <li class="nav-item ml-1 mr-1">
-                                <a href="<?= base_url( 'public/signUp' ) ?>" class="btn btn-outline-primary w-100 btn-sm">
+                                <a href="<?= base_url( 'public/signUp' ) ?>" id="sigUpBtn"
+                                    class="btn btn-outline-primary w-100 btn-sm">
                                     <i class="bi bi-person-plus me-1"></i> Sign up
                                 </a>
                             </li>

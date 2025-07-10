@@ -193,6 +193,10 @@ $(document).ready(function () {
     });
   }
 
+  $("#sigUpBtn").on("click", function () {
+    showLoader();
+  });
+
   $("#logoutBtn").on("click", function () {
     Swal.fire({
       title: "Log Out?",
@@ -213,5 +217,14 @@ $(document).ready(function () {
         window.location.href = logoutUrl;
       }
     });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    new bootstrap.Tooltip(tooltipTriggerEl);
   });
 });

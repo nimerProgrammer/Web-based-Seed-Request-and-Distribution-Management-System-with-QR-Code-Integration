@@ -11,6 +11,9 @@ use App\Models\SeedRequestsModel;
  * @param string $value
  * @return bool
  */
+
+
+
 function isDuplicate( string $table, string $field, string $value ) : bool
 {
     if ( $table === 'client_info' ) {
@@ -23,6 +26,32 @@ function isDuplicate( string $table, string $field, string $value ) : bool
         return $model->where( $field, $value )->first() !== null;
     }
 }
+
+function isDuplicates( string $table, string $field, string $value, ?string $original = null ) : bool
+{
+    // if ( $table === 'client_info' ) {
+    //     $model   = new ClientInfoModel();
+    //     $builder = $model->where( $field, $value );
+
+    //     if ( $original !== null ) {
+    //         $builder->where( "$field !=", $original );
+    //     }
+
+    //     return $builder->first() !== null;
+    // }
+
+    if ( $table === 'users' ) {
+        $model   = new UsersModel();
+        $builder = $model->where( $field, $value );
+
+        if ( $original !== null ) {
+            $builder->where( "$field !=", $original );
+        }
+
+        return $builder->first() !== null;
+    }
+}
+
 
 function isSeedRequestedByUser( $inventoryId, $userClientId )
 {

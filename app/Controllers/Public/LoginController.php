@@ -84,12 +84,14 @@ class LoginController extends BaseController
                 'public_user_middlename'     => $farmer[ 'middle_name' ] ?? '',
                 'public_user_suffix_and_ext' => $farmer[ 'suffix_and_ext' ] ?? '',
                 'public_logged_in'           => true,
-                'public_user_fullname'       => ucwords( strtolower( trim(
-                    $farmer[ 'first_name' ] . ' ' .
-                    ( !empty( $farmer[ 'middle_name' ] ) ? $farmer[ 'middle_name' ] . ' ' : '' ) .
-                    $farmer[ 'last_name' ] .
+                'public_user_fullname'       =>
+                    ucwords( strtolower( trim(
+                        $farmer[ 'first_name' ] . ' ' .
+                        ( !empty( $farmer[ 'middle_name' ] ) ? $farmer[ 'middle_name' ] . ' ' : '' ) .
+                        $farmer[ 'last_name' ]
+                    ) ) ) .
                     ( !empty( $farmer[ 'suffix_and_ext' ] ) ? ' ' . $farmer[ 'suffix_and_ext' ] : '' )
-                ) ) )
+
             ] );
 
             $logData = [ 

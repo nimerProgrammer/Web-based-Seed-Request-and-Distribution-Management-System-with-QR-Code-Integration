@@ -133,9 +133,10 @@ class Home extends BaseController
         $fullName = ucwords( strtolower( trim(
             $data[ 'users' ][ 'first_name' ] . ' ' .
             ( !empty( $data[ 'users' ][ 'middle_name' ] ) ? $data[ 'users' ][ 'middle_name' ] . ' ' : '' ) .
-            $data[ 'users' ][ 'last_name' ] .
-            ( !empty( $data[ 'users' ][ 'suffix_and_ext' ] ) ? ' ' . $data[ 'users' ][ 'suffix_and_ext' ] : '' )
-        ) ) );
+            $data[ 'users' ][ 'last_name' ]
+        ) ) ) .
+            ( !empty( $data[ 'users' ][ 'suffix_and_ext' ] ) ? ' ' . $data[ 'users' ][ 'suffix_and_ext' ] : '' );
+
 
         session()->set( 'public_user_fullname', $fullName );
 
@@ -147,7 +148,7 @@ class Home extends BaseController
         $header = view( 'public/templates/header' );
         $body   = view( 'public/profile', $data );
         $modals = view( 'public/dialog/requestSeedModalDialog' );
-        $modals .= view( 'public/dialog/editSentRequestsModalDialog' );
+        $modals .= view( 'public/dialog/profileModalDialog' );
         $footer = view( 'public/templates/footer' );
 
         return $header . $body . $modals . $footer;

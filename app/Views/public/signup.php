@@ -49,8 +49,16 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="suffix" class="form-label">Suffix / Extension</label>
-                                <input type="text" class="form-control" id="suffix" name="suffix"
-                                    placeholder="e.g. Jr., Sr., III (optional)">
+                                <select id="suffix" name="suffix" class="form-select">
+                                    <option value="">-- Select Suffix (optional) --</option>
+                                    <option value="Jr.">Jr.</option>
+                                    <option value="Sr.">Sr.</option>
+                                    <option value="II">II</option>
+                                    <option value="III">III</option>
+                                    <option value="IV">IV</option>
+                                    <option value="V">V</option>
+                                    <option value="VI">VI</option>
+                                </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="birthdate" class="form-label">Birthdate</label>
@@ -59,7 +67,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="gender" class="form-label">Gender</label>
                                 <select class="form-select" id="gender" name="gender" required>
-                                    <option value="">-- Select Gender --</option>
+                                    <option value="" selected disabled>-- Select Gender --</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
@@ -74,7 +82,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="barangay" class="form-label">Barangay</label>
                                 <select class="form-select" id="barangay" name="barangay" required>
-                                    <option value="">-- Select Barangay --</option>
+                                    <option value="" selected disabled>-- Select Barangay --</option>
                                     <?php foreach ( getBarangayList() as $b ) : ?>
                                         <option value="<?= esc( $b[ 'barangay_name' ] ) ?>">
                                             <?= esc( $b[ 'barangay_name' ] ) ?>
@@ -157,7 +165,7 @@
                             </div>
 
                             <div class="col-md-12 mt-1">
-                                <button type="submit" id="submitBtn" class="btn btn-sm btn-primary w-100" disabled>
+                                <button type="submit" id="submitBtn" class="btn btn-sm btn-primary w-100">
                                     Submit
                                 </button>
                             </div>

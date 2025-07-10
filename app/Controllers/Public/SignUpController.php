@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UsersModel;
 use App\Models\ClientInfoModel;
 use App\Models\LogsModel;
+use DateTime;
 class SignUpController extends BaseController
 {
     /**
@@ -51,23 +52,25 @@ class SignUpController extends BaseController
 
         /* Save to users table */
         $userModel->insert( [ 
-            'users_tbl_id'   => Null,
-            'contact_no'     => $request->getPost( 'contact_no' ),
-            'email'          => $request->getPost( 'email' ),
-            'username'       => $request->getPost( 'username' ),
-            'password'       => password_hash( $request->getPost( 'password' ), PASSWORD_DEFAULT ),
+            'users_tbl_id'   => null,
+            'contact_no'     => trim( $request->getPost( 'contact_no' ) ),
+            'email'          => trim( $request->getPost( 'email' ) ),
+            'username'       => trim( $request->getPost( 'username' ) ),
+            'password'       => password_hash( trim( $request->getPost( 'password' ) ), PASSWORD_DEFAULT ),
             'user_type'      => 'farmer',
             'account_status' => 'active',
         ] );
 
-        $userID    = $userModel->getInsertID(); // Get ID of inserted user
-        $birthdate = $request->getPost( 'birthdate' );
+        $userID = $userModel->getInsertID(); // Get ID of inserted user
+        // $birthdate = trim( $request->getPost( 'birthdate' ) );
+        $birthdate = $this->request->getPost( 'birthdate' );
         $age       = date_diff( date_create( $birthdate ), date_create() )->y;
 
-        $firstName    = ucwords( strtolower( $this->request->getPost( 'first_name' ) ) );
-        $middleName   = $this->request->getPost( 'middle_name' ) ? ucwords( strtolower( $this->request->getPost( 'middle_name' ) ) ) : null;
-        $lastName     = ucwords( strtolower( $this->request->getPost( 'last_name' ) ) );
-        $suffixAndExt = $this->request->getPost( 'suffix' ) ? ucwords( strtolower( $this->request->getPost( 'suffix' ) ) ) : null;
+        $firstName    = ucwords( strtolower( trim( $this->request->getPost( 'first_name' ) ) ) );
+        $middleName   = $this->request->getPost( 'middle_name' ) ? ucwords( strtolower( trim( $this->request->getPost( 'middle_name' ) ) ) ) : null;
+        $lastName     = ucwords( strtolower( trim( $this->request->getPost( 'last_name' ) ) ) );
+        $suffixAndExt = trim( $this->request->getPost( 'editExtName' ) ) ?: null;
+
 
         $fullNameParts = [ $firstName ];
 
@@ -88,19 +91,19 @@ class SignUpController extends BaseController
             'first_name'      => $firstName,
             'middle_name'     => $middleName,
             'suffix_and_ext'  => $suffixAndExt,
-            'gender'          => $this->request->getPost( 'gender' ),
+            'gender'          => trim( $this->request->getPost( 'gender' ) ),
             'age'             => $age,
             'b_date'          => $birthdate,
-            'brgy'            => $this->request->getPost( 'barangay' ),
-            'mun'             => $this->request->getPost( 'municipality' ),
-            'prov'            => $this->request->getPost( 'province' ),
-            'farm_area'       => $this->request->getPost( 'farm_area' ),
-            'name_land_owner' => ucwords( strtolower( $this->request->getPost( 'land_owner' ) ) ),
-            'rsbsa_ref_no'    => $this->request->getPost( 'rsbsa_no' ),
+            'brgy'            => trim( $this->request->getPost( 'barangay' ) ),
+            'mun'             => trim( $this->request->getPost( 'municipality' ) ),
+            'prov'            => trim( $this->request->getPost( 'province' ) ),
+            'farm_area'       => trim( $this->request->getPost( 'farm_area' ) ),
+            'name_land_owner' => ucwords( strtolower( trim( $this->request->getPost( 'land_owner' ) ) ) ),
+            'rsbsa_ref_no'    => trim( $this->request->getPost( 'rsbsa_no' ) ),
             'users_tbl_id'    => $userID,
         ] );
 
-        $gender     = strtolower( $this->request->getPost( 'gender' ) ) === 'male';
+        $gender     = strtolower( trim( $this->request->getPost( 'gender' ) ) ) === 'male';
         $genderType = $gender ? 'his' : 'her';
 
         /* Insert log entry */
@@ -119,6 +122,7 @@ class SignUpController extends BaseController
         ] );
         return redirect()->to( base_url( '/' ) );
     }
+
 
 
 

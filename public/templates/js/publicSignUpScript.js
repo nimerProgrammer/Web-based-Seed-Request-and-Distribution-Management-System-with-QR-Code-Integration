@@ -13,42 +13,6 @@ $(document).ready(function () {
     }
   }
 
-  $("#last_name").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#first_name").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#middle_name").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#suffix").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#gender").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#barangay").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#farm_area").on("input", function () {
-    checkFormValidity();
-  });
-
-  $("#land_owner").on("input", function () {
-    checkFormValidity();
-  });
-
-  // $("#username").on("input", function () {
-  //   checkFormValidity();
-  // });
-
   $("#birthdate").on("input", function () {
     const value = $(this).val();
     const input = $(this);
@@ -87,8 +51,6 @@ $(document).ready(function () {
       input.removeClass("is-invalid");
       input.next(".invalid-feedback").hide();
     }
-
-    checkFormValidity();
   });
 
   $("#rsbsa_no").on("input", function () {
@@ -118,8 +80,6 @@ $(document).ready(function () {
       },
       "json"
     );
-
-    checkFormValidity();
   });
 
   $("#contact_no").on("keypress", function (e) {
@@ -190,8 +150,6 @@ $(document).ready(function () {
         "json"
       );
     }
-
-    checkFormValidity();
   });
 
   $("#email").on("input", function () {
@@ -206,13 +164,25 @@ $(document).ready(function () {
 
     // Allow only specific domains
     let allowedDomains = ["@gmail.com", "@email.com", "@yahoo.com"];
-    let isValidDomain = allowedDomains.some((domain) => value.endsWith(domain));
+    let isValid = false;
 
-    if (!isValidDomain) {
+    for (let domain of allowedDomains) {
+      if (value.endsWith(domain)) {
+        let prefix = value.slice(0, -domain.length);
+        if (prefix.length > 0 && /^[A-Za-z0-9._%+-]+$/.test(prefix)) {
+          isValid = true;
+          break;
+        }
+      }
+    }
+
+    if (!isValid) {
       input.addClass("is-invalid");
       input
         .next(".invalid-feedback")
-        .text("Email must end with @gmail.com, @email.com, or @yahoo.com.")
+        .text(
+          "Please enter a complete email address (e.g., abc@gmail.com, abc@yahoo.com, or abc@email.com), not only the domain."
+        )
         .show();
       return;
     }
@@ -239,8 +209,6 @@ $(document).ready(function () {
       },
       "json"
     );
-
-    checkFormValidity();
   });
 
   $("#username").on("input", function () {
@@ -260,7 +228,6 @@ $(document).ready(function () {
         .next(".invalid-feedback")
         .text("Username must be at least 8 characters long.")
         .show();
-      checkFormValidity();
       return;
     }
 
@@ -271,7 +238,6 @@ $(document).ready(function () {
         .next(".invalid-feedback")
         .text("Username cannot be 'username'.")
         .show();
-      checkFormValidity();
       return;
     }
 
@@ -282,7 +248,6 @@ $(document).ready(function () {
         .next(".invalid-feedback")
         .text("Username must not contain uppercase letters.")
         .show();
-      checkFormValidity();
       return;
     }
 
@@ -304,13 +269,10 @@ $(document).ready(function () {
         } else {
           input.removeClass("is-invalid");
           input.next(".invalid-feedback").hide();
-          checkFormValidity();
         }
       },
       "json"
     );
-
-    checkFormValidity();
   });
 
   $("#password").on("input", function () {
@@ -371,83 +333,41 @@ $(document).ready(function () {
     } else {
       input.addClass("is-invalid");
     }
-
-    checkFormValidity();
   });
 
-  function checkFormValidity() {
-    const form = $("form");
+  $("#signUpForm").on("submit", function (e) {
+    e.preventDefault(); // Stop form from submitting immediately
 
-    // Check if all required fields (input + select) are filled
-    const requiredFieldsFilled = form
-      .find("input[required], select[required]")
-      .toArray()
-      .every((field) => {
-        return $(field).val().trim() !== "";
+    let hasError = false;
+
+    // Check all invalid-feedback elements for visible error messages
+    $(this)
+      .find(".invalid-feedback")
+      .each(function () {
+        if ($(this).is(":visible") && $(this).text().trim() !== "") {
+          hasError = true;
+        }
       });
 
-    // Get target fields for custom validation
-    const rsbsa = $("#rsbsa_no");
-    const contact = $("#contact_no");
-    const email = $("#email");
-    const username = $("#username");
-    const password = $("#password");
-
-    // Field-specific validation
-    const isRSBSAValid =
-      !rsbsa.hasClass("is-invalid") && rsbsa.val().trim() !== "";
-    const isContactValid =
-      !contact.hasClass("is-invalid") && contact.val().trim() !== "";
-    const isEmailValid =
-      !email.hasClass("is-invalid") && email.val().trim() !== "";
-    const isUsernameValid =
-      !username.hasClass("is-invalid") &&
-      username.val().trim().length >= 8 &&
-      username.val().toLowerCase() !== "username";
-
-    // Password rules
-    const pw = password.val().trim();
-    const hasUppercase = /[A-Z]/.test(pw);
-    const hasNumber = /[0-9]/.test(pw);
-    const hasSymbol = /[^A-Za-z0-9]/.test(pw);
-    const isLongEnough = pw.length >= 8;
-    const isPasswordValid =
-      hasUppercase && hasNumber && hasSymbol && isLongEnough;
-
-    // Final check — all required fields filled & no .is-invalid fields
-    const noInvalids = form.find(".is-invalid").length === 0;
-
-    if (
-      requiredFieldsFilled &&
-      isRSBSAValid &&
-      isContactValid &&
-      isEmailValid &&
-      isUsernameValid &&
-      isPasswordValid &&
-      noInvalids
-    ) {
-      $("#submitBtn").prop("disabled", false);
-    } else {
-      $("#submitBtn").prop("disabled", true);
-    }
-  }
-
-  $("#submitBtn").on("click", function (e) {
-    e.preventDefault(); // Prevent default form submission
-
-    if (typeof checkFormValidity === "function") {
-      checkFormValidity(); // Optional re-check before submit
+    if (hasError) {
+      Swal.fire({
+        icon: "error",
+        title: "Please correct the errors",
+        text: "Some fields have errors. Please fix them before submitting.",
+        timer: 3000, // 3 seconds
+        showConfirmButton: false,
+        customClass: {
+          confirmButton: "btn btn-primary",
+        },
+        buttonsStyling: false,
+      });
+      return;
     }
 
-    if (!$(this).prop("disabled")) {
-      if (typeof showLoader === "function") {
-        showLoader();
-      }
+    // If no errors, proceed
+    $("#submitBtn").prop("disabled", true).text("Saving...");
+    showLoader();
 
-      showLoader();
-      $(this).text("Submitting...").prop("disabled", true);
-
-      $("#signUpForm").submit(); // Manually trigger form submit
-    }
+    this.submit(); // Submit the form normally
   });
 });
