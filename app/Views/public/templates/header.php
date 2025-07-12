@@ -96,7 +96,7 @@
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <nav class="main-header navbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
             <div class="container-fluid">
                 <!-- Logo and DA text -->
                 <a class="navbar-brand d-flex align-items-center" href="#">

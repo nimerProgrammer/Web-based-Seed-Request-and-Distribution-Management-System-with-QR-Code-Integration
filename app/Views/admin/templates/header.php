@@ -216,7 +216,8 @@
 
                         <!-- Public Page -->
                         <li class="nav-item">
-                            <a href="<?= base_url( "/" ) ?>" class="nav-link">
+                            <a href="publicPage"
+                                class="nav-link <?= session()->get( "current_tab" ) == "publicPage" ? "active" : null ?>">
                                 <i class="nav-icon bi bi-globe ml-1"></i>
                                 <p>Public Page <i class="bi bi-box-arrow-up-right ml-1"></i></p>
                             </a>

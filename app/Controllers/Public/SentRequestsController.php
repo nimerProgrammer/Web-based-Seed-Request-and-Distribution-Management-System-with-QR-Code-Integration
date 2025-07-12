@@ -7,6 +7,7 @@ use App\Models\InventoryModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BeneficiariesModel;
 use App\Models\SeedRequestsModel;
+use App\Models\LogsModel;
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
@@ -151,12 +152,16 @@ class SentRequestsController extends BaseController
     }
 
     /**
-     * Updates the seed associated with an existing seed request.
+     * Edits a previously submitted seed request.
      *
-     * This method retrieves the request ID and the newly selected inventory ID (seed)
-     * from POST data and updates the seed request in the database accordingly.
+     * Updates the selected seed (inventory item) in the request entry,
+     * logs the action, and redirects the user to the Sent Requests page.
      *
-     * @return RedirectResponse Redirects back to the sent requests page after update.
+     * Logs action: 'Edit Seed Request'
+     * Log details example:
+     *   User Juan Dela Cruz edited a seed request and selected a new seed.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse|null
      */
     public function editSentRequest()
     {
@@ -172,23 +177,52 @@ class SentRequestsController extends BaseController
         $success = $seedRequestModel->update( $requestId, $updateData );
 
         if ( $success ) {
+            $formattedDate = getPhilippineTimeFormatted();
+
+            $logsModel = new LogsModel();
+            $logsModel->insert( [ 
+                'timestamp'    => $formattedDate,
+                'action'       => 'Edit Seed Request',
+                'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' edited a seed request and selected a new seed.',
+                'users_tbl_id' => session( 'public_user_id' ),
+            ] );
+
             return redirect()->to( base_url( 'public/sentRequests' ) );
         }
     }
 
+    /**
+     * Cancels a submitted seed request.
+     *
+     * Deletes the seed request entry from the database using the provided request ID,
+     * logs the action, and redirects the user to the Sent Requests page.
+     *
+     * Logs action: 'Cancel Seed Request'
+     * Log details example:
+     *   User Juan Dela Cruz canceled a seed request.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse|null
+     */
     public function cancelRequest()
     {
         $requestId = $this->request->getPost( 'seed_requests_tbl_id' );
 
         $seedRequestModel = new SeedRequestsModel();
 
-
-
         $success = $seedRequestModel->delete( $requestId );
 
         if ( $success ) {
+            $formattedDate = getPhilippineTimeFormatted();
+
+            $logsModel = new LogsModel();
+            $logsModel->insert( [ 
+                'timestamp'    => $formattedDate,
+                'action'       => 'Cancel Seed Request',
+                'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' canceled a seed request.',
+                'users_tbl_id' => session( 'public_user_id' ),
+            ] );
+
             return redirect()->to( base_url( 'public/sentRequests' ) );
         }
     }
-
 }

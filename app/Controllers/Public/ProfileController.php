@@ -3,13 +3,30 @@
 namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
+use App\Models\LogsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UsersModel;
 use App\Models\ClientInfoModel;
 
 class ProfileController extends BaseController
 {
-
+    /**
+     * Handles duplicate value checking for profile fields.
+     *
+     * This method checks if a given value already exists in a specified table and field,
+     * excluding the original value (used during updates).
+     *
+     * Accepts POST data:
+     * - table: the table name to check
+     * - field: the column name
+     * - value: the new value to validate
+     * - original: the original value to exclude
+     *
+     * Returns JSON:
+     * { "exists": true|false }
+     *
+     * @return ResponseInterface
+     */
     public function checker()
     {
         $table    = $this->request->getPost( 'table' );
@@ -26,42 +43,99 @@ class ProfileController extends BaseController
         ] );
     }
 
+    /**
+     * Handles the update of the user's full name.
+     *
+     * Compares the submitted full name fields with existing values,
+     * applies changes if needed, logs each field change, and shows a response.
+     *
+     * @return ResponseInterface
+     */
     public function updateFullname()
     {
-        $lastName   = ucwords( strtolower( trim( $this->request->getPost( 'editLastName' ) ) ) );
-        $firstName  = ucwords( strtolower( trim( $this->request->getPost( 'editFirstName' ) ) ) );
-        $middleName = trim( $this->request->getPost( 'editMiddleName' ) );
-        $middleName = $middleName ? ucwords( strtolower( $middleName ) ) : null;
-        $extName    = trim( $this->request->getPost( 'editExtName' ) ) ?: null;
-
         $clientModel = new ClientInfoModel();
+        $userID      = session()->get( 'public_user_id' );
 
-        // Get logged-in user ID from session
-        $userID = session()->get( 'public_user_id' );
+        // Get current data
+        $currentData = $clientModel->where( 'users_tbl_id', $userID )->first();
 
-        // Perform the update
-        $clientModel
-            ->where( 'users_tbl_id', $userID )
-            ->set( [ 
-                'first_name'     => $firstName,
-                'last_name'      => $lastName,
-                'middle_name'    => $middleName,
-                'suffix_and_ext' => $extName,
-            ] )
-            ->update();
+        // Get new values from form
+        $newFirstName  = ucwords( strtolower( trim( $this->request->getPost( 'editFirstName' ) ) ) );
+        $newLastName   = ucwords( strtolower( trim( $this->request->getPost( 'editLastName' ) ) ) );
+        $newMiddleName = trim( $this->request->getPost( 'editMiddleName' ) );
+        $newMiddleName = $newMiddleName ? ucwords( strtolower( $newMiddleName ) ) : null;
+        $newExtName    = trim( $this->request->getPost( 'editExtName' ) ) ?: null;
 
-        // Optional: set a flash message
-        session()->setFlashdata( 'swal', [ 
-            'title' => 'Success!',
-            'text'  => 'Your name has been saved.',
-            'icon'  => 'success',
+        // Track changes with before and after
+        $changes = [];
 
-        ] );
+        if ( $newFirstName !== $currentData[ 'first_name' ] ) {
+            $changes[] = "changed first name from '{$currentData[ 'first_name' ]}' to '$newFirstName'";
+        }
+        if ( $newLastName !== $currentData[ 'last_name' ] ) {
+            $changes[] = "changed last name from '{$currentData[ 'last_name' ]}' to '$newLastName'";
+        }
+        if ( $newMiddleName !== $currentData[ 'middle_name' ] ) {
+            $before    = $currentData[ 'middle_name' ] ?? '(none)';
+            $after     = $newMiddleName ?? '(none)';
+            $changes[] = "changed middle name from '$before' to '$after'";
+        }
+        if ( $newExtName !== $currentData[ 'suffix_and_ext' ] ) {
+            $before    = $currentData[ 'suffix_and_ext' ] ?? '(none)';
+            $after     = $newExtName ?? '(none)';
+            $changes[] = "changed suffix/ext from '$before' to '$after'";
+        }
 
+        if ( !empty( $changes ) ) {
+            // Update the values
+            $clientModel
+                ->where( 'users_tbl_id', $userID )
+                ->set( [ 
+                    'first_name'     => $newFirstName,
+                    'last_name'      => $newLastName,
+                    'middle_name'    => $newMiddleName,
+                    'suffix_and_ext' => $newExtName,
+                ] )
+                ->update();
+
+            // Format log details
+            $changedText = implode( '; ', $changes );
+
+            $formattedDate = getPhilippineTimeFormatted();
+
+            $logsModel = new LogsModel();
+            $logsModel->insert( [ 
+                'timestamp'    => $formattedDate,
+                'action'       => 'Update Fullname',
+                'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' ' . $changedText . '.',
+                'users_tbl_id' => $userID,
+            ] );
+
+            session()->setFlashdata( 'swal', [ 
+                'title' => 'Success!',
+                'text'  => 'Your name has been updated.',
+                'icon'  => 'success',
+            ] );
+        } else {
+            // No changes
+            session()->setFlashdata( 'swal', [ 
+                'title' => 'No Changes',
+                'text'  => 'No changes were made to your name.',
+                'icon'  => 'info',
+            ] );
+        }
 
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's gender.
+     *
+     * Updates the gender field in the database, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateGender()
     {
         $gender = trim( $this->request->getPost( 'editGender' ) ) ?: null;
@@ -77,6 +151,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Gender',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their gender.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your gender has been saved.',
@@ -87,6 +171,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's birthdate and auto-calculates age.
+     *
+     * Updates the birthdate and computed age in the database, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateBirthdate()
     {
         $birthdate = $this->request->getPost( 'editBirthdate' );
@@ -104,6 +196,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Birthdate',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their birthdate.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your birthdate and age has been saved.',
@@ -114,6 +216,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's barangay.
+     *
+     * Updates the barangay field in the database, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateBarangay()
     {
         $editBarangay = trim( $this->request->getPost( 'editBarangay' ) ) ?: null;
@@ -129,6 +239,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Barangay',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their barangay.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your barangay has been saved.',
@@ -139,6 +259,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's farm area.
+     *
+     * Updates the farm area in the database, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateFarmArea()
     {
         $editFarmArea = trim( $this->request->getPost( 'editFarmArea' ) ) ?: null;
@@ -154,6 +282,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Farm Area',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their farm area.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your farm area has been saved.',
@@ -164,6 +302,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's land owner name.
+     *
+     * Updates the name of the land owner in the database, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateLandOwner()
     {
         $editLandOwner = trim( $this->request->getPost( 'editLand_owner' ) ) ?: null;
@@ -179,6 +325,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Name of Land Owner',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated the name of the land owner.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your land owner name has been saved.',
@@ -189,6 +345,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's RSBSA number.
+     *
+     * Updates the RSBSA reference number in the database, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateRSBSA()
     {
         $editRSBSA = trim( $this->request->getPost( 'editRSBSA' ) ) ?: null;
@@ -204,6 +368,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update RSBSA No.',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their RSBSA number.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your RSBSA number has been saved.',
@@ -214,6 +388,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's contact number.
+     *
+     * Updates the contact number in the `users` table, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateContactNo()
     {
         $editContactNo = trim( $this->request->getPost( 'editContactNo' ) ) ?: null;
@@ -229,6 +411,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Contact Number',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their contact number.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your contact number has been saved.',
@@ -239,6 +431,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's email address.
+     *
+     * Updates the email in the `users` table, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateEmail()
     {
         $editEmail = trim( $this->request->getPost( 'editEmail' ) ) ?: null;
@@ -254,6 +454,16 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Email Address',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their email address.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your email has been saved.',
@@ -264,6 +474,14 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Handles the update of the user's username.
+     *
+     * Updates the username in the `users` table, logs the action,
+     * and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function updateUsername()
     {
         $editUsername = strtolower( trim( $this->request->getPost( 'editUsername' ) ) ) ?: null;
@@ -279,6 +497,17 @@ class ProfileController extends BaseController
             ] )
             ->update();
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Update Username',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' updated their username.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
+
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
             'text'  => 'Your email has been saved.',
@@ -289,6 +518,17 @@ class ProfileController extends BaseController
         return redirect()->to( base_url( 'public/profile' ) );
     }
 
+    /**
+     * Verifies the current password entered by the user.
+     *
+     * Compares the submitted password against the hashed password in the database
+     * and returns a JSON response indicating if it matched.
+     *
+     * Returns JSON:
+     * { "valid": true|false }
+     *
+     * @return ResponseInterface
+     */
     public function checkCurrentPassword()
     {
         $currentPassword = $this->request->getPost( 'currentPassword' );
@@ -305,7 +545,14 @@ class ProfileController extends BaseController
         return $this->response->setJSON( [ 'valid' => false ] );
     }
 
-
+    /**
+     * Handles the change of the user's password.
+     *
+     * Hashes and updates the new password in the `users` table,
+     * logs the password change, and sets a success message.
+     *
+     * @return ResponseInterface
+     */
     public function changePassword()
     {
         $session     = session();
@@ -321,6 +568,16 @@ class ProfileController extends BaseController
             'password' => $hashedPassword,
         ] );
 
+        $formattedDate = getPhilippineTimeFormatted();
+
+        $logsModel = new LogsModel();
+        $logsModel->insert( [ 
+            'timestamp'    => $formattedDate,
+            'action'       => 'Change Password',
+            'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' changed their password.',
+            'users_tbl_id' => session( 'public_user_id' ),
+        ] );
+
         // Set SweetAlert flashdata
         session()->setFlashdata( 'swal', [ 
             'title' => 'Success!',
@@ -330,6 +587,4 @@ class ProfileController extends BaseController
 
         return redirect()->to( base_url( 'public/profile' ) );
     }
-
-
 }

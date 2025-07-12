@@ -58,6 +58,7 @@ $routes->post( '/public/request_seed/submit', 'Public\RequestSeedController::req
 $routes->get( '/admin', 'Admin\Admin::index' );
 $routes->get( '/admin/dashboard', 'Admin\Admin::dashboard' );
 // Admin management pages
+$routes->get( '/admin/publicPage', 'Admin\Admin::publicPage' );
 $routes->get( '/admin/inventory', 'Admin\Admin::inventory' );
 $routes->get( '/admin/seedsRequests', 'Admin\Admin::seedsRequests' );
 $routes->get( '/admin/beneficiaries', 'Admin\Admin::beneficiaries' );

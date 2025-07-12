@@ -1,3 +1,20 @@
+window.addEventListener("DOMContentLoaded", () => {
+  const navbar = document.querySelector(".main-header.navbar");
+  if (navbar) {
+    const navbarHeight = navbar.offsetHeight;
+    document.body.style.paddingTop = `${navbarHeight}px`;
+  }
+});
+
+// Optional: Recalculate on window resize
+window.addEventListener("resize", () => {
+  const navbar = document.querySelector(".main-header.navbar");
+  if (navbar) {
+    const navbarHeight = navbar.offsetHeight;
+    document.body.style.paddingTop = `${navbarHeight}px`;
+  }
+});
+
 $(document).ready(function () {
   preventDevTools(false);
 

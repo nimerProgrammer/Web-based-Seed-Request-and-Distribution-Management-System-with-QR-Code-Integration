@@ -122,8 +122,4 @@ class SignUpController extends BaseController
         ] );
         return redirect()->to( base_url( '/' ) );
     }
-
-
-
-
 }

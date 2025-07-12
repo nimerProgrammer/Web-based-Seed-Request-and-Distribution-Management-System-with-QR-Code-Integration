@@ -180,6 +180,26 @@ class Admin extends BaseController
     }
 
     /**
+     * Displays the admin dashboard.
+     *
+     * @return string
+     */
+    public function publicPage()
+    {
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
+        }
+
+        session()->set( "title", "PublicPage" );
+        session()->set( "current_tab", "publicPage" );
+
+        $view = view( 'admin/publicPage' );
+
+        return $view;
+    }
+
+    /**
      * Displays the inventory page.
      *
      * @return string
