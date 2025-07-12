@@ -13,6 +13,8 @@ use App\Models\ClientInfoModel;
 use App\Models\BeneficiariesModel;
 use App\Models\StaffInfoModel;
 use App\Models\LogsModel;
+use App\Models\PostDescriptionModel;
+use App\Models\PostImageModel;
 
 
 class Admin extends BaseController
@@ -194,9 +196,31 @@ class Admin extends BaseController
         session()->set( "title", "PublicPage" );
         session()->set( "current_tab", "publicPage" );
 
-        $view = view( 'admin/publicPage' );
+        $postModel  = new PostDescriptionModel();
+        $imageModel = new PostImageModel();
 
-        return $view;
+        $rawPosts = $postModel->orderBy( 'created_at', 'DESC' )->findAll();
+
+        $posts = [];
+        foreach ( $rawPosts as $post ) {
+            $images = $imageModel
+                ->where( 'post_description_tbl_id', $post[ 'post_description_tbl_id' ] )
+                ->findAll();
+
+            $posts[] = [ 
+                'description' => $post[ 'description' ],
+                'created_at'  => $post[ 'created_at' ],
+                'images'      => $images
+            ];
+        }
+
+        $data[ 'posts' ] = $posts;
+
+        $view   = view( 'admin/publicPage', $data );
+        $modals = view( 'admin/modals/publicPageModal' );
+
+
+        return $view . $modals;
     }
 
     /**

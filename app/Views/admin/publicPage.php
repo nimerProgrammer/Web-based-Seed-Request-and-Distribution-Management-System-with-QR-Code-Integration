@@ -23,66 +23,9 @@
     <!-- Default Icon in the Head Section -->
     <link rel="shortcut icon" href="<?= base_url( 'templates/img/icon.png' ) ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?= base_url( 'templates/css/admin-style.css?v=1.1.1' ) ?>">
+    <link rel="stylesheet" href="<?= base_url( 'templates/css/publicPage.css?v=1.1.1' ) ?>">
 
-    <style>
-        .spinner-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.2);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
 
-        .spinner-with-logo {
-            position: relative;
-            width: 100px;
-            height: 100px;
-        }
-
-        .gradient-spinner {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: conic-gradient(rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, 0.2) 20%,
-                    rgba(255, 255, 255, 0.4) 40%,
-                    rgba(255, 255, 255, 0.8) 70%,
-                    rgba(255, 255, 255, 1) 100%);
-
-            /* Make the ring thin (just a small line on the edge) */
-            mask: radial-gradient(farthest-side, transparent 89%, black 90%);
-            -webkit-mask: radial-gradient(farthest-side, transparent 89%, black 90%);
-
-            animation: spin 1s linear infinite;
-            transform-origin: center;
-        }
-
-        .spinner-logo {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 80px;
-            height: 80px;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            object-fit: contain;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
 
 </head>
 <div class="spinner-overlay" id="loading-spinner" style="display: none;">
@@ -91,24 +34,6 @@
         <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="Logo" class="spinner-logo">
     </div>
 </div>
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const navbar = document.querySelector('.main-header.navbar');
-        if (navbar) {
-            const navbarHeight = navbar.offsetHeight;
-            document.body.style.paddingTop = `${navbarHeight}px`;
-        }
-    });
-
-    // Optional: Recalculate on window resize
-    window.addEventListener('resize', () => {
-        const navbar = document.querySelector('.main-header.navbar');
-        if (navbar) {
-            const navbarHeight = navbar.offsetHeight;
-            document.body.style.paddingTop = `${navbarHeight}px`;
-        }
-    });
-</script>
 
 <body class="hold-transition layout-top-nav">
     <div class="wrapper">
@@ -212,152 +137,76 @@
                 </div>
             </div>
 
-            <!-- Main Content -->
+            <!-- Content Body -->
             <section class="content">
-                <div class="container-fluid text-center">
+                <div class="container-fluid">
+                    <button type="button" class="add-post-box mb-3" style="font-size: 20px" data-bs-toggle="modal"
+                        data-bs-target="#addPostModal">
+                        <i class="fas fa-plus"></i>&nbsp;<span>Add Post</span>
+                    </button>
 
-                    <!-- Full-width image carousel -->
-                    <div id="devCarousel" class="carousel slide mb-2" data-bs-ride="carousel">
-                        <!-- Indicators -->
-                        <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#devCarousel" data-bs-slide-to="0" class="active"
-                                aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#devCarousel" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#devCarousel" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
+                    <?php foreach ( $posts as $index => $post ) : ?>
+                        <div class="card">
+                            <!-- Date at the top -->
+                            <div class="px-3 pt-3">
+                                <?php
+                                $rawCreated = $post[ 'created_at' ];
+                                $createdObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawCreated );
+                                if ( $createdObj ) :
+                                    ?>
+                                    <?= $createdObj->format( 'F j, Y' ) ?><br>
+                                    <small class="text-muted"><?= $createdObj->format( 'h:i:s A' ) ?></small>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Image Carousel -->
+                            <div id="carouselPost<?= $index ?>" class="carousel slide" data-bs-ride="carousel">
+                                <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
+                                    <div class="carousel-indicators">
+                                        <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
+                                            <button type="button" data-bs-target="#carouselPost<?= $index ?>"
+                                                data-bs-slide-to="<?= $imgIndex ?>" class="<?= $imgIndex === 0 ? 'active' : '' ?>"
+                                                aria-current="<?= $imgIndex === 0 ? 'true' : 'false' ?>"
+                                                aria-label="Slide <?= $imgIndex + 1 ?>"></button>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="carousel-inner">
+                                    <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
+                                        <div class="carousel-item <?= $imgIndex === 0 ? 'active' : '' ?>">
+                                            <img src="<?= base_url( $img[ 'image_path' ] ) ?>" class="d-block w-100"
+                                                style="max-height: 500px; object-fit: cover;" alt="Post Image">
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+
+                                <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="card-body">
+                                <p>
+                                    <?= esc( $post[ 'description' ] ) ?>. <i id="editCaptionBtn"
+                                        class="bi bi-pencil-square text-primary" role="button" data-bs-toggle="modal"
+                                        data-bs-target="#editPostModal">&nbsp;edit</i>
+                                </p>
+                            </div>
                         </div>
-
-                        <!-- Slides -->
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="<?= base_url( 'assets/images/image1.jpg' ) ?>" class="d-block w-100"
-                                    alt="Slide 1" style="max-height: 500px; object-fit: cover;">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="<?= base_url( 'assets/images/image2.jpg' ) ?>" class="d-block w-100"
-                                    alt="Slide 2" style="max-height: 500px; object-fit: cover;">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="<?= base_url( 'assets/images/image3.jpg' ) ?>" class="d-block w-100"
-                                    alt="Slide 3" style="max-height: 500px; object-fit: cover;">
-                            </div>
-                        </div>
-
-                        <!-- Controls -->
-                        <button class="carousel-control-prev" type="button" data-bs-target="#devCarousel"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#devCarousel"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-
-                    <!-- Caption below carousel -->
-                    <div class="text-center mb-4">
-                        <p id="devCaption" class="text-secondary">
-                            This feature is currently under development.
-                            <i id="editCaptionBtn" class="bi bi-pencil-square text-primary" role="button"
-                                data-bs-toggle="modal" data-bs-target="#editModal">&nbsp;edit</i>
-                        </p>
-                    </div>
-
+                    <?php endforeach; ?>
                 </div>
             </section>
-
-            <!-- Styles for Indicators -->
-            <style>
-                .carousel-indicators [data-bs-target] {
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 50%;
-                    background-color: rgba(255, 255, 255, 0.1);
-                    /* default faded */
-                    opacity: 1;
-                    border: none;
-                    transition: background-color 0.3s ease, transform 0.3s ease;
-                }
-
-                .carousel-indicators .active-dot {
-                    background-color: #ffffff;
-                    /* fully white */
-                    transform: scale(1.2);
-                }
-
-                .carousel-indicators .near-active-dot {
-                    background-color: rgba(255, 255, 255, 0.6);
-                    /* medium opacity */
-                }
-            </style>
-
-            <!-- Edit Modal -->
-            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form id="editForm" class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Image & Caption</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-start">
-                            <div class="mb-3">
-                                <label for="imageUrl" class="form-label">Image URL</label>
-                                <input type="url" class="form-control" id="imageUrl"
-                                    placeholder="https://example.com/image.jpg">
-                            </div>
-                            <div class="mb-3">
-                                <label for="captionText" class="form-label">Caption</label>
-                                <input type="text" class="form-control" id="captionText"
-                                    placeholder="Enter caption here...">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Script -->
-            <script>
-                const carousel = document.querySelector('#devCarousel');
-                const indicators = document.querySelectorAll('.carousel-indicators [data-bs-target]');
-
-                function updateIndicators() {
-                    const activeIndex = [...indicators].findIndex(dot => dot.classList.contains('active'));
-                    indicators.forEach((dot, i) => {
-                        dot.classList.remove('active-dot', 'near-active-dot');
-                        if (i === activeIndex) {
-                            dot.classList.add('active-dot');
-                        } else if (Math.abs(i - activeIndex) <= 2) {
-                            dot.classList.add('near-active-dot');
-                        }
-                    });
-                }
-
-                document.addEventListener('DOMContentLoaded', updateIndicators);
-                carousel.addEventListener('slid.bs.carousel', updateIndicators);
-
-                // Optional: Update caption/image on edit
-                document.getElementById('editForm').addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    const imageUrl = document.getElementById('imageUrl').value;
-                    const captionText = document.getElementById('captionText').value;
-
-                    if (imageUrl) {
-                        document.querySelector('.carousel-item.active img').src = imageUrl;
-                    }
-                    if (captionText) {
-                        document.getElementById('devCaption').textContent = captionText;
-                    }
-
-                    bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-                });
-            </script>
-
 
 
         </div>
@@ -389,7 +238,7 @@
         <script src="<?= base_url( 'templates/js/sweetalert2.js?v=3.3.3' ) ?>"></script>
     <?php endif ?>
 
-    <script src="<?= base_url( 'templates/js/adminHomeScript.js?v=5.5.5' ) ?>"></script>
+    <script src="<?= base_url( 'templates/js/publicPageScript.js?v=5.5.5' ) ?>"></script>
 
 
 

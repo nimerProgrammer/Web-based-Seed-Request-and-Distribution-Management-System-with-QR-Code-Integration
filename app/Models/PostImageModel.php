@@ -4,19 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class LogsModel extends Model
+class PostImageModel extends Model
 {
-    protected $table = 'logs';
-    protected $primaryKey = 'logs_tbl_id';
+    protected $table = 'post_image';
+    protected $primaryKey = 'post_image_tbl_id';
     protected $useAutoIncrement = true;
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
 
     protected $allowedFields = [ 
-        'timestamp',
-        'action',
-        'details',
-        'users_tbl_id'
+        'image_path',
+        'post_description_tbl_id'
     ];
 }

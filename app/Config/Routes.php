@@ -66,6 +66,9 @@ $routes->get( '/admin/reports', 'Admin\Admin::reports' );
 $routes->get( '/admin/logs', 'Admin\Admin::logs' );
 $routes->get( '/admin/logout', 'Admin\Admin::logout' );
 
+/*** PUBLIC PAGE CONTROLLER ACTIONS ***/
+$routes->post( '/admin/uploadPost', 'Admin\PublicPageController::uploadPost' );
+
 
 /*** INVENTORY CONTROLLER ACTIONS ***/
 // Save, update, and delete inventory items
