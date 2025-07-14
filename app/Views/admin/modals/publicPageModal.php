@@ -31,8 +31,7 @@
 <!-- Edit Post Modal -->
 <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="editPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form id="editPostForm" action="<?= base_url( 'public/uploadImages' ) ?>" method="post"
-            enctype="multipart/form-data" class="modal-content">
+        <form id="editPostForm" action="<?= base_url( 'admin/updatePost' ) ?>" method="post" class="modal-content">
             <?= csrf_field() ?>
             <div class="modal-header">
                 <h5 class="modal-title" id="editPostModalLabel">Edit Description</h5>
@@ -40,15 +39,16 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
+                    <input type="hidden" id="descriptionID" name="descriptionID">
                     <label for="editDescription" class="form-label">Description</label>
-                    <textarea name="description" id="editDescription" class="form-control" rows="5"
+                    <textarea name="editDescription" id="editDescription" class="form-control" rows="5"
                         placeholder="Enter your post description here..."></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <!-- Edit Post Button -->
                 <button type="submit" id="editPostBtn" class="btn btn-primary" disabled>
-                    Save Changes
+                    Save
                 </button>
             </div>
         </form>

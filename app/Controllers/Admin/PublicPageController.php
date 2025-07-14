@@ -24,8 +24,17 @@ class PublicPageController extends BaseController
         $validImages = [];
         $hasInvalid  = false;
 
+        // ✅ Save post description
+        $postID = $postModel->insert( [ 
+            'description'  => $description,
+            'created_at'   => $formattedDate,
+            'updated_at'   => null,
+            'users_tbl_id' => session()->get( 'user_id' ),
+        ] );
+
         // ✅ Validate all uploaded images
-        if ( !empty( $images ) ) {
+        // ✅ Validate all uploaded images (only if there are valid files)
+        if ( is_array( $images ) && count( array_filter( $images, fn( $img ) => $img->isValid() && !$img->hasMoved() ) ) > 0 ) {
             foreach ( $images as $image ) {
                 $extension = strtolower( $image->getClientExtension() );
 
@@ -41,7 +50,6 @@ class PublicPageController extends BaseController
                 $validImages[] = $image;
             }
 
-            // 🚫 If any image is invalid, do not proceed
             if ( $hasInvalid ) {
                 session()->setFlashdata( 'swal', [ 
                     'title' => 'Invalid Image',
@@ -50,42 +58,37 @@ class PublicPageController extends BaseController
                 ] );
                 return redirect()->back()->withInput();
             }
-        }
 
-        // ✅ Save post description
-        $postID = $postModel->insert( [ 
-            'description'  => $description,
-            'created_at'   => $formattedDate,
-            'updated_at'   => null,
-            'users_tbl_id' => session()->get( 'user_id' ),
-        ] );
+            // ✅ Process valid images
+            foreach ( $validImages as $image ) {
+                $newName   = $image->getRandomName();
+                $tempPath  = WRITEPATH . 'temp/' . $newName;
+                $finalPath = FCPATH . 'uploads/images/' . $newName;
 
-        // ✅ Process valid images
-        foreach ( $validImages as $image ) {
-            $newName   = $image->getRandomName();
-            $tempPath  = WRITEPATH . 'temp/' . $newName;
-            $finalPath = FCPATH . 'uploads/images/' . $newName;
+                $image->move( WRITEPATH . 'temp', $newName );
 
-            $image->move( WRITEPATH . 'temp', $newName );
+                $imageInfo = getimagesize( $tempPath );
+                $width     = $imageInfo[ 0 ];
+                $height    = $imageInfo[ 1 ];
 
-            $imageInfo = getimagesize( $tempPath );
-            $width     = $imageInfo[ 0 ];
-            $height    = $imageInfo[ 1 ];
+                $imageService = \Config\Services::image()->withFile( $tempPath );
 
-            $imageService = \Config\Services::image()->withFile( $tempPath );
+                if ( $width > 1920 || $height > 1080 ) {
+                    $imageService->resize( 1920, 1080, true );
+                }
 
-            if ( $width > 1920 || $height > 1080 ) {
-                $imageService->resize( 1920, 1080, true );
+                $imageService->save( $finalPath );
+                unlink( $tempPath );
+
+                $imageModel->insert( [ 
+                    'image_path'              => 'uploads/images/' . $newName,
+                    'post_description_tbl_id' => $postID,
+                ] );
             }
-
-            $imageService->save( $finalPath );
-            unlink( $tempPath );
-
-            $imageModel->insert( [ 
-                'image_path'              => 'uploads/images/' . $newName,
-                'post_description_tbl_id' => $postID,
-            ] );
         }
+
+
+
 
         session()->setFlashdata( 'swal', [ 
             'title' => 'Posted!',
@@ -107,9 +110,6 @@ class PublicPageController extends BaseController
         // Delete the post itself
         $postModel->delete( $id );
 
-        // Optional: set flashdata message
-        // session()->setFlashdata( 'success', 'Post deleted successfully.' );
-
         session()->setFlashdata( 'swal', [ 
             'title' => 'Deleted!',
             'text'  => 'Post deleted successfully.',
@@ -119,5 +119,40 @@ class PublicPageController extends BaseController
         return redirect()->back();
     }
 
+    public function updatePost()
+    {
+        $id          = trim( $this->request->getPost( 'descriptionID' ) );
+        $description = trim( $this->request->getPost( 'editDescription' ) );
+
+        $postModel = new PostDescriptionModel();
+
+
+        if ( empty( $id ) || empty( $description ) ) {
+            session()->setFlashdata( 'swal', [ 
+                'title' => 'Missing Data!',
+                'text'  => 'Description or ID is missing.',
+                'icon'  => 'warning',
+            ] );
+            return redirect()->back();
+        }
+
+        $updated = $postModel->update( $id, [ 'description' => $description ] );
+
+        if ( $updated ) {
+            session()->setFlashdata( 'swal', [ 
+                'title' => 'Updated!',
+                'text'  => 'Post updated successfully.',
+                'icon'  => 'success',
+            ] );
+        } else {
+            session()->setFlashdata( 'swal', [ 
+                'title' => 'Update Failed!',
+                'text'  => 'Could not update the post.',
+                'icon'  => 'error',
+            ] );
+        }
+
+        return redirect()->back();
+    }
 
 }

@@ -153,6 +153,22 @@ $(document).ready(function () {
   // Apply to Edit Post
   toggleSubmitButton("editDescription", "editPostBtn");
 
+  $("#addDescription, #editDescription").on("keydown", function (e) {
+    if (e.key === "Tab") {
+      e.preventDefault(); // Prevent focus switch
+
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      const value = $(this).val();
+
+      // Insert tab character
+      $(this).val(value.substring(0, start) + "\t" + value.substring(end));
+
+      // Move cursor after tab
+      this.selectionStart = this.selectionEnd = start + 1;
+    }
+  });
+
   $("#addPostForm").on("submit", function (e) {
     e.preventDefault();
     $(this)
@@ -161,16 +177,6 @@ $(document).ready(function () {
       .prop("disabled", true);
     showLoader();
     this.submit();
-  });
-
-  // Edit Post submit
-  $("#editPostForm").on("submit", function (e) {
-    e.preventDefault();
-    $(this)
-      .find('button[type="submit"]')
-      .text("Saving...")
-      .prop("disabled", true);
-    showLoader();
   });
 
   // DELETE post (fix)
@@ -196,5 +202,24 @@ $(document).ready(function () {
         window.location.href = deleteUrl;
       }
     });
+  });
+
+  $(".editCaptionBtn").on("click", function () {
+    const description = $(this).data("description");
+    const description_id = $(this).data("description_id");
+
+    $("#descriptionID").val(description_id);
+    $("#editDescription").val(description);
+    $("#editPostBtn").prop("disabled", false);
+  });
+
+  $("#editPostForm").on("submit", function (e) {
+    e.preventDefault();
+    $(this)
+      .find('button[type="submit"]')
+      .html('<i class="bi bi-upload"></i> Publishing...')
+      .prop("disabled", true);
+    showLoader();
+    this.submit();
   });
 });

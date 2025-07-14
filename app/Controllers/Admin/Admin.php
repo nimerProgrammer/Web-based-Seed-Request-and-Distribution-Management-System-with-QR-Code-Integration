@@ -199,7 +199,7 @@ class Admin extends BaseController
         $postModel  = new PostDescriptionModel();
         $imageModel = new PostImageModel();
 
-        $rawPosts = $postModel->orderBy( 'created_at', 'DESC' )->findAll();
+        $rawPosts = $postModel->orderBy( 'post_description_tbl_id', 'DESC' )->findAll();
 
         $posts = [];
         foreach ( $rawPosts as $post ) {

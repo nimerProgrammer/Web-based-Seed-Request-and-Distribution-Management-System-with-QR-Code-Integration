@@ -140,90 +140,91 @@
             <!-- Content Body -->
             <section class="content">
                 <div class="container-fluid">
-                    <button type="button" class="add-post-box mb-3" style="font-size: 20px" data-bs-toggle="modal"
-                        data-bs-target="#addPostModal">
-                        <i class="fas fa-plus"></i>&nbsp;<span>Add Post</span>
-                    </button>
-                    <div class="card">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-6">
+                            <button type="button" class="add-post-box mb-3" style="font-size: 20px"
+                                data-bs-toggle="modal" data-bs-target="#addPostModal">
+                                <i class="fas fa-plus"></i>&nbsp;<span>Add Post</span>
+                            </button>
 
-                        <?php foreach ( $posts as $index => $post ) : ?>
-                            <div class="card-body">
+                            <div class="card">
 
-                                <!-- Delete button -->
-                                <a href="javascript:void(0)"
-                                    class="btn btn-sm btn-secondary rounded-circle float-end mb-2 delete-post-btn"
-                                    data-url="<?= base_url( '/admin/deletePost/' . $post[ 'post_description_tbl_id' ] ) ?>"
-                                    data-bs-toggle="tooltip" title="Delete post">
-                                    <i class="bi bi-trash text-white"></i>
-                                </a>
+                                <?php foreach ( $posts as $index => $post ) : ?>
+                                    <div class="card-body">
 
+                                        <!-- Delete button -->
+                                        <a href="javascript:void(0)"
+                                            class="btn btn-sm btn-secondary rounded-circle float-end mb-2 delete-post-btn"
+                                            data-url="<?= base_url( '/admin/deletePost/' . $post[ 'post_description_tbl_id' ] ) ?>"
+                                            data-bs-toggle="tooltip" title="Delete post">
+                                            <i class="bi bi-trash text-white"></i>
+                                        </a>
 
-
-                                <!-- <div class="card-header"> -->
-                                <!-- Date at the top -->
-                                <div class="mb-1 mt-1">
-                                    Posted:
-                                    <?php
-                                    $rawCreated = $post[ 'created_at' ];
-                                    $createdObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawCreated );
-                                    if ( $createdObj ) :
-                                        ?>
-                                        <?= $createdObj->format( 'F j, Y' ) ?>
-                                        <small class="text-muted"><?= $createdObj->format( 'h:i:s A' ) ?></small>
-                                    <?php endif; ?>
-                                    <!-- <i class="bi bi-trash text-danger float-end" role="button"></i> -->
-                                </div>
-                                <!-- </div> -->
-
-                                <!-- Image Carousel -->
-                                <!-- <div class="card-body"> -->
-                                <div id="carouselPost<?= $index ?>" class="carousel slide" data-bs-ride="carousel">
-                                    <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
-                                        <div class="carousel-indicators">
-                                            <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
-                                                <button type="button" data-bs-target="#carouselPost<?= $index ?>"
-                                                    data-bs-slide-to="<?= $imgIndex ?>"
-                                                    class="<?= $imgIndex === 0 ? 'active' : '' ?>"
-                                                    aria-current="<?= $imgIndex === 0 ? 'true' : 'false' ?>"
-                                                    aria-label="Slide <?= $imgIndex + 1 ?>"></button>
-                                            <?php endforeach; ?>
+                                        <div class="mb-1 mt-1">
+                                            Posted:
+                                            <?php
+                                            $rawCreated = $post[ 'created_at' ];
+                                            $createdObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawCreated );
+                                            if ( $createdObj ) :
+                                                ?>
+                                                <?= $createdObj->format( 'F j, Y' ) ?>
+                                                <small class="text-muted"><?= $createdObj->format( 'h:i:s A' ) ?></small>
+                                            <?php endif; ?>
                                         </div>
-                                    <?php endif; ?>
+                                        <div id="carouselPost<?= $index ?>" class="carousel slide" data-bs-ride="carousel">
+                                            <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
+                                                <div class="carousel-indicators">
+                                                    <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
+                                                        <button type="button" data-bs-target="#carouselPost<?= $index ?>"
+                                                            data-bs-slide-to="<?= $imgIndex ?>"
+                                                            class="<?= $imgIndex === 0 ? 'active' : '' ?>"
+                                                            aria-current="<?= $imgIndex === 0 ? 'true' : 'false' ?>"
+                                                            aria-label="Slide <?= $imgIndex + 1 ?>"></button>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            <?php endif; ?>
 
-                                    <div class="carousel-inner">
-                                        <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
-                                            <div class="carousel-item <?= $imgIndex === 0 ? 'active' : '' ?>">
-                                                <img src="<?= base_url( $img[ 'image_path' ] ) ?>" class="d-block w-100 h-100"
-                                                    style="object-fit: cover;" alt="Post Image">
+                                            <div class="carousel-inner">
+                                                <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
+                                                    <div class="carousel-item <?= $imgIndex === 0 ? 'active' : '' ?>">
+                                                        <img src="<?= base_url( $img[ 'image_path' ] ) ?>"
+                                                            class="d-block w-100 h-100" style="object-fit: cover;"
+                                                            alt="Post Image">
+                                                    </div>
+                                                <?php endforeach; ?>
                                             </div>
-                                        <?php endforeach; ?>
+
+                                            <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
+                                                <button class="carousel-control-prev" type="button"
+                                                    data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+                                                <button class="carousel-control-next" type="button"
+                                                    data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <!-- Description -->
+
+                                        <p class="mt-2">
+                                            <?= esc( $post[ 'description' ] ) ?>
+                                            <i class="bi bi-pencil-square text-primary editCaptionBtn" role="button"
+                                                data-bs-toggle="modal" data-bs-target="#editPostModal"
+                                                data-description_id="<?= esc( $post[ 'post_description_tbl_id' ] ) ?>"
+                                                data-description="<?= esc( $post[ 'description' ] ) ?>">&nbsp;edit
+                                            </i>
+
+                                        </p>
                                     </div>
+                                    <div class="border-bottom"></div>
 
-                                    <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
-                                        <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </button>
-                                        <button class="carousel-control-next" type="button"
-                                            data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </button>
-                                    <?php endif; ?>
-                                </div>
-
-                                <!-- Description -->
-
-                                <p class="mt-1">
-                                    <?= esc( $post[ 'description' ] ) ?>. <i id="editCaptionBtn"
-                                        class="bi bi-pencil-square text-primary" role="button" data-bs-toggle="modal"
-                                        data-bs-target="#editPostModal">&nbsp;edit</i>
-                                </p>
+                                <?php endforeach; ?>
                             </div>
-                            <div class="border-bottom"></div>
-
-                        <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </section>
