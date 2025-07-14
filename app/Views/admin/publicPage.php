@@ -144,67 +144,87 @@
                         data-bs-target="#addPostModal">
                         <i class="fas fa-plus"></i>&nbsp;<span>Add Post</span>
                     </button>
+                    <div class="card">
 
-                    <?php foreach ( $posts as $index => $post ) : ?>
-                        <div class="card">
-                            <!-- Date at the top -->
-                            <div class="px-3 pt-3">
-                                <?php
-                                $rawCreated = $post[ 'created_at' ];
-                                $createdObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawCreated );
-                                if ( $createdObj ) :
-                                    ?>
-                                    <?= $createdObj->format( 'F j, Y' ) ?><br>
-                                    <small class="text-muted"><?= $createdObj->format( 'h:i:s A' ) ?></small>
-                                <?php endif; ?>
-                            </div>
+                        <?php foreach ( $posts as $index => $post ) : ?>
+                            <div class="card-body">
 
-                            <!-- Image Carousel -->
-                            <div id="carouselPost<?= $index ?>" class="carousel slide" data-bs-ride="carousel">
-                                <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
-                                    <div class="carousel-indicators">
+                                <!-- Delete button -->
+                                <a href="javascript:void(0)"
+                                    class="btn btn-sm btn-secondary rounded-circle float-end mb-2 delete-post-btn"
+                                    data-url="<?= base_url( '/admin/deletePost/' . $post[ 'post_description_tbl_id' ] ) ?>"
+                                    data-bs-toggle="tooltip" title="Delete post">
+                                    <i class="bi bi-trash text-white"></i>
+                                </a>
+
+
+
+                                <!-- <div class="card-header"> -->
+                                <!-- Date at the top -->
+                                <div class="mb-1 mt-1">
+                                    Posted:
+                                    <?php
+                                    $rawCreated = $post[ 'created_at' ];
+                                    $createdObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawCreated );
+                                    if ( $createdObj ) :
+                                        ?>
+                                        <?= $createdObj->format( 'F j, Y' ) ?>
+                                        <small class="text-muted"><?= $createdObj->format( 'h:i:s A' ) ?></small>
+                                    <?php endif; ?>
+                                    <!-- <i class="bi bi-trash text-danger float-end" role="button"></i> -->
+                                </div>
+                                <!-- </div> -->
+
+                                <!-- Image Carousel -->
+                                <!-- <div class="card-body"> -->
+                                <div id="carouselPost<?= $index ?>" class="carousel slide" data-bs-ride="carousel">
+                                    <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
+                                        <div class="carousel-indicators">
+                                            <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
+                                                <button type="button" data-bs-target="#carouselPost<?= $index ?>"
+                                                    data-bs-slide-to="<?= $imgIndex ?>"
+                                                    class="<?= $imgIndex === 0 ? 'active' : '' ?>"
+                                                    aria-current="<?= $imgIndex === 0 ? 'true' : 'false' ?>"
+                                                    aria-label="Slide <?= $imgIndex + 1 ?>"></button>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <div class="carousel-inner">
                                         <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
-                                            <button type="button" data-bs-target="#carouselPost<?= $index ?>"
-                                                data-bs-slide-to="<?= $imgIndex ?>" class="<?= $imgIndex === 0 ? 'active' : '' ?>"
-                                                aria-current="<?= $imgIndex === 0 ? 'true' : 'false' ?>"
-                                                aria-label="Slide <?= $imgIndex + 1 ?>"></button>
+                                            <div class="carousel-item <?= $imgIndex === 0 ? 'active' : '' ?>">
+                                                <img src="<?= base_url( $img[ 'image_path' ] ) ?>" class="d-block w-100 h-100"
+                                                    style="object-fit: cover;" alt="Post Image">
+                                            </div>
                                         <?php endforeach; ?>
                                     </div>
-                                <?php endif; ?>
 
-                                <div class="carousel-inner">
-                                    <?php foreach ( $post[ 'images' ] as $imgIndex => $img ) : ?>
-                                        <div class="carousel-item <?= $imgIndex === 0 ? 'active' : '' ?>">
-                                            <img src="<?= base_url( $img[ 'image_path' ] ) ?>" class="d-block w-100"
-                                                style="max-height: 500px; object-fit: cover;" alt="Post Image">
-                                        </div>
-                                    <?php endforeach; ?>
+                                    <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
 
-                                <?php if ( count( $post[ 'images' ] ) > 1 ) : ?>
-                                    <button class="carousel-control-prev" type="button"
-                                        data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                        data-bs-target="#carouselPost<?= $index ?>" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
-                                <?php endif; ?>
-                            </div>
+                                <!-- Description -->
 
-                            <!-- Description -->
-                            <div class="card-body">
-                                <p>
+                                <p class="mt-1">
                                     <?= esc( $post[ 'description' ] ) ?>. <i id="editCaptionBtn"
                                         class="bi bi-pencil-square text-primary" role="button" data-bs-toggle="modal"
                                         data-bs-target="#editPostModal">&nbsp;edit</i>
                                 </p>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                            <div class="border-bottom"></div>
+
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </section>
 
@@ -238,6 +258,7 @@
         <script src="<?= base_url( 'templates/js/sweetalert2.js?v=3.3.3' ) ?>"></script>
     <?php endif ?>
 
+    <script src="<?= base_url( 'templates/js/adminscript.js?v=6.6.6' ) ?>"></script>
     <script src="<?= base_url( 'templates/js/publicPageScript.js?v=5.5.5' ) ?>"></script>
 
 

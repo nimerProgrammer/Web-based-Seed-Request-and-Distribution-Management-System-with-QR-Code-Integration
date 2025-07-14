@@ -68,6 +68,8 @@ $routes->get( '/admin/logout', 'Admin\Admin::logout' );
 
 /*** PUBLIC PAGE CONTROLLER ACTIONS ***/
 $routes->post( '/admin/uploadPost', 'Admin\PublicPageController::uploadPost' );
+$routes->get( '/admin/deletePost/(:num)', 'Admin\PublicPageController::deletePost/$1' );
+
 
 
 /*** INVENTORY CONTROLLER ACTIONS ***/

@@ -35,13 +35,10 @@
             enctype="multipart/form-data" class="modal-content">
             <?= csrf_field() ?>
             <div class="modal-header">
-                <h5 class="modal-title" id="editPostModalLabel">Edit Post</h5>
+                <h5 class="modal-title" id="editPostModalLabel">Edit Description</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div id="editImagePreview" class="d-flex flex-wrap gap-2 mb-3 align-items-center"></div>
-                <input type="file" name="images[]" id="editFinalImageInput" multiple hidden>
-
                 <div class="mb-3">
                     <label for="editDescription" class="form-label">Description</label>
                     <textarea name="description" id="editDescription" class="form-control" rows="5"

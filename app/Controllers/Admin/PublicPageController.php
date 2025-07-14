@@ -32,7 +32,7 @@ class PublicPageController extends BaseController
                 if (
                     !$image->isValid() ||
                     $image->hasMoved() ||
-                    !in_array( $extension, [ 'jpg', 'jpeg' ] )
+                    !in_array( $extension, [ 'jpg', 'jpeg', 'png' ] )
                 ) {
                     $hasInvalid = true;
                     break; // Stop right away if even one image is invalid
@@ -93,6 +93,29 @@ class PublicPageController extends BaseController
             'icon'  => 'success',
         ] );
 
+        return redirect()->back();
+    }
+
+    public function deletePost( $id )
+    {
+        $postModel  = new PostDescriptionModel();
+        $imageModel = new PostImageModel();
+
+        // Optional: delete related images
+        $imageModel->where( 'post_description_tbl_id', $id )->delete();
+
+        // Delete the post itself
+        $postModel->delete( $id );
+
+        // Optional: set flashdata message
+        // session()->setFlashdata( 'success', 'Post deleted successfully.' );
+
+        session()->setFlashdata( 'swal', [ 
+            'title' => 'Deleted!',
+            'text'  => 'Post deleted successfully.',
+            'icon'  => 'success',
+        ] );
+        // Redirect back
         return redirect()->back();
     }
 

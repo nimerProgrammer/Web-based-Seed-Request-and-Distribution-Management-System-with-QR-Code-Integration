@@ -47,6 +47,7 @@
 
 <script src="<?= base_url( 'templates/js/publicScript.js?v=5.5.5' ) ?>"></script>
 <script src="<?= base_url( 'templates/js/publicLoginScript.js?v=4.4.4' ) ?>"></script>
+<link rel="stylesheet" href="<?= base_url( 'templates/css/publicPage.css?v=1.1.1' ) ?>">
 
 
 <?php if ( session()->get( 'public_logged_in' ) === true ) : ?>

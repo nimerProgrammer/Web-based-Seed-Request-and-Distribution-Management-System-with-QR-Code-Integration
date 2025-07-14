@@ -208,9 +208,10 @@ class Admin extends BaseController
                 ->findAll();
 
             $posts[] = [ 
-                'description' => $post[ 'description' ],
-                'created_at'  => $post[ 'created_at' ],
-                'images'      => $images
+                'post_description_tbl_id' => $post[ 'post_description_tbl_id' ],
+                'description'             => $post[ 'description' ],
+                'created_at'              => $post[ 'created_at' ],
+                'images'                  => $images
             ];
         }
 

@@ -1,3 +1,34 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const allCarousels = document.querySelectorAll(".carousel");
+
+  allCarousels.forEach((carousel) => {
+    const indicators = carousel.querySelectorAll(
+      ".carousel-indicators [data-bs-target]"
+    );
+
+    function updateIndicators() {
+      const activeIndex = [...indicators].findIndex((dot) =>
+        dot.classList.contains("active")
+      );
+
+      indicators.forEach((dot, i) => {
+        dot.classList.remove("active-dot", "near-active-dot");
+        if (i === activeIndex) {
+          dot.classList.add("active-dot");
+        } else if (Math.abs(i - activeIndex) <= 2) {
+          dot.classList.add("near-active-dot");
+        }
+      });
+    }
+
+    // Initial indicator styling
+    updateIndicators();
+
+    // Update indicators on slide
+    carousel.addEventListener("slid.bs.carousel", updateIndicators);
+  });
+});
+
 window.addEventListener("DOMContentLoaded", () => {
   const navbar = document.querySelector(".main-header.navbar");
   if (navbar) {

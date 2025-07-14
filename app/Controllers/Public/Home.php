@@ -6,6 +6,8 @@ use App\Controllers\BaseController;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\SeedRequestsModel;
+use App\Models\PostImageModel;
+use App\Models\PostDescriptionModel;
 
 class Home extends BaseController
 {
@@ -39,8 +41,28 @@ class Home extends BaseController
         session()->set( "public_title", "home" );
         session()->set( "public_current_tab", "home" );
 
+        $postModel  = new PostDescriptionModel();
+        $imageModel = new PostImageModel();
+
+        $rawPosts = $postModel->orderBy( 'created_at', 'DESC' )->findAll();
+
+        $posts = [];
+        foreach ( $rawPosts as $post ) {
+            $images = $imageModel
+                ->where( 'post_description_tbl_id', $post[ 'post_description_tbl_id' ] )
+                ->findAll();
+
+            $posts[] = [ 
+                'description' => $post[ 'description' ],
+                'created_at'  => $post[ 'created_at' ],
+                'images'      => $images
+            ];
+        }
+
+        $data[ 'posts' ] = $posts;
+
         $header = view( 'public/templates/header' );
-        $body   = view( 'public/home' );
+        $body   = view( 'public/home', $data );
         $modals = view( 'public/dialog/loginModalDialog' );
         if ( session()->get( "public_logged_in" ) === true ) {
             $modals .= view( 'public/dialog/requestSeedModalDialog' );

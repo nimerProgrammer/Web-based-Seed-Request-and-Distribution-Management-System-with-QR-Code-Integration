@@ -172,4 +172,29 @@ $(document).ready(function () {
       .prop("disabled", true);
     showLoader();
   });
+
+  // DELETE post (fix)
+  $(document).on("click", ".delete-post-btn", function (e) {
+    e.preventDefault();
+    const deleteUrl = $(this).data("url");
+
+    Swal.fire({
+      title: "Delete Post?",
+      text: "Are you sure you want to delete this post?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-md btn-danger me-2",
+        cancelButton: "btn btn-md btn-secondary",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        showLoader();
+        window.location.href = deleteUrl;
+      }
+    });
+  });
 });
