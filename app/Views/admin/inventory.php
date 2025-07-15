@@ -95,13 +95,14 @@
                                                             data-id="<?= $item[ 'inventory_tbl_id' ] ?>"
                                                             data-name="<?= esc( $item[ 'seed_name' ] ) ?>"
                                                             data-class="<?= esc( $item[ 'seed_class' ] ) ?>"
-                                                            data-stock="<?= esc( $item[ 'stock' ] ) ?>" title="Edit">
+                                                            data-stock="<?= esc( $item[ 'stock' ] ) ?>"
+                                                            data-bs-toggles="tooltip" title="Edit">
                                                             <i class="bi bi-pencil-square"></i>
                                                         </button>
 
                                                         <a href="<?= base_url( '/admin/inventory/delete/' . $item[ 'inventory_tbl_id' ] ) ?>"
                                                             class="btn btn-sm btn-outline-danger delete-inventory-button"
-                                                            title="Delete">
+                                                            data-bs-toggle="tooltip" title="Delete">
                                                             <i class="bi bi-trash"></i>
                                                         </a>
                                                     </div>

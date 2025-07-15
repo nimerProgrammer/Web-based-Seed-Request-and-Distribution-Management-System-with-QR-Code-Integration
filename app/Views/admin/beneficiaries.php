@@ -159,7 +159,7 @@
                                                                     <td class="align-middle">
                                                                         <?php
                                                                         $rawBDate = $beneficiary[ 'b_date' ];
-                                                                        $dateObj  = DateTime::createFromFormat( 'm-d-Y', $rawBDate );
+                                                                        $dateObj  = DateTime::createFromFormat( 'Y-m-d', $rawBDate );
                                                                         ?>
 
                                                                         <?php if ( $dateObj ) : ?>
@@ -230,6 +230,7 @@
 
                                                                                     <button type="submit"
                                                                                         class="btn btn-sm btn-outline-secondary"
+                                                                                        data-bs-toggle="tooltip"
                                                                                         title="Undo Receive">
                                                                                         <i class="bi bi-arrow-counterclockwise"></i>
                                                                                     </button>
@@ -255,6 +256,7 @@
 
                                                                                     <button type="submit"
                                                                                         class="btn btn-sm btn-outline-primary"
+                                                                                        data-bs-toggle="tooltip"
                                                                                         title="Mark as Received">
                                                                                         <i class="bi bi-check-circle"></i>
                                                                                     </button>

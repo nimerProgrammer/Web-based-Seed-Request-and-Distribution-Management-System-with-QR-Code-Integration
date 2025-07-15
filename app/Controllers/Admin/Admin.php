@@ -169,12 +169,14 @@ class Admin extends BaseController
         session()->set( "title", "Dashboard" );
         session()->set( "current_tab", "dashboard" );
 
-        $User_Model = new UsersModel();
+        $seasonModel = new CroppingSeasonModel();
 
-        $data[ "user" ] = $User_Model->where( "users_tbl_id", session()->get( "user_id" ) )->findAll( 1 )[ 0 ];
+        $data[ 'seasons' ]       = $seasonModel->orderBy( 'year', 'DESC' )->findAll();
+        $currentSeason           = $seasonModel->where( 'status', 'Current' )->first();
+        $data[ 'currentSeason' ] = $currentSeason;
 
         $header = view( 'admin/templates/header' );
-        $body   = view( 'admin/dashboard' );
+        $body   = view( 'admin/dashboard', $data );
         // $modals = view('_admin/modals/profile_modal');
         $footer = view( 'admin/templates/footer' );
 

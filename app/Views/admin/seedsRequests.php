@@ -255,7 +255,7 @@
                                                                                         <?php endforeach; ?>
                                                                                         <button type="submit"
                                                                                             class="btn btn-sm btn-outline-primary"
-                                                                                            title="Approve">
+                                                                                            data-bs-toggle="tooltip" title="Approve">
                                                                                             <i class="bi bi-check-circle"></i>
                                                                                         </button>
                                                                                     </form>
@@ -273,6 +273,7 @@
                                                                                         <?php endforeach; ?>
                                                                                         <button type="submit"
                                                                                             class="btn btn-sm btn-outline-secondary"
+                                                                                            data-bs-toggle="tooltip"
                                                                                             title="Undo Approve">
                                                                                             <i class="bi bi-arrow-counterclockwise"></i>
                                                                                         </button>
@@ -291,7 +292,7 @@
                                                                                         <?php endforeach; ?>
                                                                                         <button type="submit"
                                                                                             class="btn btn-sm btn-outline-danger"
-                                                                                            title="Reject">
+                                                                                            data-bs-toggle="tooltip" title="Reject">
                                                                                             <i class="bi bi-x-circle"></i>
                                                                                         </button>
                                                                                     </form>
@@ -309,6 +310,7 @@
                                                                                         <?php endforeach; ?>
                                                                                         <button type="submit"
                                                                                             class="btn btn-sm btn-outline-secondary"
+                                                                                            data-bs-toggle="tooltip"
                                                                                             title="Undo Reject">
                                                                                             <i class="bi bi-arrow-counterclockwise"></i>
                                                                                         </button>
