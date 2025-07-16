@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Redirects to the login page if the user is not logged in.
+ *
+ * @return \CodeIgniter\HTTP\RedirectResponse|null
+ */
 if ( !function_exists( 'ifLogin' ) ) {
     function ifLogin()
     {

@@ -9,6 +9,11 @@ use App\Models\PostImageModel;
 
 class PublicPageController extends BaseController
 {
+    /**
+     * Handles the upload of a new post with images.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function uploadPost()
     {
         helper( [ 'form', 'url' ] );
@@ -99,6 +104,12 @@ class PublicPageController extends BaseController
         return redirect()->back();
     }
 
+    /**
+     * Deletes a post by ID.
+     *
+     * @param int $id The ID of the post to delete.
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function deletePost( $id )
     {
         $postModel  = new PostDescriptionModel();
@@ -119,6 +130,11 @@ class PublicPageController extends BaseController
         return redirect()->back();
     }
 
+    /**
+     * Updates a post description.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function updatePost()
     {
         $id          = trim( $this->request->getPost( 'descriptionID' ) );

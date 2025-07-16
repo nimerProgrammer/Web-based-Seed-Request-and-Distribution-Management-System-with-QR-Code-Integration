@@ -24,7 +24,7 @@ class Database extends Config
      *
      * @var array<string, mixed>
      */
-    public array $default = [
+    public array $default = [ 
         'DSN'          => '',
         'hostname'     => 'localhost',
         'username'     => 'root',
@@ -44,10 +44,10 @@ class Database extends Config
         'port'         => 3306,
         'numberNative' => false,
         'foundRows'    => false,
-        'dateFormat'   => [
-            'date'     => 'Y-m-d',
-            'datetime' => 'Y-m-d H:i:s',
-            'time'     => 'H:i:s',
+        'dateFormat'   => [ 
+            'date'     => 'm-d-Y',
+            'datetime' => 'm-d-Y H:i:s A',
+            'time'     => 'H:i:s A',
         ],
     ];
 
@@ -162,7 +162,7 @@ class Database extends Config
      *
      * @var array<string, mixed>
      */
-    public array $tests = [
+    public array $tests = [ 
         'DSN'         => '',
         'hostname'    => '127.0.0.1',
         'username'    => '',
@@ -182,7 +182,7 @@ class Database extends Config
         'port'        => 3306,
         'foreignKeys' => true,
         'busyTimeout' => 1000,
-        'dateFormat'  => [
+        'dateFormat'  => [ 
             'date'     => 'Y-m-d',
             'datetime' => 'Y-m-d H:i:s',
             'time'     => 'H:i:s',
@@ -196,7 +196,7 @@ class Database extends Config
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
         // we don't overwrite live data on accident.
-        if (ENVIRONMENT === 'testing') {
+        if ( ENVIRONMENT === 'testing' ) {
             $this->defaultGroup = 'tests';
         }
     }

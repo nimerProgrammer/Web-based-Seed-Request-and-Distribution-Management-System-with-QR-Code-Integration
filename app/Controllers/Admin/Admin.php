@@ -171,16 +171,17 @@ class Admin extends BaseController
 
         $seasonModel = new CroppingSeasonModel();
 
-        $data[ 'seasons' ]       = $seasonModel->orderBy( 'year', 'DESC' )->findAll();
+        $data[ 'seasons' ] = $seasonModel->select( '*' )->orderBy( 'year', 'DESC' )->findAll();
+
         $currentSeason           = $seasonModel->where( 'status', 'Current' )->first();
         $data[ 'currentSeason' ] = $currentSeason;
 
         $header = view( 'admin/templates/header' );
         $body   = view( 'admin/dashboard', $data );
-        // $modals = view('_admin/modals/profile_modal');
+        $modals = view( 'admin/modals/dashboardModal' );
         $footer = view( 'admin/templates/footer' );
 
-        return $header . $body . $footer;
+        return $header . $body . $modals . $footer;
     }
 
     /**

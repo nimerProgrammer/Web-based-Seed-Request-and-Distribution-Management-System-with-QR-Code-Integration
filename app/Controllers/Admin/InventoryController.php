@@ -46,10 +46,9 @@ class InventoryController extends BaseController
         ] );
 
         session()->setFlashdata( 'swal', [ 
-            'title'             => 'Success!',
-            'text'              => 'Seed added successfully.',
-            'icon'              => 'success',
-            'confirmButtonText' => 'OK'
+            'title' => 'Success!',
+            'text'  => 'Seed added successfully.',
+            'icon'  => 'success',
         ] );
 
         return redirect()->to( '/admin/inventory' );

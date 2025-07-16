@@ -66,6 +66,17 @@ $routes->get( '/admin/reports', 'Admin\Admin::reports' );
 $routes->get( '/admin/logs', 'Admin\Admin::logs' );
 $routes->get( '/admin/logout', 'Admin\Admin::logout' );
 
+/*** DASHBOARD CONTROLLER ACTIONS ***/
+$routes->post( '/admin/dashboard/checkSeasonExists', 'Admin\DashboardController::checkSeasonExists' );
+$routes->post( '/admin/dashboard/checkStartDateConflict', 'Admin\DashboardController::checkStartDateConflict' );
+$routes->post( '/admin/dashboard/newSeason', 'Admin\DashboardController::newSeason' );
+$routes->post( '/admin/dashboard/editCheckSeasonExists', 'Admin\DashboardController::editCheckSeasonExists' );
+$routes->post( '/admin/dashboard/editCheckStartDateConflict', 'Admin\DashboardController::editCheckStartDateConflict' );
+$routes->post( '/admin/dashboard/updateSeason', 'Admin\DashboardController::updateSeason' );
+$routes->post( '/admin/dashboard/deleteSeason/(:num)', 'Admin\DashboardController::deleteSeason/$1' );
+
+
+
 /*** PUBLIC PAGE CONTROLLER ACTIONS ***/
 $routes->post( '/admin/uploadPost', 'Admin\PublicPageController::uploadPost' );
 $routes->get( '/admin/deletePost/(:num)', 'Admin\PublicPageController::deletePost/$1' );

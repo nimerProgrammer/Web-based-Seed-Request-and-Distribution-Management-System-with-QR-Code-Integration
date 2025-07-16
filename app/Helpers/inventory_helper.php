@@ -2,6 +2,11 @@
 
 use App\Models\InventoryModel;
 
+/**
+ * Get a list of inventory items with their cropping season details.
+ *
+ * @return array
+ */
 function getInventoryList() : array
 {
     $inventoryModel = new InventoryModel();
