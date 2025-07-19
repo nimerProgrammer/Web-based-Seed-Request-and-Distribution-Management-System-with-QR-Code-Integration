@@ -154,6 +154,43 @@ class Admin extends BaseController
 
     }
 
+    public function profile()
+    {
+        $redirect = ifLogin();
+        if ( $redirect ) {
+            return $redirect;
+        }
+
+        session()->set( "title", "Profile" );
+        session()->set( "current_tab", "profile" );
+
+        $userID = session()->get( 'user_id' );
+
+        $usersModel = new UsersModel();
+
+        $data[ 'users' ] = $usersModel
+            ->select( 'users.*, staff_info.*' )
+            ->join( 'staff_info', 'users.users_tbl_id = staff_info.users_tbl_id' )
+            ->where( 'users.users_tbl_id', $userID )
+            ->first();
+
+        $fullName = ucwords( strtolower( trim(
+            $data[ 'users' ][ 'first_name' ] . ' ' .
+            ( !empty( $data[ 'users' ][ 'middle_name' ] ) ? $data[ 'users' ][ 'middle_name' ] . ' ' : '' ) .
+            $data[ 'users' ][ 'last_name' ]
+        ) ) ) .
+            ( !empty( $data[ 'users' ][ 'suffix_and_ext' ] ) ? ' ' . $data[ 'users' ][ 'suffix_and_ext' ] : '' );
+
+
+        session()->set( 'user_fullname', $fullName );
+
+        $header = view( 'admin/templates/header' );
+        $body   = view( 'admin/profile', $data );
+        $modals = view( 'admin/modals/profileModal' );
+        $footer = view( 'admin/templates/footer' );
+
+        return $header . $body . $modals . $footer;
+    }
     /**
      * Displays the admin dashboard.
      *

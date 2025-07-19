@@ -263,30 +263,6 @@ $(document).ready(function () {
     $("#editBirthdateModal").modal("show");
   });
 
-  $("#editBarangayBtn").on("click", function () {
-    const barangay = $(this).data("barangay") || "";
-    $("#editBarangay").val(barangay);
-    $("#editBarangayModal").modal("show");
-  });
-
-  $("#editFarmAreaBtn").on("click", function () {
-    const farmArea = $(this).data("farmarea") || "";
-    $("#editFarmArea").val(farmArea);
-    $("#editFarmAreaModal").modal("show");
-  });
-
-  $("#editNameLandOwnerBtn").on("click", function () {
-    const land_owner = $(this).data("namelandowner") || "";
-    $("#editLand_owner").val(land_owner);
-    $("#editNameLandOwnerModal").modal("show");
-  });
-
-  $("#editRSBSABtn").on("click", function () {
-    const rsbsa = $(this).data("rsbsa") || "";
-    $("#editRSBSA").val(rsbsa);
-    $("#editRSBSAModal").modal("show");
-  });
-
   $("#editContactNoBtn").on("click", function () {
     const contactno = $(this).data("contactno") || "";
     $("#editContactNo").val(contactno);
@@ -466,26 +442,6 @@ $(document).ready(function () {
     showLoader();
   });
 
-  $("#editBarangayForm").on("submit", function (e) {
-    $(".btn").text("Saving...");
-    showLoader();
-  });
-
-  $("#editFarmAreaForm").on("submit", function (e) {
-    $(".btn").text("Saving...");
-    showLoader();
-  });
-
-  $("#editNameLandOwnerForm").on("submit", function (e) {
-    $(".btn").text("Saving...");
-    showLoader();
-  });
-
-  $("#editRSBSAForm").on("submit", function (e) {
-    $(".btn").text("Saving...");
-    showLoader();
-  });
-
   $("#editContactNoForm").on("submit", function (e) {
     e.preventDefault(); // Stop form from submitting immediately
 
@@ -594,8 +550,7 @@ $(document).ready(function () {
   $("#changePasswordForm").on("submit", function (e) {
     e.preventDefault(); // Prevent default form submission
 
-    validateConfirmPassword();
-
+    validateConfirmPassword(); // Ensure confirm password is validated
     const form = $(this);
     let hasError = false;
 

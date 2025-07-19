@@ -20,7 +20,7 @@
             <div class="row mt-3">
 
                 <div class="col-md-4">
-                    <div class="card shadow-sm text-white"
+                    <div class="card shadow-md text-white"
                         style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
                         <div class="card-body d-flex align-items-center justify-content-between">
 
@@ -66,13 +66,41 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="card shadow-sm text-white"
+                    <div class="card shadow-md text-white"
+                        style="background: linear-gradient(135deg, #6610f2, #520dc2);">
+                        <!-- Bootstrap purple gradient -->
+                        <div class="card-body d-flex align-items-center justify-content-between">
+
+                            <!-- Text Content on the Left -->
+                            <div>
+                                <h4 class="card-text">Total:</h4>
+                                <h6 class="card-title mb-1">Users</h6>
+                            </div>
+
+                            <!-- Icon Circle on the Right -->
+                            <div class="rounded-circle bg-white d-flex align-items-center justify-content-center ms-auto"
+                                style="width: 80px; height: 80px;">
+                                <i class="fas fa-user text-purple fa-2x" style="color: #6610f2;"></i>
+                            </div>
+
+                        </div>
+                        <div class="card-footer bg-transparent border-top">
+                            <a href="users" class="dash-btn btn btn-outline-light btn-sm float-end">
+                                <i class="fas fa-search"></i> View More Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="card shadow-md text-white"
                         style="background: linear-gradient(135deg, #28a745, #1e7e34);">
                         <div class="card-body d-flex align-items-center justify-content-between">
 
                             <!-- Text Content on the Left -->
                             <div>
-                                <h2 class="card-text">Total: <?= countCurrentSeasonSeeds() ?></h2>
+                                <h4 class="card-text">Total: <?= countCurrentSeasonSeeds() ?></h4>
                                 <h6 class="card-title mb-1">Available Seeds</h6>
                             </div>
 
@@ -94,42 +122,14 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="card shadow-sm text-white"
-                        style="background: linear-gradient(135deg, #14bfdaff, #1593a7ff);">
-                        <!-- Bootstrap info gradient -->
-                        <div class="card-body d-flex align-items-center justify-content-between">
-
-                            <!-- Text Content on the Left -->
-                            <div>
-                                <h2 class="card-text">Total: <?= countCurrentSeasonBeneficiaries() ?>
-                                </h2>
-                                <h6 class=" card-title mb-1">Beneficiaries</h6>
-                            </div>
-
-                            <!-- Icon Circle on the Right -->
-                            <div class="rounded-circle bg-white d-flex align-items-center justify-content-center ms-auto"
-                                style="width: 80px; height: 80px;">
-                                <i class="fas fa-users text-info fa-2x"></i>
-                            </div>
-
-                        </div>
-                        <div class="card-footer bg-transparent border-top">
-                            <a href="beneficiaries" class="dash-btn btn btn-outline-light btn-sm float-end">
-                                <i class="fas fa-search"></i> View More Details
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card shadow-sm text-white"
+                    <div class="card shadow-md text-white"
                         style="background: linear-gradient(135deg, #f5b907ff, #cf9c02ff);">
                         <!-- Bootstrap warning gradient -->
                         <div class="card-body d-flex align-items-center justify-content-between">
 
                             <!-- Text Content on the Left -->
                             <div>
-                                <h2 class="card-text">Total: <?= countCurrentSeasonSeedRequests() ?></h2>
+                                <h4 class="card-text">Total: <?= countCurrentSeasonSeedRequests() ?></h4>
                                 <h6 class="card-title mb-1">Seed Requests</h6>
                             </div>
 
@@ -148,6 +148,33 @@
                     </div>
                 </div>
 
+                <div class="col-md-4">
+                    <div class="card shadow-md text-white"
+                        style="background: linear-gradient(135deg, #14bfdaff, #1593a7ff);">
+                        <!-- Bootstrap info gradient -->
+                        <div class="card-body d-flex align-items-center justify-content-between">
+
+                            <!-- Text Content on the Left -->
+                            <div>
+                                <h4 class="card-text">Total: <?= countCurrentSeasonBeneficiaries() ?>
+                                </h4>
+                                <h6 class=" card-title mb-1">Beneficiaries</h6>
+                            </div>
+
+                            <!-- Icon Circle on the Right -->
+                            <div class="rounded-circle bg-white d-flex align-items-center justify-content-center ms-auto"
+                                style="width: 80px; height: 80px;">
+                                <i class="fas fa-users text-info fa-2x"></i>
+                            </div>
+
+                        </div>
+                        <div class="card-footer bg-transparent border-top">
+                            <a href="beneficiaries" class="dash-btn btn btn-outline-light btn-sm float-end">
+                                <i class="fas fa-search"></i> View More Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-lg-12">
                     <div class="card">

@@ -57,7 +57,14 @@
 <?php endif ?>
 
 <script src="<?= base_url( 'templates/js/adminscript.js?v=6.6.6' ) ?>"></script>
-<script src="<?= base_url( 'templates/js/adminDashboardScript.js?v=6.6.6' ) ?>"></script>
+
+<?php if ( session()->get( 'title' ) === 'Profile' && session()->get( 'current_tab' ) === 'profile' ) : ?>
+    <script src="<?= base_url( 'templates/js/adminProfileScript.js?v=6.6.6' ) ?>"></script>
+<?php endif; ?>
+
+<?php if ( session()->get( 'title' ) === 'Dashboard' && session()->get( 'current_tab' ) === 'dashboard' ) : ?>
+    <script src="<?= base_url( 'templates/js/adminDashboardScript.js?v=6.6.6' ) ?>"></script>
+<?php endif; ?>
 
 <?php if ( session()->has( 'swal' ) ) : ?>
     <script>

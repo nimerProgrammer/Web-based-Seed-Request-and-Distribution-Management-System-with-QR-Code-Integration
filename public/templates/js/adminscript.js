@@ -102,6 +102,9 @@ $(document).ready(function () {
     }
   }
 
+  $("#user-menu-btn").on("click", function () {
+    showLoader();
+  });
   // Sidebar link auto-show loader
   document.querySelectorAll(".nav-sidebar .nav-link").forEach((link) => {
     link.addEventListener("click", function (e) {
@@ -143,6 +146,7 @@ $(document).ready(function () {
   let baseURL = $("#base_url").val();
 
   const pages = [
+    { name: "Profile", keywords: ["profile"], route: "profile" },
     { name: "Dashboard", keywords: ["dashboard"], route: "dashboard" },
     { name: "Inventory", keywords: ["inventory", "stock"], route: "inventory" },
     {
@@ -187,6 +191,7 @@ $(document).ready(function () {
   // Click suggestion
   $(document).on("click", ".suggestion-item", function () {
     const route = $(this).data("route");
+    showLoader();
     window.location.href = baseURL + route;
   });
 
@@ -202,6 +207,7 @@ $(document).ready(function () {
     );
 
     if (match) {
+      showLoader();
       window.location.href = baseURL + match.route;
     } else {
       alert("No matching page found.");
@@ -480,6 +486,29 @@ $(document).ready(function () {
       if (result.isConfirmed) {
         showLoader();
         $("#clearLogsForm").submit();
+      }
+    });
+  });
+
+  $("#logoutBtn").on("click", function () {
+    hideLoader();
+    Swal.fire({
+      title: "Log Out?",
+      text: "Are you sure you want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-md btn-primary mr-2",
+        cancelButton: "btn btn-md btn-secondary",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        showLoader();
+        const logoutUrl = $(this).data("url");
+        window.location.href = logoutUrl;
       }
     });
   });

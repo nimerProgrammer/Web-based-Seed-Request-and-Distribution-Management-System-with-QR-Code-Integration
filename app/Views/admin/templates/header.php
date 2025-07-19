@@ -34,76 +34,6 @@
 
     <link rel="stylesheet" href="<?= base_url( 'templates/css/admin-style.css?v=4.4.4' ) ?>">
 
-    <style>
-        .spinner-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.2);
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        .spinner-with-logo {
-            position: relative;
-            width: 100px;
-            height: 100px;
-        }
-
-        .gradient-spinner {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: conic-gradient(rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, 0.2) 20%,
-                    rgba(255, 255, 255, 0.4) 40%,
-                    rgba(255, 255, 255, 0.8) 70%,
-                    rgba(255, 255, 255, 1) 100%);
-
-            /* Make the ring thin (just a small line on the edge) */
-            mask: radial-gradient(farthest-side, transparent 89%, black 90%);
-            -webkit-mask: radial-gradient(farthest-side, transparent 89%, black 90%);
-
-            animation: spin 1s linear infinite;
-            transform-origin: center;
-        }
-
-        .spinner-logo {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 80px;
-            height: 80px;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            object-fit: contain;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .dropdown-item:hover {
-            background-color: var(--bs-secondary);
-            color: #fff;
-        }
-
-        .dropdown-item.active {
-            background-color: var(--bs-secondary);
-            color: #fff;
-        }
-    </style>
-
 </head>
 <div class="spinner-overlay" id="loading-spinner" style="display: none;">
     <div class="spinner-with-logo">
@@ -166,23 +96,12 @@
                 <!-- User dropdown (collapsible on mobile) -->
                 <div class="collapse navbar-collapse justify-content-end" id="navbarUserDropdown">
                     <ul class="navbar-nav">
-                        <li class="nav-item dropdown user-menu">
-                            <a href="#" class="nav-link dropdown-toggle d-flex align-items-center"
-                                data-bs-toggle="dropdown">
+                        <li class="nav-item dropdown user-menu" id="user-menu-btn">
+                            <a href="profile" class="nav-link" data-bs-toggles="tooltip" title="view profile">
                                 <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="User Avatar"
                                     class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
                                 <span><?= esc( session( 'user_fullname' ) ) ?></span>
                             </a>
-
-                            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                                <li class="user-header text-bg-primary text-center">
-                                    <p><small>Administrator</small></p>
-                                </li>
-                                <li class="user-footer text-center">
-                                    <a href="javascript:void(0)" class="btn btn-default btn-flat"
-                                        id="profile">Profile</a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -270,7 +189,8 @@
 
                         <!-- Logout -->
                         <li class="nav-item mt-2">
-                            <a href="logout" class="nav-link">
+                            <a href="javascript:void(0)" class="nav-link" id="logoutBtn"
+                                data-url="<?= base_url( 'admin/logout' ) ?>">
                                 <i class="nav-icon bi bi-box-arrow-right ml-1"></i>
                                 <p>Logout</p>
                             </a>

@@ -56,6 +56,7 @@ $routes->post( '/public/request_seed/submit', 'Public\RequestSeedController::req
 /*** ADMIN PAGES ***/
 // Admin authentication and dashboard routes
 $routes->get( '/admin', 'Admin\Admin::index' );
+$routes->get( '/admin/profile', 'Admin\Admin::profile' );
 $routes->get( '/admin/dashboard', 'Admin\Admin::dashboard' );
 // Admin management pages
 $routes->get( '/admin/publicPage', 'Admin\Admin::publicPage' );
@@ -65,6 +66,17 @@ $routes->get( '/admin/beneficiaries', 'Admin\Admin::beneficiaries' );
 $routes->get( '/admin/reports', 'Admin\Admin::reports' );
 $routes->get( '/admin/logs', 'Admin\Admin::logs' );
 $routes->get( '/admin/logout', 'Admin\Admin::logout' );
+
+/*** PROFILE CONTROLLER ACTIONS ***/
+$routes->post( '/admin/checker', 'Admin\ProfileController::checker' );
+$routes->post( '/admin/updateFullname', 'Admin\ProfileController::updateFullname' );
+$routes->post( '/admin/updateGender', 'Admin\ProfileController::updateGender' );
+$routes->post( '/admin/updateBirthdate', 'Admin\ProfileController::updateBirthdate' );
+$routes->post( '/admin/updateContactNo', 'Admin\ProfileController::updateContactNo' );
+$routes->post( '/admin/updateEmail', 'Admin\ProfileController::updateEmail' );
+$routes->post( '/admin/updateUsername', 'Admin\ProfileController::updateUsername' );
+$routes->post( '/admin/checkCurrentPassword', 'Admin\ProfileController::checkCurrentPassword' );
+$routes->post( '/admin/changePassword', 'Admin\ProfileController::changePassword' );
 
 /*** DASHBOARD CONTROLLER ACTIONS ***/
 $routes->post( '/admin/dashboard/checkSeasonExists', 'Admin\DashboardController::checkSeasonExists' );
