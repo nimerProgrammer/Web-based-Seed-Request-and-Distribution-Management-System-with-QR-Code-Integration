@@ -65,7 +65,7 @@ class SentRequestsController extends BaseController
             ->writerOptions( [] )
             ->data( $qrData )
             ->encoding( new Encoding( 'UTF-8' ) )
-            ->size( 200 )
+            ->size( 180 )
             ->margin( 1 )
             ->build();
 
@@ -111,31 +111,43 @@ class SentRequestsController extends BaseController
         imagettftext( $voucher, 14, 0, 90, 50, $green, $font, 'Republic of the Philippines' );
         imagettftext( $voucher, 14, 0, 90, 75, $green, $font, 'DEPARTMENT OF AGRICULTURE' );
 
+        $logoPath = FCPATH . 'templates/img/Oras.png';
+        if ( file_exists( $logoPath ) ) {
+            $logoImg     = imagecreatefrompng( $logoPath );
+            $logoSize    = 60;
+            $logoResized = imagecreatetruecolor( $logoSize, $logoSize );
+            imagealphablending( $logoResized, false );
+            imagesavealpha( $logoResized, true );
+            imagecopyresampled( $logoResized, $logoImg, 0, 0, 0, 0, $logoSize, $logoSize, imagesx( $logoImg ), imagesy( $logoImg ) );
+            imagecopy( $voucher, $logoResized, 430, 25, 0, 0, $logoSize, $logoSize );
+            imagedestroy( $logoImg );
+            imagedestroy( $logoResized );
+        }
         // Fields
         $left       = 40;
         $top        = 130;
         $lineHeight = 30;
 
         imagettftext( $voucher, 12, 0, $left, $top, $black, $font, 'Recipient Name:' );
-        imagettftext( $voucher, 12, 0, $left + 140, $top, $black, $font, $fullName );
+        imagettftext( $voucher, 12, 0, $left + 130, $top, $black, $font, $fullName );
 
         $top += $lineHeight;
         imagettftext( $voucher, 12, 0, $left, $top, $black, $font, 'Address:' );
-        imagettftext( $voucher, 12, 0, $left + 140, $top, $black, $font, $address );
+        imagettftext( $voucher, 12, 0, $left + 130, $top, $black, $font, $address );
 
         $top += $lineHeight;
         imagettftext( $voucher, 12, 0, $left, $top, $black, $font, 'Intervention:' );
-        imagettftext( $voucher, 12, 0, $left + 140, $top, $black, $font, "$seedName SEEDS — $seedType" );
+        imagettftext( $voucher, 12, 0, $left + 130, $top, $black, $font, "$seedName SEEDS — $seedType" );
 
         $top += $lineHeight;
         imagettftext( $voucher, 12, 0, $left, $top, $black, $font, 'Date Generated:' );
-        imagettftext( $voucher, 12, 0, $left + 140, $top, $black, $font, $dateGenerated );
+        imagettftext( $voucher, 12, 0, $left + 130, $top, $black, $font, $dateGenerated );
 
         // Footer
         imagettftext( $voucher, 14, 0, 200, $height - 35, $black, $font, 'Certified Voucher — Seed Request Program' );
 
         // QR Code
-        imagecopy( $voucher, $qrImg, $width - 230, 30, 0, 0, imagesx( $qrImg ), imagesy( $qrImg ) );
+        imagecopy( $voucher, $qrImg, $width - 200, 30, 0, 0, imagesx( $qrImg ), imagesy( $qrImg ) );
 
         // Output
         ob_start();

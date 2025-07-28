@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="card-footer bg-transparent border-top">
-                            <a href="javascript:void(0)" class="btn btn-outline-light btn-sm float-end">
+                            <a href="#cropping-seasons-table" class="btn btn-outline-light btn-sm float-end">
                                 <i class="fas fa-search me-1"></i> View More Details
                             </a>
                         </div>
@@ -67,25 +67,28 @@
 
                 <div class="col-md-4">
                     <div class="card shadow-md text-white"
-                        style="background: linear-gradient(135deg, #6610f2, #520dc2);">
-                        <!-- Bootstrap purple gradient -->
+                        style="background: linear-gradient(135deg, #fd7e14, #e8590c);">
+                        <!-- Bootstrap orange gradient -->
                         <div class="card-body d-flex align-items-center justify-content-between">
 
                             <!-- Text Content on the Left -->
                             <div>
-                                <h4 class="card-text">Total:</h4>
-                                <h6 class="card-title mb-1">Users</h6>
+                                <h4 class="card-text">Total: <?= countFarmersWithAccountsOnly() ?>
+                                </h4>
+                                <h6 class="card-title">List of Farmers <br>(<i>account holders
+                                        only</i>)</h6>
                             </div>
 
                             <!-- Icon Circle on the Right -->
                             <div class="rounded-circle bg-white d-flex align-items-center justify-content-center ms-auto"
                                 style="width: 80px; height: 80px;">
-                                <i class="fas fa-user text-purple fa-2x" style="color: #6610f2;"></i>
+                                <i class="fa-solid fa-person-digging text-orange fa-2x" style="color: #fd7e14;"></i>
+                                <i class="fa-solid fa-person-digging text-orange"></i>
                             </div>
-
                         </div>
+
                         <div class="card-footer bg-transparent border-top">
-                            <a href="users" class="dash-btn btn btn-outline-light btn-sm float-end">
+                            <a href="#farmers-table" class="btn btn-outline-light btn-sm float-end">
                                 <i class="fas fa-search"></i> View More Details
                             </a>
                         </div>
@@ -107,7 +110,7 @@
                             <!-- Icon Circle on the Right -->
                             <div class="rounded-circle bg-white d-flex align-items-center justify-content-center ms-auto"
                                 style="width: 80px; height: 80px;">
-                                <i class="fas fa-seedling text-success fa-2x"></i>
+                                <i class="fas fa-wheat-awn text-success fa-2x"></i>
                             </div>
 
                         </div>
@@ -176,7 +179,10 @@
                     </div>
                 </div>
 
-                <div class="col-lg-12">
+
+
+
+                <div class="col-lg-12" id="cropping-seasons-table">
                     <div class="card">
                         <div class="card-header bg-primary text-white">
                             <h3 class="card-title">Cropping Season</h3>
@@ -278,6 +284,79 @@
                                         <?php endforeach; ?>
 
                                     </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12" id="farmers-table">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title">List of Farmers (<i>account holders only</i>)</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="set-Table table table-bordered table-hover">
+                                    <thead class="table-secondary">
+                                        <tr>
+                                            <th rowspan="2">No.</th>
+                                            <th rowspan="2">RSBSA Reference No.</th>
+                                            <th colspan="4" class="text-center">Name of Farmer</th>
+
+                                            <th rowspan="2">Barangay</th>
+                                            <th rowspan="2">Municipality</th>
+                                            <th rowspan="2">Province</th>
+                                            <th rowspan="2">Birthdate<br>(mm/dd/yyyy)</th>
+                                            <th rowspan="2">Gender<br>Male/Female</th>
+                                            <th rowspan="2">Contact No.<br>(Mobile No.)</th>
+                                            <th rowspan="2">Farm Area<br>(Hectares)</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Last Name</th>
+                                            <th>First Name</th>
+                                            <th>Middle Name</th>
+                                            <th>Suffix & Ext.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ( !empty( $clients ) ) : ?>
+                                            <?php $no = 1; ?>
+                                            <?php foreach ( $clients as $client ) : ?>
+                                                <tr>
+                                                    <td class="align-middle"><?= $no++ ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'rsbsa_ref_no' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'last_name' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'first_name' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'middle_name' ] ?? '—' ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'suffix_and_ext' ] ?? '—' ) ?>
+                                                    </td>
+                                                    <td class="align-middle"><?= esc( $client[ 'brgy' ] ?? '—' ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'mun' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'prov' ] ) ?></td>
+                                                    <td class="align-middle">
+                                                        <?php
+                                                        $rawBDate = $client[ 'b_date' ] ?? null;
+                                                        $dateObj  = $rawBDate ? DateTime::createFromFormat( 'Y-m-d', $rawBDate ) : null;
+                                                        ?>
+                                                        <?php if ( $dateObj ) : ?>
+                                                            <?= $dateObj->format( 'F j, Y' ) ?>
+                                                        <?php else : ?>
+                                                            <span class="text-muted">—</span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td class="align-middle"><?= esc( $client[ 'gender' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'contact_no' ] ) ?></td>
+                                                    <td class="align-middle"><?= esc( $client[ 'farm_area' ] ) ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else : ?>
+                                            <tr>
+                                                <td class="text-center" colspan="13">No farmers found.</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+
                                 </table>
                             </div>
                         </div>

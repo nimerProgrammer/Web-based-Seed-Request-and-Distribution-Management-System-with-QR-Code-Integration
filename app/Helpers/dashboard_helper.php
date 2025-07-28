@@ -4,6 +4,7 @@ use App\Models\InventoryModel;
 use App\Models\CroppingSeasonModel;
 use App\Models\BeneficiariesModel;
 use App\Models\SeedRequestsModel;
+use App\Models\ClientInfoModel;
 
 function countCurrentSeasonSeeds() : int
 {
@@ -56,6 +57,16 @@ function countCurrentSeasonSeedRequests() : int
         ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
         ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
         ->where( 'cropping_season.status', 'Current' )
+        ->countAllResults();
+}
+
+function countFarmersWithAccountsOnly() : int
+{
+    $clientInfoModel = new ClientInfoModel();
+
+    return $clientInfoModel
+        ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id' )
+        ->where( 'users.user_type', 'farmer' )
         ->countAllResults();
 }
 

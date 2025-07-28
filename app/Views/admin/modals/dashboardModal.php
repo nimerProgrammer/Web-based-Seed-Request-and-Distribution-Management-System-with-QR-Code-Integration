@@ -94,7 +94,7 @@
                     <div class="mb-3">
                         <label for="edit_season_start_date" class="form-label">Start Date</label>
                         <input type="date" class="form-control" id="edit_season_start_date" name="season_start_date"
-                            data-url="<?= base_url( 'admin/dashboard/checkStartDateConflict' ) ?>" required>
+                            data-url="<?= base_url( 'admin/dashboard/editCheckStartDateConflict' ) ?>" required>
                         <div id="editStartDateFeedback" class="invalid-feedback"></div>
                     </div>
 

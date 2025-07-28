@@ -113,7 +113,6 @@
                                                                 <th rowspan="2">Gender<br>Male/Female</th>
                                                                 <th rowspan="2">Contact No.<br>(Mobile No.)</th>
                                                                 <th rowspan="2">Farm Area<br>(Hectares)</th>
-                                                                <th rowspan="2">Province</th>
                                                                 <th rowspan="2">Date & Time Received</th>
                                                                 <th rowspan="2" class="text-center">Status</th>
                                                                 <th rowspan="2" class="text-center">Action</th>
@@ -176,9 +175,6 @@
                                                                     </td>
                                                                     <td class="align-middle">
                                                                         <?= esc( $beneficiary[ 'farm_area' ] ) ?>
-                                                                    </td>
-                                                                    <td class="align-middle">
-                                                                        <?= esc( $beneficiary[ 'prov' ] ) ?>
                                                                     </td>
                                                                     <td class="align-middle">
                                                                         <?php

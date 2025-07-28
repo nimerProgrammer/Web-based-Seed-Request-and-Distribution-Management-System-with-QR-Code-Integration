@@ -207,11 +207,22 @@ class Admin extends BaseController
         session()->set( "current_tab", "dashboard" );
 
         $seasonModel = new CroppingSeasonModel();
+        $clientModel = new ClientInfoModel();
 
         $data[ 'seasons' ] = $seasonModel->select( '*' )->orderBy( 'year', 'DESC' )->findAll();
 
         $currentSeason           = $seasonModel->where( 'status', 'Current' )->first();
         $data[ 'currentSeason' ] = $currentSeason;
+
+        // Get all clients
+        $data[ 'clients' ] = $clientModel
+            ->select( 'client_info.*, users.contact_no' )
+            ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id', 'left' )
+            ->where( 'users.user_type', 'farmer' )
+            ->orderBy('client_info.brgy', 'ASC')
+    ->orderBy('client_info.last_name', 'ASC')
+            ->findAll();
+
 
         $header = view( 'admin/templates/header' );
         $body   = view( 'admin/dashboard', $data );

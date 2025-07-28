@@ -13,6 +13,9 @@ $routes->get( '/admin/login', 'Admin\Admin::login' );
 // User data API endpoints
 $routes->post( '/get_user_data', 'Admin\Admin::get_user_data' );
 
+/*** Cron Jobs ***/
+$routes->get( 'cronjobs/checkSeason', 'CronJobs::checkSeason' );
+
 /*** PUBLIC PAGES ***/
 $routes->get( '/', 'Public\Home::index' );
 $routes->get( '/public/home', 'Public\Home::home' );
