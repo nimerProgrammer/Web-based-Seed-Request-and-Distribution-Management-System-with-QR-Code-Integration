@@ -191,24 +191,6 @@ $(document).ready(function () {
     }
   });
 
-  /* For Edit Season */
-  $(".edit-season-btn").on("click", function () {
-    const season = $(this).data("season");
-    const year = $(this).data("year");
-    const start = $(this).data("start");
-    const end = $(this).data("end");
-    const id = $(this).data("id");
-
-    // Set values
-    $("#edit_cropping_season_tbl_id").val(id);
-    $("#edit_season_name").val(season);
-    $("#edit_season_year").val(year);
-    $("#edit_season_start_date").val(start);
-    $("#edit_season_end_date").val(end);
-
-    $("#editSeasonModal").modal("show");
-  });
-
   function validateEditSeasonCombination() {
     const seasonName = $("#edit_season_name").val();
     const seasonYear = $("#edit_season_year").val();

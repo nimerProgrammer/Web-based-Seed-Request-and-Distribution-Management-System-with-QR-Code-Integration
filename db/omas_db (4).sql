@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2025 at 04:34 AM
+-- Generation Time: Jul 31, 2025 at 06:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -99,8 +99,8 @@ CREATE TABLE `cropping_season` (
 --
 
 INSERT INTO `cropping_season` (`cropping_season_tbl_id`, `season`, `year`, `date_start`, `date_end`, `status`) VALUES
-(1, '1st CROPPING', '2025', '07-16-2025', '07-18-2025', 'Current'),
-(3, '1st CROPPING', '2026', '12-17-2026', '02-16-2027', 'Ongoing');
+(1, '1st CROPPING', '2025', '07-16-2025', '07-30-2025', 'Current'),
+(5, '2nd CROPPING', '2026', '07-28-2026', '07-30-2026', 'Ongoing');
 
 -- --------------------------------------------------------
 
@@ -228,7 +228,56 @@ INSERT INTO `logs` (`logs_tbl_id`, `timestamp`, `action`, `details`, `users_tbl_
 (80, '07-19-2025 11:17:36 PM', 'Change Password', 'Admin Clarck Dela Cruz changed their password.', 1),
 (81, '07-19-2025 11:23:12 PM', 'Change Password', 'User Jhon Mark Montallana Pajanustan Jr. changed their password.', 26),
 (82, '07-19-2025 11:24:15 PM', 'Change Password', 'Admin Clarck Dela Cruz changed their password.', 1),
-(83, '07-19-2025 11:51:20 PM', 'Login', 'User Clarck Dela Cruz logged in successfully.', 1);
+(83, '07-19-2025 11:51:20 PM', 'Login', 'User Clarck Dela Cruz logged in successfully.', 1),
+(84, '07-28-2025 11:43:53 AM', 'Login', 'User Clarck Dela Cruz logged in successfully.', 1),
+(85, '07-28-2025 11:44:16 AM', 'Login', 'User Jhon Mark Montallana Pajanustan Jr. logged in successfully.', 26),
+(86, '07-28-2025 12:22:31 PM', 'Login', 'User Jhon Mark Montallana Pajanustan Jr. logged in successfully.', 26),
+(87, '07-28-2025 10:15:45 PM', 'Login', 'Login attempt failed — username not found: admin', NULL),
+(88, '07-28-2025 10:15:52 PM', 'Login', 'User Clarck Dela Cruz logged in successfully.', 1),
+(89, '07-28-2025 10:16:05 PM', 'Login', 'User Clarck Dela Cruz logged in successfully.', 1),
+(90, '07-28-2025 10:57:47 PM', 'Delete Cropping Seas', 'Clarck Dela Cruz deleted cropping season \"1st CROPPING\" (2026).', 1),
+(91, '07-28-2025 10:58:44 PM', 'Add Cropping Season', 'Clarck Dela Cruz added a new cropping season: \"2nd CROPPING\" (2025) from 07-28-2025 to 07-30-2025.', 1),
+(92, '07-28-2025 11:49:39 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"2nd CROPPING\" (2025) from 07-28-2025 to 07-30-2025.', 1),
+(93, '07-29-2025 08:04:52 AM', 'Login', 'User Clarck Dela Cruz logged in successfully.', 1),
+(94, '07-30-2025 12:10:37 PM', 'Login', 'User Clarck Dela Cruz logged in successfully.', 1),
+(95, '07-30-2025 12:11:17 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"2nd CROPPING\" (2025) from 07-28-2025 to 07-30-2025.', 1),
+(96, '07-30-2025 12:11:47 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"2nd CROPPING\" (2025) from 07-28-2025 to 07-30-2026.', 1),
+(97, '07-30-2025 12:12:15 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"2nd CROPPING\" (2026) from 07-28-2026 to 07-30-2026.', 1),
+(98, '07-30-2025 12:16:42 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(99, '07-30-2025 12:43:36 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-18-2025.', 1),
+(100, '07-30-2025 12:59:26 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(101, '07-30-2025 01:01:35 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-18-2025.', 1),
+(102, '07-30-2025 01:01:49 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(103, '07-30-2025 01:05:00 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(104, '07-30-2025 01:05:59 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-29-2025.', 1),
+(105, '07-30-2025 01:07:55 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(106, '07-30-2025 01:09:28 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(107, '07-30-2025 01:11:13 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(108, '07-30-2025 01:11:44 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(109, '07-30-2025 01:14:00 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(110, '07-30-2025 01:14:20 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(111, '07-30-2025 01:17:59 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(112, '07-30-2025 01:38:55 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(113, '07-30-2025 01:39:23 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(114, '07-30-2025 01:48:27 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(115, '07-30-2025 01:52:51 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-29-2025.', 1),
+(116, '07-30-2025 01:55:06 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(117, '07-30-2025 01:56:32 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(118, '07-30-2025 01:57:32 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(119, '07-30-2025 02:10:20 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(120, '07-30-2025 02:17:45 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-29-2025.', 1),
+(121, '07-30-2025 02:18:23 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(122, '07-30-2025 02:40:47 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(123, '07-30-2025 02:42:08 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(124, '07-30-2025 02:43:25 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(125, '07-30-2025 02:44:34 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(126, '07-30-2025 02:46:27 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(127, '07-30-2025 02:46:48 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(128, '07-30-2025 02:52:35 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1),
+(129, '07-30-2025 02:52:54 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(130, '07-30-2025 02:53:13 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-29-2025.', 1),
+(131, '07-30-2025 02:55:47 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-31-2025.', 1),
+(132, '07-30-2025 03:21:57 PM', 'Update Cropping Seas', 'Clarck Dela Cruz updated cropping season: \"1st CROPPING\" (2025) from 07-16-2025 to 07-30-2025.', 1);
 
 -- --------------------------------------------------------
 
@@ -459,7 +508,7 @@ ALTER TABLE `client_info`
 -- AUTO_INCREMENT for table `cropping_season`
 --
 ALTER TABLE `cropping_season`
-  MODIFY `cropping_season_tbl_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `cropping_season_tbl_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `inventory`
@@ -471,7 +520,7 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `logs_tbl_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `logs_tbl_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `post_description`

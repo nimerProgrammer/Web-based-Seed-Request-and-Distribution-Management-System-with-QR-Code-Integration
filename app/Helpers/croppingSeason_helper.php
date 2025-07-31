@@ -5,25 +5,53 @@ use App\Models\CroppingSeasonModel;
 if ( !function_exists( 'checkCroppingSeason' ) ) {
     function checkCroppingSeason()
     {
-        $model = new CroppingSeasonModel();
-        $today = date( 'm-d-Y' );
+        $model          = new CroppingSeasonModel();
+        $today          = DateTime::createFromFormat( 'm-d-Y', date( 'm-d-Y' ) );
+        $todayTimestamp = $today ? $today->getTimestamp() : false;
 
-        // 1. End current season if date_end is today or earlier
-        $model->where( 'status', 'Current' )
-            ->where( 'date_end <=', $today )
-            ->set( [ 'status' => 'Ended' ] )
-            ->update();
+        if ( !$todayTimestamp ) {
+            log_message( 'error', 'Invalid today date format.' );
+            return;
+        }
 
-        // 2. Check if no season is currently active
-        $hasCurrent = $model->where( 'status', 'Current' )->countAllResults();
+        $seasons = $model->findAll();
 
-        if ( $hasCurrent == 0 ) {
-            // 3. Set a valid season to Current
-            $model->where( 'date_start <=', $today )
-                ->where( 'date_end >=', $today )
-                ->where( 'status !=', 'Ended' )
-                ->set( [ 'status' => 'Current' ] )
-                ->update();
+        foreach ( $seasons as $season ) {
+            $startObj = DateTime::createFromFormat( 'm-d-Y', $season[ 'date_start' ] );
+            $endObj   = DateTime::createFromFormat( 'm-d-Y', $season[ 'date_end' ] );
+
+            if ( !$startObj || !$endObj ) {
+                log_message( 'error', 'Invalid date format in season ID: ' . $season[ 'cropping_season_tbl_id' ] );
+                continue;
+            }
+
+            $start = $startObj->getTimestamp();
+            $end   = $endObj->getTimestamp();
+
+            $currentStatus = $season[ 'status' ];
+            $seasonId      = $season[ 'cropping_season_tbl_id' ];
+
+            if ( $start <= $todayTimestamp && $end > $todayTimestamp ) {
+                $model->update( $seasonId, [ 'status' => 'Current' ] );
+
+                // Set session selected_cropping_season_id and name
+                // $session    = Services::session();
+                $seasonName = $season[ 'season' ] . ' ' . $season[ 'year' ];
+
+                session()->set( [ 
+                    'selected_cropping_season_id'   => $seasonId,
+                    'selected_cropping_season_name' => $seasonName,
+                ] );
+
+            }
+
+            if ( $currentStatus === 'Current' && $end <= $todayTimestamp ) {
+                $model->update( $seasonId, [ 'status' => 'Ended' ] );
+            }
+
+            if ( $start >= $todayTimestamp ) {
+                $model->update( $seasonId, [ 'status' => 'Ongoing' ] );
+            }
         }
     }
 }

@@ -7,4 +7,4 @@ setInterval(() => {
     .catch((error) => {
       console.error("Error checking season:", error);
     });
-}, 1000); // every 5 seconds
+}, 10000); // every 10 seconds

@@ -198,6 +198,7 @@ class Admin extends BaseController
      */
     public function dashboard()
     {
+        checkCroppingSeason();
         $redirect = ifLogin();
         if ( $redirect ) {
             return $redirect;
@@ -219,8 +220,8 @@ class Admin extends BaseController
             ->select( 'client_info.*, users.contact_no' )
             ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id', 'left' )
             ->where( 'users.user_type', 'farmer' )
-            ->orderBy('client_info.brgy', 'ASC')
-    ->orderBy('client_info.last_name', 'ASC')
+            ->orderBy( 'client_info.brgy', 'ASC' )
+            ->orderBy( 'client_info.last_name', 'ASC' )
             ->findAll();
 
 

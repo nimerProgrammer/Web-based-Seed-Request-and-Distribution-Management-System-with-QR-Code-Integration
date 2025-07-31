@@ -27,6 +27,7 @@
         <div class="container-fluid">
             <div class="card">
                 <form id="signUpForm" action="<?= base_url( 'public/signUp/submitSignUp' ) ?>" method="post">
+                    <?= csrf_field() ?>
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Personal Information </h5>
                     </div>

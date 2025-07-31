@@ -75,23 +75,59 @@
 
                                             <!-- Visible Dropdown -->
                                             <div class="dropdown">
+                                                <?php
+                                                $selectedSeasonName = session( 'selected_cropping_season_name' );
+                                                $seasonLabel        = $selectedSeasonName;
+
+                                                // Match the selected season from the list
+                                                foreach ( $cropping_seasons as $s ) {
+                                                    $fullName = $s[ 'season' ] . ' ' . $s[ 'year' ];
+                                                    if ( $fullName === $selectedSeasonName ) {
+                                                        if ( $s[ 'status' ] === 'Current' ) {
+                                                            $seasonLabel .= ' (Current Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ended' ) {
+                                                            $seasonLabel .= ' (Previous Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ongoing' ) {
+                                                            $seasonLabel .= ' (Ongoing)';
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                                ?>
+
                                                 <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
                                                     id="seasonDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <?= esc( session( 'selected_cropping_season_name' ) ) ?>
+                                                    <?= esc( $seasonLabel ) ?>
                                                 </button>
+
                                                 <ul class="dropdown-menu" aria-labelledby="seasonDropdown">
                                                     <?php foreach ( $cropping_seasons as $s ) : ?>
                                                         <?php
                                                         $isActive = session( 'selected_cropping_season_name' ) === $s[ 'season' ] . ' ' . $s[ 'year' ];
+                                                        $label    = esc( $s[ 'season' ] ) . ' ' . esc( $s[ 'year' ] );
+
+                                                        // Add label based on status
+                                                        if ( $s[ 'status' ] === 'Current' ) {
+                                                            $label .= ' (Current Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ended' ) {
+                                                            $label .= ' (Previous Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ongoing' ) {
+                                                            $label .= ' (Ongoing)';
+                                                        }
+
+                                                        // Disable link if Ongoing
+                                                        $disabled = $s[ 'status' ] === 'Ongoing';
                                                         ?>
                                                         <li>
                                                             <a href="#"
-                                                                class="dropdown-item select-season <?= $isActive ? 'active' : '' ?>"
-                                                                data-value="<?= $s[ 'cropping_season_tbl_id' ] . '|' . esc( $s[ 'season' ] ) . '|' . esc( $s[ 'year' ] ) ?>">
-                                                                <?= esc( $s[ 'season' ] ) . ' ' . esc( $s[ 'year' ] ) ?>
+                                                                class="dropdown-item select-season <?= $isActive ? 'active' : '' ?> <?= $disabled ? 'disabled text-muted' : '' ?>"
+                                                                data-value="<?= $s[ 'cropping_season_tbl_id' ] . '|' . esc( $s[ 'season' ] ) . '|' . esc( $s[ 'year' ] ) ?>"
+                                                                <?= $disabled ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
+                                                                <?= $label ?>
                                                             </a>
                                                         </li>
                                                     <?php endforeach; ?>
+
                                                 </ul>
                                             </div>
 
@@ -345,8 +381,10 @@
                                                 action="<?= base_url( '/admin/reports/beneficiariesExportToPDF' ) ?>"
                                                 method="post" target="_blank" style="display: none;">
                                                 <?= csrf_field() ?>
-                                                <input type="hidden" name="inventory_id" id="pdfInventoryId">
-                                                <input type="hidden" name="seed_name" id="pdfSeedName">
+                                                <input type="hidden" name="Beneficiaries_inventory_id"
+                                                    id="pdfBeneficiariesInventoryId">
+                                                <input type="hidden" name="Beneficiaries_seed_name"
+                                                    id="pdfBeneficiariesSeedName">
                                             </form>
 
                                             <!-- PDF Button -->
@@ -371,7 +409,7 @@
                                                                 id="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
                                                                 data-bs-toggle="tab"
                                                                 data-bs-target="#tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                                role="tab"
+                                                                data-seed-name="<?= esc( $item[ 'seed_name' ] ) ?>" role="tab"
                                                                 aria-controls="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
                                                                 aria-selected="<?= $isFirst ? 'true' : 'false' ?>">
                                                                 <?= esc( $item[ 'seed_name' ] ) ?>
@@ -453,7 +491,7 @@
                                                                                 <td class="align-middle">
                                                                                     <?php
                                                                                     $rawBDate = $beneficiary[ 'b_date' ];
-                                                                                    $dateObj  = DateTime::createFromFormat( 'm-d-Y', $rawBDate );
+                                                                                    $dateObj  = DateTime::createFromFormat( 'Y-m-d', $rawBDate );
                                                                                     ?>
 
                                                                                     <?php if ( $dateObj ) : ?>

@@ -215,7 +215,8 @@ class ReportsController extends BaseController
         } else {
             $seedType = $seedName; // use as is
         }
-
+        var_dump( $seedType );
+        exit;
         if ( !session()->has( 'selected_cropping_season_id' ) ) {
             // Check if fallback cropping_season_id is available
             if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
@@ -407,7 +408,7 @@ class ReportsController extends BaseController
                 </div>
                 <div style="position: relative; width: 100%; height: 20px; margin-bottom: 2px; font-size: 12px;">
                     <div style="position: absolute; left: 0; font-weight: bold;">
-                        REQUEST FOR ' . strtoupper( esc( $seedType ) ) . ' SEEDS
+                        REQUEST FOR ' . strtoupper( htmlspecialchars( $seedType ) ) . ' SEEDS
                     </div>
                     <div style="position: absolute; left: 50%; transform: translateX(-50%);">
                         Cropping Season: ' . $seasonName . '
@@ -416,8 +417,8 @@ class ReportsController extends BaseController
             ;
         }
 
-        $inventoryId = $this->request->getPost( 'inventory_id' );
-        $seedName    = $this->request->getPost( 'seed_name' );
+        $inventoryId = $this->request->getPost( 'Beneficiaries_inventory_id' );
+        $seedName    = $this->request->getPost( 'Beneficiaries_seed_name' );
 
         if ( !$inventoryId ) {
             return $this->response->setBody( 'No inventory ID provided.' );
@@ -429,6 +430,7 @@ class ReportsController extends BaseController
         } else {
             $seedType = $seedName; // use as is
         }
+
 
         if ( !session()->has( 'selected_cropping_season_id' ) ) {
             // Check if fallback cropping_season_id is available
@@ -585,8 +587,8 @@ class ReportsController extends BaseController
                 <td>' . esc( $entry[ 'mun' ] ) . '</td>
                 <td>' . esc( $entry[ 'prov' ] ) . '</td>
                 <td>' . (
-                    !empty( $entry[ 'b_date' ] ) && DateTime::createFromFormat( 'm-d-Y', $entry[ 'b_date' ] )
-                    ? DateTime::createFromFormat( 'm-d-Y', $entry[ 'b_date' ] )->format( 'F j, Y' )
+                    !empty( $entry[ 'b_date' ] ) && DateTime::createFromFormat( 'Y-m-d', $entry[ 'b_date' ] )
+                    ? DateTime::createFromFormat( 'Y-m-d', $entry[ 'b_date' ] )->format( 'F j, Y' )
                     : '—'
                 ) . '</td>
                 <td>' . esc( $entry[ 'gender' ] ) . '</td>
@@ -620,5 +622,12 @@ class ReportsController extends BaseController
         return $this->response
             ->setContentType( 'application/pdf' )
             ->setBody( $dompdf->output() );
+
+        // $cleanSeasonName = str_replace( [ ' ', '/' ], '_', $selectedSeasonName ); // remove spaces or slashes
+        // $filename        = 'Beneficiaries_Report_' . $cleanSeasonName . '.pdf';
+
+        // $dompdf->stream( $filename, [ 'Attachment' => true ] );
+        // exit;
+
     }
 }

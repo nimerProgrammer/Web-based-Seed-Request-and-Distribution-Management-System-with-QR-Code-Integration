@@ -27,9 +27,9 @@ class Database extends Config
     public array $default = [ 
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'root',
-        'password'     => '',
-        'database'     => 'omas_db',
+        'username'     => 'u796340262_omas_user',
+        'password'     => '@Omas_db123',
+        'database'     => 'u796340262_omas_db',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,

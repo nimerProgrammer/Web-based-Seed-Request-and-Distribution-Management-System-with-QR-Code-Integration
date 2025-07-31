@@ -459,10 +459,9 @@ $(document).ready(function () {
     const seedName = activeTab.getAttribute("data-seed-name");
 
     // Fill hidden inputs
-    $("#pdfInventoryId").val(inventoryId);
-    $("#pdfSeedName").val(seedName);
+    $("#pdfBeneficiariesInventoryId").val(inventoryId);
+    $("#pdfBeneficiariesSeedName").val(seedName);
 
-    // Submit form
     $("#beneficiariesPDFExportForm").submit();
   });
 

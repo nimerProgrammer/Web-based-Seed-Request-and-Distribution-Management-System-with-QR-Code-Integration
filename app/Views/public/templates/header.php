@@ -125,14 +125,16 @@
                     <!-- Left links -->
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item ms-1 mt-1 mr-1">
-                            <form class="d-flex" role="search">
-                                <div class="input-group input-group-sm">
-                                    <input type="search" class="form-control" placeholder="Search" aria-label="Search">
+                            <form class="d-flex position-relative" role="search" id="searchForm" style="width: 200px;">
+                                <div class="input-group input-group-sm w-100">
+                                    <input type="search" class="form-control" placeholder="Search" id="searchInput"
+                                        autocomplete="off">
                                     <button class="btn btn-outline-secondary" type="submit">
                                         <i class="bi bi-search"></i>
                                     </button>
                                 </div>
                             </form>
+
                         </li>
 
                         <li class="nav-item ms-1 top-loader">

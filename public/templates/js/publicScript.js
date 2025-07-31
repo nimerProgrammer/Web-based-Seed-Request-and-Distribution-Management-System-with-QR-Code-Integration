@@ -1,3 +1,109 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const BASE_URL = document.querySelector("#base_url")?.value || "";
+
+  const pages = [
+    { name: "Profile", keywords: ["profile"], route: "public/profile" },
+    { name: "Home", keywords: ["home"], route: "" },
+    {
+      name: "Request a Seed",
+      keywords: [
+        "request",
+        "request seed",
+        "request a seed",
+        "seed request",
+        "seeds",
+      ],
+      route: "public/seedsRequests",
+    },
+    {
+      name: "Sent Requests",
+      keywords: ["sent", "requests"],
+      route: "public/sentRequests",
+    },
+    { name: "About", keywords: ["about", "info"], route: "public/about" },
+  ];
+
+  const searchInput = document.querySelector("#searchInput");
+  const searchForm = document.querySelector("#searchForm");
+
+  // Create and style the suggestion list
+  const suggestionsList = document.createElement("ul");
+  suggestionsList.id = "suggestionsList";
+  suggestionsList.style.cssText = `
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1050;
+    width: 100%;
+    display: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 0.25rem 0.25rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 0.875rem;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 2px;
+  `;
+  searchForm.appendChild(suggestionsList);
+
+  searchInput.addEventListener("input", function () {
+    const input = this.value.trim().toLowerCase();
+    suggestionsList.innerHTML = "";
+    suggestionsList.style.display = "none";
+
+    if (!input) return;
+
+    const matches = pages.filter((page) =>
+      page.keywords.some(
+        (keyword) => keyword.includes(input) || input.includes(keyword)
+      )
+    );
+
+    if (matches.length > 0) {
+      matches.forEach((page) => {
+        const li = document.createElement("li");
+        li.textContent = page.name;
+        li.setAttribute("data-route", page.route);
+        li.style.cssText = `
+          padding: 6px 10px;
+          cursor: pointer;
+          border-bottom: 1px solid #eee;
+        `;
+        li.addEventListener("click", function () {
+          window.location.href = BASE_URL + this.getAttribute("data-route");
+        });
+        suggestionsList.appendChild(li);
+      });
+      suggestionsList.style.display = "block";
+    }
+  });
+
+  // Hide suggestions on outside click
+  document.addEventListener("click", function (e) {
+    if (!searchForm.contains(e.target)) {
+      suggestionsList.style.display = "none";
+    }
+  });
+
+  // Handle submit
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const input = searchInput.value.trim().toLowerCase();
+    const match = pages.find((page) =>
+      page.keywords.some(
+        (keyword) => keyword.includes(input) || input.includes(keyword)
+      )
+    );
+    if (match) {
+      window.location.href = BASE_URL + match.route;
+    } else {
+      alert("No matching page found.");
+    }
+  });
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const allCarousels = document.querySelectorAll(".carousel");
 

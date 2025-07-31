@@ -28,26 +28,8 @@
                             <div>
                                 <h6 class="card-title mb-1">Current Season</h6>
 
-                                <?php if ( !empty( $currentSeason ) ) : ?>
-                                    <h5 class="card-text mb-1">
-                                        <?= esc( $currentSeason[ 'season' ] ) ?> - <?= esc( $currentSeason[ 'year' ] ) ?>
-                                    </h5>
-                                    <?php
-                                    $startObj = DateTime::createFromFormat( 'm-d-Y', $currentSeason[ 'date_start' ] );
-                                    $endObj   = DateTime::createFromFormat( 'm-d-Y', $currentSeason[ 'date_end' ] );
-                                    ?>
-
-                                    <p class="card-text small">
-                                        <?php if ( $startObj && $endObj ) : ?>
-                                            <?= $startObj->format( 'F j, Y' ) ?> to <?= $endObj->format( 'F j, Y' ) ?>
-                                        <?php else : ?>
-                                            <span class="text-muted">Invalid date</span>
-                                        <?php endif; ?>
-                                    </p>
-
-                                <?php else : ?>
-                                    <p class="card-text small mb-0">No current season available.</p>
-                                <?php endif; ?>
+                                <h5 class="card-text mb-1" id="season-title">Loading...</h5>
+                                <p class="card-text small" id="season-dates">Fetching season dates...</p>
                             </div>
 
                             <!-- Icon Circle on the Right -->
@@ -206,7 +188,7 @@
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="season-tbody">
                                         <?php $i = 1; ?>
                                         <?php foreach ( $seasons as $season ) : ?>
                                             <tr>

@@ -82,6 +82,8 @@ $routes->post( '/admin/checkCurrentPassword', 'Admin\ProfileController::checkCur
 $routes->post( '/admin/changePassword', 'Admin\ProfileController::changePassword' );
 
 /*** DASHBOARD CONTROLLER ACTIONS ***/
+$routes->get( '/admin/dashboard/getCurrentSeason', 'Admin\DashboardController::getCurrentSeason' );
+$routes->get( '/admin/dashboard/getSeasonTableBody', 'Admin\DashboardController::getSeasonTableBody' );
 $routes->post( '/admin/dashboard/checkSeasonExists', 'Admin\DashboardController::checkSeasonExists' );
 $routes->post( '/admin/dashboard/checkStartDateConflict', 'Admin\DashboardController::checkStartDateConflict' );
 $routes->post( '/admin/dashboard/newSeason', 'Admin\DashboardController::newSeason' );

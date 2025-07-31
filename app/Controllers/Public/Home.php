@@ -108,8 +108,8 @@ class Home extends BaseController
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id', 'left' )
             ->where( [ 
-                // 'cropping_season.cropping_season_tbl_id' => $selectedSeason,     // e.g., 'Wet'
                 'cropping_season.cropping_season_tbl_id' => $selectedSeason,     // e.g., 'Wet'
+                'cropping_season.status'                 => 'Current',     // e.g., 'Wet'
                 'seed_requests.client_info_tbl_id'       => $clientId  // e.g., 12
             ] )
             ->orderBy( 'seed_requests.date_time_requested', 'DESC' )
@@ -190,7 +190,7 @@ class Home extends BaseController
         session()->set( "public_current_tab", "Sign Up" );
 
         $header = view( 'public/templates/header' );
-        $body   = view( 'public/signUp' );
+        $body   = view( 'public/signup' );
         $modals = view( 'public/dialog/loginModalDialog' );
         $footer = view( 'public/templates/footer' );
 

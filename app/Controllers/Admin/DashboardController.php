@@ -9,6 +9,32 @@ use App\Models\LogsModel;
 use \DateTime;
 class DashboardController extends BaseController
 {
+    public function getCurrentSeason()
+    {
+        $model   = new CroppingSeasonModel();
+        $current = $model->where( 'status', 'Current' )->first();
+
+        if ( $current ) {
+            return $this->response->setJSON( [ 
+                'success'    => true,
+                'season'     => $current[ 'season' ],
+                'year'       => $current[ 'year' ],
+                'date_start' => $current[ 'date_start' ],
+                'date_end'   => $current[ 'date_end' ]
+            ] );
+        }
+
+        return $this->response->setJSON( [ 'success' => false ] );
+    }
+
+    public function getSeasonTableBody()
+    {
+        $model             = new CroppingSeasonModel();
+        $data[ 'seasons' ] = $model->orderBy( 'year', 'DESC' )->findAll();
+
+        return view( 'admin/season_tbody', $data );
+    }
+
     /**
      * Checks if a cropping season already exists.
      *
@@ -191,7 +217,6 @@ class DashboardController extends BaseController
             'year'       => $seasonYear,
             'date_start' => $dateStart,
             'date_end'   => $dateEnd,
-            'status'     => 'Ongoing',
         ];
 
         // Update the record
