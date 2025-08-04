@@ -48,7 +48,7 @@ class SeedRequestsController extends BaseController
         $beneficiaryModel = new BeneficiariesModel();
         $logsModel        = new LogsModel();
 
-        $qrCode = "$season-$year-$seedName-$seedClass-$rsbsa";
+        $qrCode = "$season $year-$seedName$seedClass-$rsbsa";
 
         $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
         $formattedDate = getPhilippineTimeFormatted();
@@ -63,7 +63,7 @@ class SeedRequestsController extends BaseController
         $randomCode = implode( '', array_slice( $refArray, 0, 12 ) );
 
         // Build final reference code
-        $refCode = 'REF-' . $dateCode . '-' . strtoupper( $seedName ) . '-' . $randomCode;
+        $refCode = 'REF-' . $dateCode . '-' . $randomCode;
 
         $requestModel->update( $id, [ 
             'status'             => 'Approved',
@@ -71,8 +71,7 @@ class SeedRequestsController extends BaseController
         ] );
 
         $beneficiaryModel->insert( [ 
-            'qr_code'              => $qrCode,
-            'ref_no'               => $refCode,
+            'qr_code'              => $qrCode . '-' . $refCode,
             'status'               => 'For Receiving',
             'seed_requests_tbl_id' => $id
         ] );

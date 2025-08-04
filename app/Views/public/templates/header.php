@@ -125,16 +125,20 @@
                     <!-- Left links -->
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                         <li class="nav-item ms-1 mt-1 mr-1">
-                            <form class="d-flex position-relative" role="search" id="searchForm" style="width: 200px;">
-                                <div class="input-group input-group-sm w-100">
-                                    <input type="search" class="form-control" placeholder="Search" id="searchInput"
-                                        autocomplete="off">
-                                    <button class="btn btn-outline-secondary" type="submit">
-                                        <i class="bi bi-search"></i>
-                                    </button>
+                            <form class="form-inline" id="searchForm">
+                                <div class="input-group input-group-sm ml-1 position-relative">
+                                    <input id="searchInput" class="form-control" type="search" placeholder="Search"
+                                        aria-label="Search" autocomplete="off">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-navbar rounded-end" type="submit">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                    <ul id="suggestionsList" class="list-group position-absolute w-100"
+                                        style="top: 100%; z-index: 1050; display: none;"></ul>
                                 </div>
                             </form>
-
+                            <input type="hidden" id="base_url" value="<?= base_url( 'public' ) ?>/" />
                         </li>
 
                         <li class="nav-item ms-1 top-loader">

@@ -54,12 +54,12 @@ class SentRequestsController extends BaseController
         $address       = strtoupper( $beneficiary[ 'brgy' ] . ', ' . $beneficiary[ 'mun' ] );
         $seedType      = strtoupper( $beneficiary[ 'seed_class' ] );
         $seedName      = strtoupper( $beneficiary[ 'seed_name' ] );
-        $ref_no        = $beneficiary[ 'ref_no' ];
+        $qr_code       = $beneficiary[ 'qr_code' ];
         $season        = session()->get( 'current_season_name' );
         $dateGenerated = date( 'F j, Y' );
 
         // Generate QR code
-        $qrData = "$season\n$ref_no";
+        $qrData = "$qr_code";
         $qr     = Builder::create()
             ->writer( new PngWriter() )
             ->writerOptions( [] )
@@ -88,7 +88,7 @@ class SentRequestsController extends BaseController
         imagerectangle( $voucher, 0, 0, $width - 1, $height - 1, $black );
 
         // Load font
-        $font = FCPATH . 'assets/fonts/arial.ttf';
+        $font = FCPATH . 'assets/fonts/OpenSans-Regular.ttf';
         if ( !file_exists( $font ) ) {
             return $this->response->setBody( 'Font file not found.' );
         }
