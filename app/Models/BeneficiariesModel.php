@@ -15,7 +15,7 @@ class BeneficiariesModel extends Model
 
     protected $allowedFields = [ 
         'qr_code',
-        'ref_no',
+        'kg',
         'date_time_received',
         'status',
         'seed_requests_tbl_id'

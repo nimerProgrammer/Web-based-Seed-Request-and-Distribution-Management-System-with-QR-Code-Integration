@@ -13,6 +13,7 @@ class InventoryModel extends Model
         'seed_name',
         'seed_class',
         'stock',
+        'requested',
         'distributed',
         'date_stored',
         'cropping_season_tbl_id'

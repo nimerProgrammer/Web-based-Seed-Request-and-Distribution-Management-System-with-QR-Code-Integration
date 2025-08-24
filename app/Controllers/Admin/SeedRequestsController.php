@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 use App\Models\SeedRequestsModel;
 use App\Models\BeneficiariesModel;
+use App\Models\InventoryModel;
 use App\Models\LogsModel;
 
 class SeedRequestsController extends BaseController
@@ -46,6 +47,7 @@ class SeedRequestsController extends BaseController
 
         $requestModel     = new SeedRequestsModel();
         $beneficiaryModel = new BeneficiariesModel();
+        $inventoryModel   = new InventoryModel();
         $logsModel        = new LogsModel();
 
         $qrCode = "$season $year-$seedName$seedClass-$rsbsa";
@@ -70,10 +72,56 @@ class SeedRequestsController extends BaseController
             'date_time_approved' => $formattedDate
         ] );
 
+        $requests = $requestModel
+            ->select( 'seed_requests.*, client_info.*, inventory.*' )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->where( 'seed_requests.seed_requests_tbl_id', $id )
+            ->first();
+
+        $inventoryId = $requests[ 'inventory_tbl_id' ];
+        $farmArea    = (float) $requests[ 'farm_area' ];
+        $kg          = 0;
+
+        if ( stripos( $requests[ 'seed_name' ], 'rice' ) !== false ) {
+            if ( $farmArea <= 0.5 ) {
+                $kg = 20; // minimum
+            } else {
+                // each full hectare step adds +10kg
+                $kg = ( floor( $farmArea ) + 1 ) * 10;
+
+                // cap at 50kg max
+                if ( $kg > 50 ) {
+                    $kg = 50;
+                }
+            }
+        } else {
+
+
+            if ( $farmArea <= 0.5 ) {
+                $kg = 1; // minimum
+            } else {
+                // calculate steps
+                $kg = floor( $farmArea ) + 1;
+
+                // cap at 6kg (for 5.0 ha and above)
+                if ( $kg > 6 ) {
+                    $kg = 6;
+                }
+            }
+
+        }
+
+        $inventoryModel->set( 'requested', "IFNULL(requested, 0) + {$kg}", false )
+            ->where( 'inventory_tbl_id', $inventoryId )
+            ->update();
+
+
         $beneficiaryModel->insert( [ 
             'qr_code'              => $qrCode . '-' . $refCode,
             'status'               => 'For Receiving',
-            'seed_requests_tbl_id' => $id
+            'seed_requests_tbl_id' => $id,
+            'kg'                   => $kg
         ] );
 
         /* Staff Fullname */
@@ -120,6 +168,7 @@ class SeedRequestsController extends BaseController
 
         $requestModel     = new SeedRequestsModel();
         $beneficiaryModel = new BeneficiariesModel();
+        $inventoryModel   = new InventoryModel();
         $logsModel        = new LogsModel();
 
         $requestModel->update( $id, [ 
@@ -127,7 +176,24 @@ class SeedRequestsController extends BaseController
             'date_time_approved' => null
         ] );
 
-        $beneficiaryModel->where( 'qr_code', $qrCode )->delete();
+
+        $requests = $requestModel
+            ->select( 'seed_requests.*, client_info.*, inventory.*, beneficiaries.*' )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->join( 'beneficiaries', 'beneficiaries.seed_requests_tbl_id = seed_requests.seed_requests_tbl_id' )
+            ->where( 'seed_requests.seed_requests_tbl_id', $id )
+            ->first();
+
+        $kg          = (float) $requests[ 'kg' ]; // from beneficiaries
+        $inventoryId = $requests[ 'inventory_tbl_id' ];
+
+        $inventoryModel->set( 'requested', "requested - {$kg}", false )
+            ->where( 'inventory_tbl_id', $inventoryId )
+            ->update();
+
+
+        $beneficiaryModel->where( 'seed_requests_tbl_id', $id )->delete();
 
         $formattedDate = getPhilippineTimeFormatted();
 

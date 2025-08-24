@@ -42,9 +42,9 @@
                                             <th>Seed Name</th>
                                             <th>Seed Class</th>
                                             <th>Stock (kg)</th>
-                                            <th>Distributed</th>
-                                            <th>Total</th>
-                                            <th>Availability</th>
+                                            <th>Requested (kg)</th>
+                                            <th>Distributed (kg)</th>
+                                            <th>Availability (kg)</th>
                                             <th>Cropping Season</th>
                                             <th>Date Stored</th>
                                             <th class="text-center">Action</th>
@@ -57,12 +57,12 @@
                                                 <td><?= $i++ ?></td>
                                                 <td><?= esc( $item[ 'seed_name' ] ) ?></td>
                                                 <td><?= esc( $item[ 'seed_class' ] ?? '-' ) ?></td>
-                                                <td><?= esc( $item[ 'stock' ] - $item[ 'distributed' ] ) ?></td>
+                                                <td><?= esc( $item[ 'stock' ] ) ?></td>
+                                                <td><?= esc( $item[ 'requested' ] ?? 0 ) ?></td>
                                                 <td><?= esc( $item[ 'distributed' ] ?? 0 ) ?></td>
-                                                <td><?= esc( $item[ 'stock' ] + $item[ 'distributed' ] ) ?></td>
                                                 <td class="text-center">
-                                                    <?php if ( $item[ 'stock' ] > 0 ) : ?>
-                                                        <?= esc( $item[ 'stock' ] - $item[ 'distributed' ] ) ?> <br>
+                                                    <?php if ( $item[ 'stock' ] > $item[ 'requested' ] ) : ?>
+                                                        <?= esc( $item[ 'stock' ] - $item[ 'requested' ] ) ?> <br>
                                                         <span class="badge bg-success">Available</span>
                                                     <?php else : ?>
                                                         <span class="badge bg-danger">Out of Stock</span>

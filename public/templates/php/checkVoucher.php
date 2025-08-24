@@ -17,7 +17,7 @@ if ( $conn->connect_error ) {
 }
 
 // ✅ Query using full code (no splitting yet)
-$stmt = $conn->prepare( "SELECT status FROM beneficiaries WHERE qr_code = ?" );
+$stmt = $conn->prepare( "SELECT beneficiaries_tbl_id,kg,status FROM beneficiaries WHERE qr_code = ?" );
 $stmt->bind_param( "s", $code );
 $stmt->execute();
 $result = $stmt->get_result();
@@ -30,8 +30,10 @@ if ( $row = $result->fetch_assoc() ) {
     if ( count( $parts ) >= 6 ) {
         $part1 = $parts[ 0 ];                             // e.g., "1st CROPPING 2025"
         $part2 = $parts[ 1 ];                             // e.g., "RC18 (Rice)Improved"
-        $part3 = $parts[ 2 ];                             // e.g., "34343"
-        $ref   = implode( '-', array_slice( $parts, 3 ) );  // e.g., "REF-08042025-XXXXXXX"
+        $part4 = $parts[ 2 ];                             // e.g., "34343"
+        $ref   = implode( '-', array_slice( $parts, 4 ) );  // e.g., "REF-08042025-XXXXXXX"
+
+        $part3 = $row[ 'kg' ];                             // e.g., "kg"
 
         echo json_encode( [ 
             'id'         => $row[ 'beneficiaries_tbl_id' ],
@@ -40,6 +42,7 @@ if ( $row = $result->fetch_assoc() ) {
                 'part1' => $part1,
                 'part2' => $part2,
                 'part3' => $part3,
+                'part4' => $part4,
                 'ref'   => $ref
             ]
         ] );

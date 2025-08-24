@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\InventoryModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BeneficiariesModel;
 use App\Models\LogsModel;
@@ -42,9 +43,27 @@ class BeneficiariesController extends BaseController
     {
         $beneficiariesModel = new BeneficiariesModel();
         $logsModel          = new LogsModel();
+        $inventoryModel     = new InventoryModel();
 
         // Get Philippine time
         $formattedDate = getPhilippineTimeFormatted();
+
+        $beneficiaries = $beneficiariesModel
+            ->select( 'beneficiaries.*, seed_requests.*, client_info.*, inventory.*' )
+            ->join( 'seed_requests', 'seed_requests.seed_requests_tbl_id = beneficiaries.seed_requests_tbl_id' )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->where( 'beneficiaries.beneficiaries_tbl_id', $id )
+            ->first();
+
+        $inventoryId = $beneficiaries[ 'inventory_tbl_id' ];
+        $kg          = (float) $beneficiaries[ 'kg' ];
+
+
+        $inventoryModel->set( 'distributed', "IFNULL(distributed, 0) + {$kg}", false )
+            ->where( 'inventory_tbl_id', $inventoryId )
+            ->update();
+
 
         // Update the status to "Received" and set the current date/time
         $beneficiariesModel->update( $id, [ 
@@ -109,6 +128,7 @@ class BeneficiariesController extends BaseController
     {
         $beneficiariesModel = new BeneficiariesModel();
         $logsModel          = new LogsModel();
+        $inventoryModel     = new InventoryModel();
 
         // Get Philippine time
         $formattedDate = getPhilippineTimeFormatted();
@@ -130,6 +150,21 @@ class BeneficiariesController extends BaseController
 
         /* Staff Fullname */
         $staffFullName = session( 'user_fullname' );
+
+        $beneficiaries = $beneficiariesModel
+            ->select( 'beneficiaries.*, seed_requests.*, client_info.*, inventory.*' )
+            ->join( 'seed_requests', 'seed_requests.seed_requests_tbl_id = beneficiaries.seed_requests_tbl_id' )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->where( 'beneficiaries.beneficiaries_tbl_id', $id )
+            ->first();
+
+        $inventoryId = $beneficiaries[ 'inventory_tbl_id' ];
+        $kg          = (float) $beneficiaries[ 'kg' ];
+
+        $inventoryModel->set( 'distributed', "distributed - {$kg}", false )
+            ->where( 'inventory_tbl_id', $inventoryId )
+            ->update();
 
         // Undo receive
         $beneficiariesModel->update( $id, [ 

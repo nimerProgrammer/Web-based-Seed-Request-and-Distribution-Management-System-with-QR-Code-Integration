@@ -128,7 +128,8 @@
                         <div class="row mb-2">
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-start">
-                                    <li class="breadcrumb-item top-loader"><a href="<?= base_url( '/' ) ?>">Home</a>
+                                    <li class="breadcrumb-item top-loader"><a
+                                            href="<?= base_url( 'admin/dashboard' ) ?>">Back to Dashboard</a>
                                     </li>
                                 </ol>
                             </div>
