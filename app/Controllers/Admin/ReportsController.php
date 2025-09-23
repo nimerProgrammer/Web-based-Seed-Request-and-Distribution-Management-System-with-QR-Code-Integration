@@ -176,7 +176,7 @@ class ReportsController extends BaseController
          * @param string $seasonName The name of the cropping season.
          * @return string HTML content for the header.
          */
-        function renderHeader( $src, $brgy, $seedType, $seasonName )
+        function renderHead( $src, $brgy, $seedType, $seasonName )
         {
             return '
             <div style="width: 100%; text-align: center; margin-bottom: 2px; font-size: 12px;">
@@ -311,7 +311,7 @@ class ReportsController extends BaseController
             }
             $first = false;
 
-            $html .= renderHeader( $src, $brgy, $seedType, $selectedSeasonName );
+            $html .= renderHead( $src, $brgy, $seedType, $selectedSeasonName );
 
             $counter  = 1;
             $rowCount = 0;
@@ -322,7 +322,7 @@ class ReportsController extends BaseController
                         $html .= '</tbody></table>';
                         $html .= '<div style="page-break-before: always;"></div>';
 
-                        $html .= renderHeader( $src, $brgy, $seedType, $selectedSeasonName );
+                        $html .= renderHead( $src, $brgy, $seedType, $selectedSeasonName );
                     }
                     // Table header
                     $html .= '<table>

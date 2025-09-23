@@ -18,7 +18,7 @@ function updateSeasonInfo() {
         title.textContent = `${data.season} - ${data.year}`;
         dates.textContent = `${startFormatted} to ${endFormatted}`;
       } else {
-        title.textContent = "-";
+        title.textContent = "—";
         dates.textContent = "No current season available.";
       }
     })

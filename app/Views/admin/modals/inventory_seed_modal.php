@@ -33,8 +33,9 @@
 
 					<!-- Read-only input to show the season name and year -->
 					<input type="hidden" class="form-control" id="add_cropping_season_tbl_id"
-						name="cropping_season_tbl_id"
-						value="<?= esc( $cropping_season[ 'cropping_season_tbl_id' ] ) ?>">
+						name="cropping_season_tbl_id" value="<?= isset( $dataCroppingSeason[ 'cropping_season' ][ 'cropping_season_tbl_id' ] )
+							? esc( $dataCroppingSeason[ 'cropping_season' ][ 'cropping_season_tbl_id' ] )
+							: '' ?>">
 				</div>
 
 				<div class="modal-footer">
