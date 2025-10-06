@@ -73,29 +73,30 @@
 
 
 
-                <!-- Mobile toggle button for user dropdown (only visible on mobile) -->
-                <ul class="navbar-nav ms-auto d-lg-none mt-n1"> <!-- d-lg-none hides this on large screens -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" role="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarUserDropdown" aria-controls="navbarUserDropdown"
-                            aria-expanded="false" aria-label="Toggle user dropdown">
-                            <i class="bi bi-list fs-5"></i> <!-- User icon, same as sidebar toggle -->
-                        </a>
-                    </li>
-                </ul>
+                <div class="d-flex align-items-center ms-auto gap-2">
+                    <!-- Notifications -->
+                    <a class="nav-link p-1 mt-1" data-widget="control-sidebar" data-controlsidebar-slide="true"
+                        href="#">
+                        <i class="bi bi-bell fs-5"></i>
+                    </a>
 
-                <!-- User dropdown (collapsible on mobile) -->
-                <div class="collapse navbar-collapse justify-content-end" id="navbarUserDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown user-menu" id="user-menu-btn">
-                            <a href="profile" class="nav-link" data-bs-toggles="tooltip" title="view profile">
-                                <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="User Avatar"
-                                    class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
-                                <span><?= esc( session( 'user_fullname' ) ) ?></span>
-                            </a>
-                        </li>
-                    </ul>
+                    <!-- Mobile user (only avatar) -->
+                    <a href="profile" class="nav-link p-1 d-lg-none" data-bs-toggle="tooltip" title="View Profile">
+                        <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="User Avatar" class="rounded-circle"
+                            style="width: 30px; height: 30px; object-fit: cover;">
+                    </a>
+
+                    <!-- Desktop user (avatar + name) -->
+                    <a href="profile" class="nav-link p-0 d-none d-lg-flex align-items-center gap-1"
+                        data-bs-toggle="tooltip" title="View Profile">
+                        <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="User Avatar" class="rounded-circle"
+                            style="width: 30px; height: 30px; object-fit: cover;">
+                        <span><?= esc( session( 'user_fullname' ) ) ?></span>
+                    </a>
                 </div>
+
+
+
             </div>
         </nav>
 

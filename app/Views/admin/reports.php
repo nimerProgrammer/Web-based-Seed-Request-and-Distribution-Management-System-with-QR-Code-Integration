@@ -97,7 +97,8 @@
 
                                                 <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
                                                     id="seasonDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <?= esc( $seasonLabel ) ?>
+                                                    <?= esc( !empty( $seasonLabel ) ? $seasonLabel : 'Select Cropping Season' ) ?>
+
                                                 </button>
 
                                                 <ul class="dropdown-menu" aria-labelledby="seasonDropdown">
@@ -178,99 +179,106 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <div class="card mt-0 shadow border border-secondary">
-                                            <div class="card-header">
-                                                <ul class="nav nav-tabs card-header-tabs" id="seedRequestsReportsTabs"
-                                                    role="tablist">
-                                                    <?php $isFirst = true; ?>
-                                                    <?php foreach ( $inventory as $item ) : ?>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link <?= $isFirst ? 'active' : '' ?>"
-                                                                id="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                                data-bs-toggle="tab"
-                                                                data-bs-target="#tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                                data-seed-name="<?= esc( $item[ 'seed_name' ] ) ?>" role="tab"
-                                                                aria-controls="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                                aria-selected="<?= $isFirst ? 'true' : 'false' ?>">
-                                                                <?= esc( $item[ 'seed_name' ] ) ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php $isFirst = false; ?>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            </div>
+                                        <?php if ( !empty( $inventory ) ) : ?>
+                                            <div class="card mt-0 shadow border border-secondary">
+                                                <div class="card-header">
+                                                    <ul class="nav nav-tabs card-header-tabs" id="seedRequestsReportsTabs"
+                                                        role="tablist">
+                                                        <?php $isFirst = true; ?>
+                                                        <?php foreach ( $inventory as $item ) : ?>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link <?= $isFirst ? 'active' : '' ?>"
+                                                                    id="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                    data-bs-toggle="tab"
+                                                                    data-bs-target="#tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                    data-seed-name="<?= esc( $item[ 'seed_name' ] ) ?>" role="tab"
+                                                                    aria-controls="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                    aria-selected="<?= $isFirst ? 'true' : 'false' ?>">
+                                                                    <?= esc( $item[ 'seed_name' ] ) ?>
+                                                                </a>
+                                                            </li>
+                                                            <?php $isFirst = false; ?>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                </div>
 
-                                            <div class="card-body">
-                                                <div class="tab-content">
-                                                    <?php $isFirst = true; ?>
-                                                    <?php foreach ( $inventory as $item ) : ?>
-                                                        <div class=" tab-pane fade <?= $isFirst ? 'show active' : '' ?>"
-                                                            id="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                            role="tabpanel"
-                                                            aria-labelledby="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>">
-                                                            <div class="table-responsive">
-                                                                <table class="set-Table table table-bordered table-hover">
-                                                                    <thead class="table-secondary">
-                                                                        <tr>
-                                                                            <th rowspan="2">No.</th>
-                                                                            <th colspan="4" class="text-center">Name of Farmer
-                                                                            </th>
-                                                                            <th rowspan="2">RSBSA Reference No.</th>
-                                                                            <th rowspan="2">Name of Land Owner</th>
-                                                                            <th rowspan="2">Verified Farm Area (Hectares)</th>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Last Name</th>
-                                                                            <th>First Name</th>
-                                                                            <th>Middle Name</th>
-                                                                            <th>Suffix & Ext.</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php $i = 1; ?>
-                                                                        <?php foreach ( $seed_requests as $request ) : ?>
-                                                                            <?php if ( $request[ 'inventory_tbl_id' ] != $item[ 'inventory_tbl_id' ] )
-                                                                                continue; ?>
-
-                                                                            <!-- render row -->
-                                                                            <tr class="text-center">
-                                                                                <td class="align-middle"><?= $i++ ?></td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $request[ 'last_name' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $request[ 'first_name' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $request[ 'middle_name' ] ?? 'N/A' ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $request[ 'suffix_and_ext' ] ?? 'N/A' ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $request[ 'rsbsa_ref_no' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $request[ 'name_land_owner' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $request[ 'farm_area' ] ) ?>
-                                                                                </td>
+                                                <div class="card-body">
+                                                    <div class="tab-content">
+                                                        <?php $isFirst = true; ?>
+                                                        <?php foreach ( $inventory as $item ) : ?>
+                                                            <div class=" tab-pane fade <?= $isFirst ? 'show active' : '' ?>"
+                                                                id="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                role="tabpanel"
+                                                                aria-labelledby="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>">
+                                                                <div class="table-responsive">
+                                                                    <table class="set-Table table table-bordered table-hover">
+                                                                        <thead class="table-secondary">
+                                                                            <tr>
+                                                                                <th rowspan="2">No.</th>
+                                                                                <th colspan="4" class="text-center">Name of Farmer
+                                                                                </th>
+                                                                                <th rowspan="2">RSBSA Reference No.</th>
+                                                                                <th rowspan="2">Name of Land Owner</th>
+                                                                                <th rowspan="2">Verified Farm Area (Hectares)</th>
                                                                             </tr>
-                                                                        <?php endforeach; ?>
-                                                                    </tbody>
-                                                                </table>
+                                                                            <tr>
+                                                                                <th>Last Name</th>
+                                                                                <th>First Name</th>
+                                                                                <th>Middle Name</th>
+                                                                                <th>Suffix & Ext.</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <?php $i = 1; ?>
+                                                                            <?php foreach ( $seed_requests as $request ) : ?>
+                                                                                <?php if ( $request[ 'inventory_tbl_id' ] != $item[ 'inventory_tbl_id' ] )
+                                                                                    continue; ?>
+
+                                                                                <!-- render row -->
+                                                                                <tr class="text-center">
+                                                                                    <td class="align-middle"><?= $i++ ?></td>
+                                                                                    <td class="align-middle">
+                                                                                        <?= esc( $request[ 'last_name' ] ) ?>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <?= esc( $request[ 'first_name' ] ) ?>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <?= esc( $request[ 'middle_name' ] ?? 'N/A' ) ?>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <?= esc( $request[ 'suffix_and_ext' ] ?? 'N/A' ) ?>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <?= esc( $request[ 'rsbsa_ref_no' ] ) ?>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <?= esc( $request[ 'name_land_owner' ] ) ?>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <?= esc( $request[ 'farm_area' ] ) ?>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            <?php endforeach; ?>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <?php $isFirst = false; ?>
-                                                    <?php endforeach; ?>
+                                                            <?php $isFirst = false; ?>
+                                                        <?php endforeach; ?>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        <?php else : ?>
+                                            <div class="card text-white text-center p-3 shadow border border-secondary">
+                                                <span class="mb-0 text-secondary">No records available.</span>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <!-- BENEFICIARIES -->
                     <?php elseif ( $selectedList === 'beneficiaries' ) : ?>
                         <div class="card mt-3">
@@ -316,6 +324,7 @@
                                                     <?php endforeach; ?>
                                                 </ul>
                                             </div>
+
                                             <!-- Cropping Season Dropdown Form -->
                                             <form id="seasonForm" action="<?= base_url( '/admin/reports/setSeasonView' ) ?>"
                                                 method="post" style="display: none;">
@@ -325,23 +334,60 @@
 
                                             <!-- Visible Dropdown -->
                                             <div class="dropdown">
+                                                <?php
+                                                $selectedSeasonName = session( 'selected_cropping_season_name' );
+                                                $seasonLabel        = $selectedSeasonName;
+
+                                                // Match the selected season from the list
+                                                foreach ( $cropping_seasons as $s ) {
+                                                    $fullName = $s[ 'season' ] . ' ' . $s[ 'year' ];
+                                                    if ( $fullName === $selectedSeasonName ) {
+                                                        if ( $s[ 'status' ] === 'Current' ) {
+                                                            $seasonLabel .= ' (Current Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ended' ) {
+                                                            $seasonLabel .= ' (Previous Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ongoing' ) {
+                                                            $seasonLabel .= ' (Ongoing)';
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                                ?>
+
                                                 <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
                                                     id="seasonDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <?= esc( session( 'selected_cropping_season_name' ) ) ?>
+                                                    <?= esc( !empty( $seasonLabel ) ? $seasonLabel : 'Select Cropping Season' ) ?>
+
                                                 </button>
+
                                                 <ul class="dropdown-menu" aria-labelledby="seasonDropdown">
                                                     <?php foreach ( $cropping_seasons as $s ) : ?>
                                                         <?php
                                                         $isActive = session( 'selected_cropping_season_name' ) === $s[ 'season' ] . ' ' . $s[ 'year' ];
+                                                        $label    = esc( $s[ 'season' ] ) . ' ' . esc( $s[ 'year' ] );
+
+                                                        // Add label based on status
+                                                        if ( $s[ 'status' ] === 'Current' ) {
+                                                            $label .= ' (Current Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ended' ) {
+                                                            $label .= ' (Previous Season)';
+                                                        } elseif ( $s[ 'status' ] === 'Ongoing' ) {
+                                                            $label .= ' (Ongoing)';
+                                                        }
+
+                                                        // Disable link if Ongoing
+                                                        $disabled = $s[ 'status' ] === 'Ongoing';
                                                         ?>
                                                         <li>
                                                             <a href="#"
-                                                                class="dropdown-item select-season <?= $isActive ? 'active' : '' ?>"
-                                                                data-value="<?= $s[ 'cropping_season_tbl_id' ] . '|' . esc( $s[ 'season' ] ) . '|' . esc( $s[ 'year' ] ) ?>">
-                                                                <?= esc( $s[ 'season' ] ) . ' ' . esc( $s[ 'year' ] ) ?>
+                                                                class="dropdown-item select-season <?= $isActive ? 'active' : '' ?> <?= $disabled ? 'disabled text-muted' : '' ?>"
+                                                                data-value="<?= $s[ 'cropping_season_tbl_id' ] . '|' . esc( $s[ 'season' ] ) . '|' . esc( $s[ 'year' ] ) ?>"
+                                                                <?= $disabled ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
+                                                                <?= $label ?>
                                                             </a>
                                                         </li>
                                                     <?php endforeach; ?>
+
                                                 </ul>
                                             </div>
 
@@ -393,154 +439,168 @@
                                                 <i class="bi bi-file-earmark-pdf"></i> PDF
                                             </a>
                                         </div>
-
                                     </div>
 
                                     <div class="col-lg-12">
-                                        <div class="card mt-0 shadow border border-secondary">
+                                        <?php if ( !empty( $inventory ) ) : ?>
 
-                                            <div class="card-header">
-                                                <ul class="nav nav-tabs card-header-tabs" id="beneficiariesReportsTabs"
-                                                    role="tablist">
-                                                    <?php $isFirst = true; ?>
-                                                    <?php foreach ( $inventory as $item ) : ?>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link <?= $isFirst ? 'active' : '' ?>"
-                                                                id="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                                data-bs-toggle="tab"
-                                                                data-bs-target="#tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                                data-seed-name="<?= esc( $item[ 'seed_name' ] ) ?>" role="tab"
-                                                                aria-controls="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                                aria-selected="<?= $isFirst ? 'true' : 'false' ?>">
-                                                                <?= esc( $item[ 'seed_name' ] ) ?>
-                                                            </a>
+                                            <div class="card mt-0 shadow border border-secondary">
 
-                                                        </li>
-                                                        <?php $isFirst = false; ?>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            </div>
+                                                <div class="card-header">
+                                                    <ul class="nav nav-tabs card-header-tabs" id="beneficiariesReportsTabs"
+                                                        role="tablist">
+                                                        <?php $isFirst = true; ?>
+                                                        <?php foreach ( $inventory as $item ) : ?>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link <?= $isFirst ? 'active' : '' ?>"
+                                                                    id="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                    data-bs-toggle="tab"
+                                                                    data-bs-target="#tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                    data-seed-name="<?= esc( $item[ 'seed_name' ] ) ?>" role="tab"
+                                                                    aria-controls="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                    aria-selected="<?= $isFirst ? 'true' : 'false' ?>">
+                                                                    <?= esc( $item[ 'seed_name' ] ) ?>
+                                                                </a>
 
-                                            <div class="card-body">
-                                                <div class="tab-content">
-                                                    <?php $isFirst = true; ?>
-                                                    <?php foreach ( $inventory as $item ) : ?>
-                                                        <div class=" tab-pane fade <?= $isFirst ? 'show active' : '' ?>"
-                                                            id="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
-                                                            role="tabpanel"
-                                                            aria-labelledby="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>">
-                                                            <div class="table-responsive">
-                                                                <table class="set-Table table table-bordered table-hover">
-                                                                    <thead class="table-secondary">
-                                                                        <tr>
-                                                                            <th rowspan="2">No.</th>
-                                                                            <th rowspan="2">RSBSA Reference No.</th>
-                                                                            <th colspan="4" class="text-center">Name of Farmer
-                                                                            </th>
+                                                            </li>
+                                                            <?php $isFirst = false; ?>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                </div>
 
-                                                                            <th rowspan="2">Barangay</th>
-                                                                            <th rowspan="2">Municipality</th>
-                                                                            <th rowspan="2">Province</th>
-                                                                            <th rowspan="2">Birthdate<br>(mm/dd/yyyy)</th>
-                                                                            <th rowspan="2">Gender<br>Male/Female</th>
-                                                                            <th rowspan="2">Contact No.<br>(Mobile No.)</th>
-                                                                            <th rowspan="2">Farm Area<br>(Hectares)</th>
-                                                                            <th class="text-center" colspan="2">Voucher</th>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th>Last Name</th>
-                                                                            <th>First Name</th>
-                                                                            <th>Middle Name</th>
-                                                                            <th>Suffix & Ext.</th>
-                                                                            <th>Reference No</th>
-                                                                            <th>Date Received</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php $i = 1; ?>
-                                                                        <?php foreach ( $beneficiaries as $beneficiary ) : ?>
-                                                                            <?php if ( $beneficiary[ 'inventory_tbl_id' ] != $item[ 'inventory_tbl_id' ] )
-                                                                                continue; ?>
+                                                <div class="card-body">
+                                                    <div class="tab-content">
+                                                        <?php $isFirst = true; ?>
+                                                        <?php foreach ( $inventory as $item ) : ?>
+                                                            <div class=" tab-pane fade <?= $isFirst ? 'show active' : '' ?>"
+                                                                id="tab-content-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>"
+                                                                role="tabpanel"
+                                                                aria-labelledby="tab-<?= esc( $item[ 'inventory_tbl_id' ] ) ?>">
+                                                                <div class="table-responsive">
+                                                                    <table class="set-Table table table-bordered table-hover">
+                                                                        <thead class="table-secondary">
+                                                                            <tr>
+                                                                                <th rowspan="2">No.</th>
+                                                                                <th rowspan="2">RSBSA Reference No.</th>
+                                                                                <th colspan="4" class="text-center">Name of Farmer
+                                                                                </th>
 
-                                                                            <tr class="text-center">
-                                                                                <td class="align-middle"><?= $i++ ?></td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'rsbsa_ref_no' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'last_name' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'first_name' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'middle_name' ] ?? '—' ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'suffix_and_ext' ] ?? '—' ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'brgy' ] ?? '—' ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'mun' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'prov' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?php
-                                                                                    $rawBDate = $beneficiary[ 'b_date' ];
-                                                                                    $dateObj  = DateTime::createFromFormat( 'Y-m-d', $rawBDate );
-                                                                                    ?>
-
-                                                                                    <?php if ( $dateObj ) : ?>
-                                                                                        <?= $dateObj->format( 'F j, Y' ) ?>
-                                                                                    <?php else : ?>
-                                                                                        <span class="text-muted">—</span>
-                                                                                    <?php endif; ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'gender' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'contact_no' ] ?? '—' ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'farm_area' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?= esc( $beneficiary[ 'ref_no' ] ) ?>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <?php
-                                                                                    $rawDate = $beneficiary[ 'date_time_received' ];
-
-                                                                                    // Create DateTime from the exact format used in DB
-                                                                                    $dateObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawDate );
-
-                                                                                    if ( $dateObj ) : ?>
-                                                                                        <?= $dateObj->format( 'F j, Y' ) ?><br>
-                                                                                        <small><?= $dateObj->format( 'h:i:s A' ) ?></small>
-                                                                                    <?php else : ?>
-                                                                                        <span class="text-muted">—</span>
-                                                                                    <?php endif; ?>
-                                                                                </td>
+                                                                                <th rowspan="2">Barangay</th>
+                                                                                <th rowspan="2">Municipality</th>
+                                                                                <th rowspan="2">Province</th>
+                                                                                <th rowspan="2">Birthdate<br>(mm/dd/yyyy)</th>
+                                                                                <th rowspan="2">Gender<br>Male/Female</th>
+                                                                                <th rowspan="2">Contact No.<br>(Mobile No.)</th>
+                                                                                <th rowspan="2">Farm Area<br>(Hectares)</th>
+                                                                                <th class="text-center" colspan="2">Voucher</th>
                                                                             </tr>
-                                                                        <?php endforeach; ?>
-                                                                    </tbody>
-                                                                </table>
+                                                                            <tr>
+                                                                                <th>Last Name</th>
+                                                                                <th>First Name</th>
+                                                                                <th>Middle Name</th>
+                                                                                <th>Suffix & Ext.</th>
+                                                                                <th>Reference No</th>
+                                                                                <th>Date Received</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <?php $i = 1; ?>
+                                                                            <?php if ( !empty( $beneficiaries ) ) : ?>
+                                                                                <?php foreach ( $beneficiaries as $beneficiary ) : ?>
+
+
+                                                                                    <tr class="text-center">
+                                                                                        <td class="align-middle"><?= $i++ ?></td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'rsbsa_ref_no' ] ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'last_name' ] ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'first_name' ] ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'middle_name' ] ?? '—' ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'suffix_and_ext' ] ?? '—' ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'brgy' ] ?? '—' ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'mun' ] ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'prov' ] ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?php
+                                                                                            $rawBDate = $beneficiary[ 'b_date' ];
+                                                                                            $dateObj  = DateTime::createFromFormat( 'Y-m-d', $rawBDate );
+                                                                                            ?>
+
+                                                                                            <?php if ( $dateObj ) : ?>
+                                                                                                <?= $dateObj->format( 'F j, Y' ) ?>
+                                                                                            <?php else : ?>
+                                                                                                <span class="text-muted">—</span>
+                                                                                            <?php endif; ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'gender' ] ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'contact_no' ] ?? '—' ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'farm_area' ] ) ?>
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?= esc( $beneficiary[ 'qr_code' ] ) ?>
+                                                                                                            </td>
+                                                                                                            <td class="align-middle">
+                                                                                                                <?php
+                                                                                                                $rawDate = $beneficiary[ 'date_time_received' ];
+
+                                                                                                                // Create DateTime from the exact format used in DB
+                                                                                                                $dateObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawDate );
+
+                                                                                                                if ( $dateObj ) : ?>
+                                                                                                                        <?= $dateObj->format( 'F j, Y' ) ?><br>
+                                                                                                                        <small><?= $dateObj->format( 'h:i:s A' ) ?></small>
+                                                                                                                <?php else : ?>
+                                                                                                                        <span class="text-muted">—</span>
+                                                                                                                <?php endif; ?>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                <?php endforeach; ?>
+                                                                                        <?php else : ?>
+
+                                                                                                <tr>
+                                                                                                    <td colspan="15" class="text-center text-muted">
+                                                                                                        No records available.
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                        <?php endif; ?>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                        <?php $isFirst = false; ?>
+                                                                <?php endforeach; ?>
                                                             </div>
                                                         </div>
-                                                        <?php $isFirst = false; ?>
-                                                    <?php endforeach; ?>
-                                                </div>
-                                            </div>
+                                                    </div>
+                                            <?php else : ?>
+                                                    <div class="card text-white text-center p-3 shadow border border-secondary">
+                                                        <span class="mb-0 text-secondary">No records available.</span>
+                                                    </div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     <?php endif; ?>
                 </div>
 

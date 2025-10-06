@@ -9,7 +9,8 @@ class InventoryModel extends Model
     protected $table = 'inventory';
     protected $primaryKey = 'inventory_tbl_id';
 
-    protected $allowedFields = [ 
+    protected $allowedFields = [
+        'inventory_tbl_id',
         'seed_name',
         'seed_class',
         'stock',

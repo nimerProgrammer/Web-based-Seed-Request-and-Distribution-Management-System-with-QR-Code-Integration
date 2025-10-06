@@ -9,9 +9,8 @@ use App\Models\SeedRequestsModel;
  *
  * @param string $field
  * @param string $value
- * @return bool
  */
-function isDuplicate( string $table, string $field, string $value ) : bool
+function isDuplicate( string $table, string $field, string $value )
 {
     if ( $table === 'client_info' ) {
         $model = new ClientInfoModel();
@@ -31,9 +30,8 @@ function isDuplicate( string $table, string $field, string $value ) : bool
  * @param string $field
  * @param string $value
  * @param string|null $original
- * @return bool
  */
-function isDuplicates( string $table, string $field, string $value, ?string $original = null ) : bool
+function isDuplicates( string $table, string $field, string $value, ?string $original = null )
 {
     if ( $table === 'users' ) {
         $model   = new UsersModel();

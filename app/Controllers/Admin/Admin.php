@@ -64,7 +64,7 @@ class Admin extends BaseController
 
         if ( !$user ) {
 
-            $logData = [ 
+            $logData = [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Login',
                 'details'      => 'Login attempt failed — email not found: ' . $email,
@@ -73,7 +73,7 @@ class Admin extends BaseController
 
             $logsModel->insert( $logData );
 
-            return $this->response->setJSON( [ 
+            return $this->response->setJSON( [
                 'success' => false,
                 'error'   => 'Email not found'
             ] );
@@ -81,7 +81,7 @@ class Admin extends BaseController
 
         if ( !password_verify( $password, $user[ 'password' ] ) ) {
 
-            $logData = [ 
+            $logData = [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Login',
                 'details'      => 'Login attempt failed due to incorrect password for email: ' . $email,
@@ -90,7 +90,7 @@ class Admin extends BaseController
 
             $logsModel->insert( $logData );
 
-            return $this->response->setJSON( [ 
+            return $this->response->setJSON( [
                 'success' => false,
                 'error'   => 'Wrong password'
             ] );
@@ -101,14 +101,14 @@ class Admin extends BaseController
         $staff      = $staffModel->where( 'users_tbl_id', $user[ 'users_tbl_id' ] )->first();
 
         if ( !$staff ) {
-            return $this->response->setJSON( [ 
+            return $this->response->setJSON( [
                 'success' => false,
                 'error'   => 'Staff info not found'
             ] );
         }
 
         // ✅ Set session with user + staff data
-        session()->set( [ 
+        session()->set( [
             'user_id'             => $user[ 'users_tbl_id' ],
             'user_email'          => $user[ 'email' ],
             'emp_id'              => $staff[ 'emp_id' ],
@@ -125,7 +125,7 @@ class Admin extends BaseController
             ) ) )
         ] );
 
-        $logData = [ 
+        $logData = [
             'timestamp'    => $formattedDate,
             'action'       => 'Login',
             'details'      => 'User ' . esc( session( 'user_fullname' ) ) . ' logged in successfully.',
@@ -140,13 +140,13 @@ class Admin extends BaseController
             ->first(); // Use `first()` since you expect only one
 
         if ( $currentSeason ) {
-            session()->set( [ 
+            session()->set( [
                 'current_season_id'   => $currentSeason[ 'cropping_season_tbl_id' ],
                 'current_season_name' => $currentSeason[ 'season' ] . ' ' . $currentSeason[ 'year' ]
             ] );
         }
 
-        return $this->response->setJSON( [ 
+        return $this->response->setJSON( [
             'success'      => true,
             'redirect_url' => base_url( 'admin/dashboard' )
         ] );
@@ -259,7 +259,7 @@ class Admin extends BaseController
                 ->where( 'post_description_tbl_id', $post[ 'post_description_tbl_id' ] )
                 ->findAll();
 
-            $posts[] = [ 
+            $posts[] = [
                 'post_description_tbl_id' => $post[ 'post_description_tbl_id' ],
                 'description'             => $post[ 'description' ],
                 'created_at'              => $post[ 'created_at' ],
@@ -294,15 +294,18 @@ class Admin extends BaseController
         $inventoryModel       = new InventoryModel();
         $cropping_seasonModel = new CroppingSeasonModel();
 
-        $dataInventory[ 'inventory' ] = $inventoryModel
-            ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
-            ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
-            ->orderBy( 'inventory.seed_name', 'ASC' )
-            ->findAll();
-
         $dataCroppingSeason[ 'cropping_season' ] = $cropping_seasonModel
             ->where( 'status', 'Current' )
             ->first();
+
+        $dataInventory[ 'inventory' ] = $inventoryModel
+            ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
+            ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->where( 'cropping_season.status', 'Current' )
+            ->orderBy( 'inventory.seed_name', 'ASC' )
+            ->findAll();
+
+
 
         $header = view( 'admin/templates/header' );
         $body   = view( 'admin/inventory', $dataInventory );
@@ -345,7 +348,7 @@ class Admin extends BaseController
             ->findAll();
 
         $dataRequests[ 'seed_requests' ] = $seedRequestsModel
-            ->select( [ 
+            ->select( [
                 'seed_requests.*',
                 'client_info.last_name',
                 'client_info.first_name',
@@ -427,7 +430,7 @@ class Admin extends BaseController
         $usersModel         = new UsersModel();
 
         $dataBeneficiaries[ 'beneficiaries' ] = $beneficiariesModel
-            ->select( [ 
+            ->select( [
                 'beneficiaries.*',
                 'client_info.rsbsa_ref_no',
                 'client_info.last_name',
@@ -500,7 +503,7 @@ class Admin extends BaseController
         if ( !session()->has( 'selected_cropping_season_id' ) ) {
             // Check if fallback cropping_season_id is available
             if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
-                session()->set( [ 
+                session()->set( [
                     'selected_cropping_season_id'   => session()->get( 'current_season_id' ),
                     'selected_cropping_season_name' => session()->get( 'current_season_name' )
                 ] );
@@ -528,7 +531,7 @@ class Admin extends BaseController
         if ( session()->get( 'selected_list' ) === 'seedrequests' ) {
 
             $dataRequests[ 'seed_requests' ] = $seedRequestsModel
-                ->select( [ 
+                ->select( [
                     'seed_requests.*',
                     'client_info.last_name',
                     'client_info.first_name',
@@ -556,26 +559,12 @@ class Admin extends BaseController
 
         if ( session()->get( 'selected_list' ) === 'beneficiaries' ) {
             $dataBeneficiaries[ 'beneficiaries' ] = $beneficiariesModel
-                ->select( [ 
+                ->select( [
                     'beneficiaries.*',
-                    'client_info.rsbsa_ref_no',
-                    'client_info.last_name',
-                    'client_info.first_name',
-                    'client_info.middle_name',
-                    'client_info.suffix_and_ext',
-                    'client_info.brgy',
-                    'client_info.mun',
-                    'client_info.prov',
-                    'client_info.b_date',
-                    'client_info.gender',
-                    'client_info.farm_area',
-                    'client_info.name_land_owner',
+                    'client_info.*',
                     'users.contact_no',
-                    'inventory.inventory_tbl_id',
-                    'inventory.seed_name',
-                    'inventory.seed_class',
-                    'cropping_season.season',
-                    'cropping_season.year'
+                    'inventory.*',
+                    'cropping_season.*'
                 ] )
                 ->join( 'seed_requests', 'seed_requests.seed_requests_tbl_id = beneficiaries.seed_requests_tbl_id' )
                 ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )

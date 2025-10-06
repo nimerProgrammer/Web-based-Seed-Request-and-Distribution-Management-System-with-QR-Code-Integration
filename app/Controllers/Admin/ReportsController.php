@@ -61,7 +61,7 @@ class ReportsController extends BaseController
         if ( $raw && strpos( $raw, '|' ) !== false ) {
             list( $id, $season, $year ) = explode( '|', $raw, 3 );
 
-            session()->set( [ 
+            session()->set( [
                 'selected_cropping_season_id'   => $id,
                 'selected_cropping_season_name' => $season . ' ' . $year
             ] );
@@ -85,7 +85,7 @@ class ReportsController extends BaseController
         $seedRequestsModel = new SeedRequestsModel();
 
         $requests = $seedRequestsModel
-            ->select( [ 
+            ->select( [
                 'client_info.last_name',
                 'client_info.first_name',
                 'client_info.middle_name',
@@ -99,7 +99,7 @@ class ReportsController extends BaseController
             ->findAll();
 
         if ( empty( $requests ) ) {
-            session()->setFlashdata( 'swal', [ 
+            session()->setFlashdata( 'swal', [
                 'title'             => 'No Data',
                 'text'              => 'No available data. Please try again later.',
                 'icon'              => 'info',
@@ -118,14 +118,14 @@ class ReportsController extends BaseController
         $sheet->getPageSetup()->setPaperSize( PageSetup::PAPERSIZE_A4 );
 
         // Header
-        $sheet->fromArray( [ 
+        $sheet->fromArray( [
             [ 'No.', 'Last Name', 'First Name', 'Middle Name', 'Suffix & Ext.', 'RSBSA Reference No.', 'Name of Land Owner', 'Farm Area (Ha)' ]
         ], null, 'A1' );
 
         $row = 2;
         $i   = 1;
         foreach ( $requests as $req ) {
-            $sheet->fromArray( [ 
+            $sheet->fromArray( [
                 $i++,
                 $req[ 'last_name' ],
                 $req[ 'first_name' ],
@@ -215,12 +215,11 @@ class ReportsController extends BaseController
         } else {
             $seedType = $seedName; // use as is
         }
-        var_dump( $seedType );
-        exit;
+
         if ( !session()->has( 'selected_cropping_season_id' ) ) {
             // Check if fallback cropping_season_id is available
             if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
-                session()->set( [ 
+                session()->set( [
                     'selected_cropping_season_id'   => session()->get( 'current_season_id' ),
                     'selected_cropping_season_name' => session()->get( 'current_season_name' )
                 ] );
@@ -232,7 +231,7 @@ class ReportsController extends BaseController
         $seedRequestsModel = new SeedRequestsModel();
 
         $requests = $seedRequestsModel
-            ->select( [ 
+            ->select( [
                 'client_info.last_name',
                 'client_info.first_name',
                 'client_info.middle_name',
@@ -255,7 +254,7 @@ class ReportsController extends BaseController
 
 
         if ( empty( $requests ) ) {
-            session()->setFlashdata( 'swal', [ 
+            session()->setFlashdata( 'swal', [
                 'title'             => 'No Data',
                 'text'              => 'No available data. Please try again later.',
                 'icon'              => 'info',
@@ -435,7 +434,7 @@ class ReportsController extends BaseController
         if ( !session()->has( 'selected_cropping_season_id' ) ) {
             // Check if fallback cropping_season_id is available
             if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
-                session()->set( [ 
+                session()->set( [
                     'selected_cropping_season_id'   => session()->get( 'current_season_id' ),
                     'selected_cropping_season_name' => session()->get( 'current_season_name' )
                 ] );
@@ -446,20 +445,9 @@ class ReportsController extends BaseController
 
         $benefeciariesModel = new BeneficiariesModel();
         $requests           = $benefeciariesModel
-            ->select( [ 
+            ->select( [
                 'beneficiaries.*',
-                'client_info.rsbsa_ref_no',
-                'client_info.last_name',
-                'client_info.first_name',
-                'client_info.middle_name',
-                'client_info.suffix_and_ext',
-                'client_info.brgy',
-                'client_info.mun',
-                'client_info.prov',
-                'client_info.b_date',
-                'client_info.gender',
-                'client_info.farm_area',
-                'client_info.name_land_owner',
+                'client_info.*',
                 'users.contact_no',
                 'inventory.inventory_tbl_id',
                 'inventory.seed_name',
@@ -480,7 +468,7 @@ class ReportsController extends BaseController
 
 
         if ( empty( $requests ) ) {
-            session()->setFlashdata( 'swal', [ 
+            session()->setFlashdata( 'swal', [
                 'title'             => 'No Data',
                 'text'              => 'No available data. Please try again later.',
                 'icon'              => 'info',
@@ -594,7 +582,7 @@ class ReportsController extends BaseController
                 <td>' . esc( $entry[ 'gender' ] ) . '</td>
                 <td>' . esc( $entry[ 'contact_no' ] ?? '—' ) . '</td>
                 <td>' . esc( $entry[ 'farm_area' ] ) . '</td>
-                <td>' . esc( $entry[ 'ref_no' ] ) . '</td>
+                <td>' . esc( $entry[ 'qr_code' ] ) . '</td>
                 <td>' . (
                     !empty( $entry[ 'date_time_received' ] ) && DateTime::createFromFormat( 'm-d-Y h:i A', $entry[ 'date_time_received' ] )
                     ? DateTime::createFromFormat( 'm-d-Y h:i A', $entry[ 'date_time_received' ] )->format( 'F j, Y' ) . '<br><small>' .

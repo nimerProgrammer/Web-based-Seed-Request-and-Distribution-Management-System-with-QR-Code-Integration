@@ -24,6 +24,80 @@
         © 2025 Seed Request and Distribution System with QR Code Integration | All rights reserved.
     </div>
 </footer>
+<!-- Right Sidebar (Control Sidebar) -->
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Content inside -->
+    <div class="p-3 control-sidebar-content">
+        <h5>Notifications</h5>
+        <hr class="mb-2">
+        <ul class="list-unstyled">
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+            <li>
+                <i class="bi bi-bell text-warning"></i> New seed request submitted
+                <br><small class="text-muted">2 mins ago</small>
+            </li>
+            <li class="mt-2">
+                <i class="bi bi-check-circle text-success"></i> Request #102 approved
+                <br><small class="text-muted">10 mins ago</small>
+            </li>
+        </ul>
+    </div>
+</aside>
 
 </div>
 

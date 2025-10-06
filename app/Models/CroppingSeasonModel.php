@@ -9,7 +9,8 @@ class CroppingSeasonModel extends Model
     protected $table = 'cropping_season';
     protected $primaryKey = 'cropping_season_tbl_id';
 
-    protected $allowedFields = [ 
+    protected $allowedFields = [
+        'cropping_season_tbl_id',
         'season',
         'year',
         'date_start',
