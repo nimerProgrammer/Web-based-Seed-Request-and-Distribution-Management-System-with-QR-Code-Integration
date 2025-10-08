@@ -12,7 +12,9 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-end">
-                        <li class="breadcrumb-item active">1st CROPPING 2025</li>
+                        <li class="breadcrumb-item active">
+                            <?= esc( session( 'ccs_name' ) ?? 'No Cropping Season' ) ?>
+                        </li>
                     </ol>
                 </div>
             </div>
@@ -225,7 +227,7 @@
 
                                                                                 $qrCode = "{$season}-{$year}-{$seedName}-{$seedClass}-{$rsbsa}";
 
-                                                                                $formData = [ 
+                                                                                $formData = [
                                                                                     'rsbsa'          => $rsbsa,
                                                                                     'season'         => $season,
                                                                                     'year'           => $year,

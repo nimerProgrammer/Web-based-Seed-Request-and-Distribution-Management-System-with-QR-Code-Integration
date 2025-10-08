@@ -511,4 +511,18 @@ $(document).ready(function () {
       }
     });
   });
+
+  $(".btn-excel").on("click", function () {
+    Swal.fire({
+      title: "Coming Soon!",
+      text: "We are working on this feature.",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "btn btn-sm btn-primary mr-1",
+      },
+      buttonsStyling: false,
+    });
+  });
 });

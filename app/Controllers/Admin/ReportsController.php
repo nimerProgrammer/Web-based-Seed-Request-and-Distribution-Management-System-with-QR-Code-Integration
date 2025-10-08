@@ -225,10 +225,10 @@ class ReportsController extends BaseController
                 ] );
             }
         }
-        $selectedSeasonId   = session()->get( 'selected_cropping_season_id' );
-        $selectedSeasonName = session()->get( 'selected_cropping_season_name' );
-
-        $seedRequestsModel = new SeedRequestsModel();
+        $selectedSeasonId     = session()->get( 'selected_cropping_season_id' );
+        $selectedSeasonName   = session()->get( 'selected_cropping_season_name' );
+        $selectedBarangayName = session()->get( 'selected_report_barangay_name' );
+        $seedRequestsModel    = new SeedRequestsModel();
 
         $requests = $seedRequestsModel
             ->select( [
@@ -246,8 +246,9 @@ class ReportsController extends BaseController
             ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
-            ->where( 'seed_requests.inventory_tbl_id', $inventoryId )
+            ->where( 'inventory.inventory_tbl_id', $inventoryId )
             ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
+            ->where( 'client_info.brgy', $selectedBarangayName )
             ->orderBy( 'client_info.brgy', 'ASC' )
             ->orderBy( 'client_info.last_name', 'ASC' )
             ->findAll();
@@ -369,9 +370,14 @@ class ReportsController extends BaseController
         $dompdf->setPaper( 'A4', 'landscape' );
         $dompdf->render();
 
-        return $this->response
-            ->setContentType( 'application/pdf' )
-            ->setBody( $dompdf->output() );
+        // return $this->response
+        //     ->setContentType( 'application/pdf' )
+        //     ->setBody( $dompdf->output() );
+
+        $filename = 'Seed_Request_Report_for_' . $seedType . '-' . $selectedBarangayName . '-' . $selectedSeasonName . '.pdf';
+
+        $dompdf->stream( $filename, [ 'Attachment' => true ] );
+        exit;
     }
     /**
      * Beneficiaries Export to PDF file.
@@ -416,8 +422,8 @@ class ReportsController extends BaseController
             ;
         }
 
-        $inventoryId = $this->request->getPost( 'Beneficiaries_inventory_id' );
-        $seedName    = $this->request->getPost( 'Beneficiaries_seed_name' );
+        $inventoryId = $this->request->getPost( 'beneficiaries_inventory_id' );
+        $seedName    = $this->request->getPost( 'beneficiaries_seed_name' );
 
         if ( !$inventoryId ) {
             return $this->response->setBody( 'No inventory ID provided.' );
@@ -440,11 +446,11 @@ class ReportsController extends BaseController
                 ] );
             }
         }
-        $selectedSeasonId   = session()->get( 'selected_cropping_season_id' );
-        $selectedSeasonName = session()->get( 'selected_cropping_season_name' );
-
-        $benefeciariesModel = new BeneficiariesModel();
-        $requests           = $benefeciariesModel
+        $selectedSeasonId     = session()->get( 'selected_cropping_season_id' );
+        $selectedSeasonName   = session()->get( 'selected_cropping_season_name' );
+        $selectedBarangayName = session()->get( 'selected_report_barangay_name' );
+        $benefeciariesModel   = new BeneficiariesModel();
+        $requests             = $benefeciariesModel
             ->select( [
                 'beneficiaries.*',
                 'client_info.*',
@@ -460,8 +466,9 @@ class ReportsController extends BaseController
             ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id' )
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
-            ->where( 'seed_requests.inventory_tbl_id', $inventoryId )
+            ->where( 'inventory.inventory_tbl_id', $inventoryId )
             ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
+            ->where( 'client_info.brgy', $selectedBarangayName )
             ->orderBy( 'client_info.brgy', 'ASC' )
             ->orderBy( 'client_info.last_name', 'ASC' )
             ->findAll();
@@ -607,15 +614,15 @@ class ReportsController extends BaseController
         $dompdf->setPaper( [ 0, 0, 612, 936 ], 'landscape' );
         $dompdf->render();
 
-        return $this->response
-            ->setContentType( 'application/pdf' )
-            ->setBody( $dompdf->output() );
+        // return $this->response
+        //     ->setContentType( 'application/pdf' )
+        //     ->setBody( $dompdf->output() );
 
-        // $cleanSeasonName = str_replace( [ ' ', '/' ], '_', $selectedSeasonName ); // remove spaces or slashes
-        // $filename        = 'Beneficiaries_Report_' . $cleanSeasonName . '.pdf';
+        // $cleanSeasonName = str_replace( [ ' ', '/' ], '_', $selectedSeasonName . ' ' . $selectedBarangayName ); // remove spaces or slashes
+        $filename = 'Beneficiaries_Report_for_' . $seedType . '-' . $selectedBarangayName . '-' . $selectedSeasonName . '.pdf';
 
-        // $dompdf->stream( $filename, [ 'Attachment' => true ] );
-        // exit;
+        $dompdf->stream( $filename, [ 'Attachment' => true ] );
+        exit;
 
     }
 }

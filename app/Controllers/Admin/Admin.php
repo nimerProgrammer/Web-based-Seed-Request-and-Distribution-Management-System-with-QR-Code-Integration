@@ -342,8 +342,9 @@ class Admin extends BaseController
         $seedRequestsModel  = new SeedRequestsModel();
 
         $dataInventory[ 'inventory' ] = $inventoryModel
-            ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
+            ->select( 'inventory.*, cropping_season.*' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->where( 'cropping_season.status', 'Current' )
             ->orderBy( 'inventory.seed_name', 'ASC' )
             ->findAll();
 
@@ -464,8 +465,9 @@ class Admin extends BaseController
 
 
         $dataInventory[ 'inventory' ] = $inventoryModel
-            ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
+            ->select( 'inventory.*, cropping_season.*' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->where( 'cropping_season.status', 'Current' )
             ->orderBy( 'inventory.seed_name', 'ASC' )
             ->findAll();
 
@@ -520,8 +522,9 @@ class Admin extends BaseController
         $dataSeasons[ 'cropping_seasons' ] = $croppingSeasonModel->findAll();
 
         $dataInventory[ 'inventory' ] = $inventoryModel
-            ->select( 'inventory.*, cropping_season.season, cropping_season.year' )
+            ->select( 'inventory.*, cropping_season.*' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->where( 'cropping_season.cropping_season_tbl_id', session()->get( 'selected_cropping_season_id' ) )
             ->orderBy( 'inventory.seed_name', 'ASC' )
             ->findAll();
 

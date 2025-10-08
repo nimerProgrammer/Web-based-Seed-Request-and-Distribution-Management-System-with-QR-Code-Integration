@@ -132,7 +132,7 @@
 
 
 <script src="<?= base_url( 'templates/js/season-watcher.js?v=6.6.6' ) ?>"></script>
-<script src="<?= base_url( 'templates/js/adminscript.js?v=6.6.6' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/adminscript.js?v=7.1.1' ) ?>"></script>
 
 <?php if ( session()->get( 'title' ) === 'Profile' && session()->get( 'current_tab' ) === 'profile' ) : ?>
     <script src="<?= base_url( 'templates/js/adminProfileScript.js?v=6.6.6' ) ?>"></script>

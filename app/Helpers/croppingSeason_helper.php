@@ -38,9 +38,9 @@ if ( !function_exists( 'checkCroppingSeason' ) ) {
                 // $session    = Services::session();
                 $seasonName = $season[ 'season' ] . ' ' . $season[ 'year' ];
 
-                session()->set( [ 
-                    'selected_cropping_season_id'   => $seasonId,
-                    'selected_cropping_season_name' => $seasonName,
+                session()->set( [
+                    'ccs_id'   => $seasonId,
+                    'ccs_name' => $seasonName,
                 ] );
 
             }

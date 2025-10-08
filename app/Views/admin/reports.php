@@ -159,7 +159,8 @@
                                             </form>
 
                                             <!-- Excel Button -->
-                                            <a href="#" class="btn btn-sm btn-outline-success" id="exportExcelBtn">
+                                            <a href="#" class="btn btn-sm btn-outline-success btn-excel"
+                                                id="exportSeedRequestExcelBtn">
                                                 <i class="bi bi-file-earmark-excel"></i> Excel
                                             </a>
 
@@ -418,7 +419,8 @@
                                             </form>
 
                                             <!-- Excel Button -->
-                                            <a href="#" class="btn btn-sm btn-outline-success" id="exportExcelBtn">
+                                            <a href="#" class="btn btn-sm btn-outline-success btn-excel"
+                                                id="exportbeneficiariesExcelBtn">
                                                 <i class="bi bi-file-earmark-excel"></i> Excel
                                             </a>
 
@@ -427,9 +429,9 @@
                                                 action="<?= base_url( '/admin/reports/beneficiariesExportToPDF' ) ?>"
                                                 method="post" target="_blank" style="display: none;">
                                                 <?= csrf_field() ?>
-                                                <input type="hidden" name="Beneficiaries_inventory_id"
+                                                <input type="hidden" name="beneficiaries_inventory_id"
                                                     id="pdfBeneficiariesInventoryId">
-                                                <input type="hidden" name="Beneficiaries_seed_name"
+                                                <input type="hidden" name="beneficiaries_seed_name"
                                                     id="pdfBeneficiariesSeedName">
                                             </form>
 
@@ -508,6 +510,8 @@
                                                                             <?php if ( !empty( $beneficiaries ) ) : ?>
                                                                                 <?php foreach ( $beneficiaries as $beneficiary ) : ?>
 
+                                                                                    <?php if ( $beneficiary[ 'inventory_tbl_id' ] != $item[ 'inventory_tbl_id' ] )
+                                                                                        continue; ?>
 
                                                                                     <tr class="text-center">
                                                                                         <td class="align-middle"><?= $i++ ?></td>
@@ -558,49 +562,43 @@
                                                                                         </td>
                                                                                         <td class="align-middle">
                                                                                             <?= esc( $beneficiary[ 'qr_code' ] ) ?>
-                                                                                                            </td>
-                                                                                                            <td class="align-middle">
-                                                                                                                <?php
-                                                                                                                $rawDate = $beneficiary[ 'date_time_received' ];
+                                                                                        </td>
+                                                                                        <td class="align-middle">
+                                                                                            <?php
+                                                                                            $rawDate = $beneficiary[ 'date_time_received' ];
 
-                                                                                                                // Create DateTime from the exact format used in DB
-                                                                                                                $dateObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawDate );
+                                                                                            // Create DateTime from the exact format used in DB
+                                                                                            $dateObj = DateTime::createFromFormat( 'm-d-Y h:i:s A', $rawDate );
 
-                                                                                                                if ( $dateObj ) : ?>
-                                                                                                                        <?= $dateObj->format( 'F j, Y' ) ?><br>
-                                                                                                                        <small><?= $dateObj->format( 'h:i:s A' ) ?></small>
-                                                                                                                <?php else : ?>
-                                                                                                                        <span class="text-muted">—</span>
-                                                                                                                <?php endif; ?>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                <?php endforeach; ?>
-                                                                                        <?php else : ?>
+                                                                                            if ( $dateObj ) : ?>
+                                                                                                <?= $dateObj->format( 'F j, Y' ) ?><br>
+                                                                                                <small><?= $dateObj->format( 'h:i:s A' ) ?></small>
+                                                                                            <?php else : ?>
+                                                                                                <span class="text-muted">—</span>
+                                                                                            <?php endif; ?>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                <?php endforeach; ?>
 
-                                                                                                <tr>
-                                                                                                    <td colspan="15" class="text-center text-muted">
-                                                                                                        No records available.
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                        <?php endif; ?>
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </div>
-                                                                        </div>
-                                                                        <?php $isFirst = false; ?>
-                                                                <?php endforeach; ?>
+                                                                            <?php endif; ?>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                            <?php $isFirst = false; ?>
+                                                        <?php endforeach; ?>
                                                     </div>
-                                            <?php else : ?>
-                                                    <div class="card text-white text-center p-3 shadow border border-secondary">
-                                                        <span class="mb-0 text-secondary">No records available.</span>
-                                                    </div>
-                                            <?php endif; ?>
-                                        </div>
+                                                </div>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="card text-white text-center p-3 shadow border border-secondary">
+                                                <span class="mb-0 text-secondary">No records available.</span>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     <?php endif; ?>
                 </div>
 
