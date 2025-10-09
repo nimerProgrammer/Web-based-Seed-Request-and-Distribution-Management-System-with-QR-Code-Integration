@@ -24,21 +24,21 @@ $result = $stmt->get_result();
 
 // ✅ If found, split the code just for the response
 if ( $row = $result->fetch_assoc() ) {
-    $parts = explode( '-', $code );
+    $parts = explode( '_', $code );
 
     // Build code parts only if format is valid
-    if ( count( $parts ) >= 6 ) {
+    if ( count( $parts ) >= 3 ) {
         $part1 = $parts[ 0 ];                             // e.g., "1st CROPPING 2025"
         $part2 = $parts[ 1 ];                             // e.g., "RC18 (Rice)Improved"
         $part4 = $parts[ 2 ];                             // e.g., "34343"
-        $ref   = implode( '-', array_slice( $parts, 4 ) );  // e.g., "REF-08042025-XXXXXXX"
-
+        // $ref   = implode( '-', array_slice( $parts, 4 ) );  // e.g., "REF-08042025-XXXXXXX"
+        $ref   = $parts[ 3 ];
         $part3 = $row[ 'kg' ];                             // e.g., "kg"
 
-        echo json_encode( [ 
+        echo json_encode( [
             'id'         => $row[ 'beneficiaries_tbl_id' ],
             'status'     => $row[ 'status' ],
-            'code_parts' => [ 
+            'code_parts' => [
                 'part1' => $part1,
                 'part2' => $part2,
                 'part3' => $part3,
@@ -48,7 +48,7 @@ if ( $row = $result->fetch_assoc() ) {
         ] );
     } else {
         // Fallback: Return status only if code format is unexpected
-        echo json_encode( [ 
+        echo json_encode( [
             'status'     => $row[ 'status' ],
             'code_parts' => null,
             'note'       => 'Code format is invalid or incomplete.'

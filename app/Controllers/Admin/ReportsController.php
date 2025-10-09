@@ -70,17 +70,38 @@ class ReportsController extends BaseController
         return redirect()->back();
     }
     /**
-     * Reports Export to Excel file.
+     * Reports for Seed Request Export to Excel file.
      *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
-    public function exportToExcel()
+    public function seedRequestExportToExcel()
     {
         $inventoryId = $this->request->getPost( 'inventory_id' );
+        $seedName    = $this->request->getPost( 'seed_name' );
 
         if ( !$inventoryId ) {
             return $this->response->setBody( 'No inventory ID provided.' );
         }
+
+        // Extract type like "Rice" from "RC18(Rice)"
+        if ( preg_match( '/\((.*?)\)/', $seedName, $match ) ) {
+            $seedType = $match[ 1 ];
+        } else {
+            $seedType = $seedName;
+        }
+
+        if ( !session()->has( 'selected_cropping_season_id' ) ) {
+            if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
+                session()->set( [
+                    'selected_cropping_season_id'   => session()->get( 'current_season_id' ),
+                    'selected_cropping_season_name' => session()->get( 'current_season_name' )
+                ] );
+            }
+        }
+
+        $selectedSeasonId     = session()->get( 'selected_cropping_season_id' );
+        $selectedSeasonName   = session()->get( 'selected_cropping_season_name' );
+        $selectedBarangayName = session()->get( 'selected_report_barangay_name' );
 
         $seedRequestsModel = new SeedRequestsModel();
 
@@ -90,12 +111,17 @@ class ReportsController extends BaseController
                 'client_info.first_name',
                 'client_info.middle_name',
                 'client_info.suffix_and_ext',
+                'client_info.brgy',
                 'client_info.rsbsa_ref_no',
                 'client_info.name_land_owner',
-                'client_info.farm_area',
+                'client_info.farm_area'
             ] )
             ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
-            ->where( 'seed_requests.inventory_tbl_id', $inventoryId )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->where( 'inventory.inventory_tbl_id', $inventoryId )
+            ->where( 'inventory.cropping_season_tbl_id', $selectedSeasonId )
+            ->where( 'client_info.brgy', $selectedBarangayName )
+            ->orderBy( 'client_info.last_name', 'ASC' )
             ->findAll();
 
         if ( empty( $requests ) ) {
@@ -106,62 +132,276 @@ class ReportsController extends BaseController
                 'confirmButtonText' => 'OK'
             ] );
             return redirect()->back();
-
-
         }
 
-        $spreadsheet = new Spreadsheet();
+        // ✅ Create Excel Spreadsheet
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet       = $spreadsheet->getActiveSheet();
 
-        $sheet->setTitle( 'Seed Requests' );
-        $sheet->getPageSetup()->setOrientation( PageSetup::ORIENTATION_LANDSCAPE );
-        $sheet->getPageSetup()->setPaperSize( PageSetup::PAPERSIZE_A4 );
+        // Insert Logo
+        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $drawing->setPath( FCPATH . 'templates/img/icon.png' );
+        $drawing->setCoordinates( 'D1' );
+        $sheet->getRowDimension( 1 )->setRowHeight( 60 ); // match the image height
+        $drawing->setHeight( 60 );
+        $drawing->setOffsetX( 40 );        // left padding inside D1
+        $drawing->setOffsetY( 8 );        // vertical alignment
+        $drawing->setWorksheet( $sheet );
 
-        // Header
-        $sheet->fromArray( [
-            [ 'No.', 'Last Name', 'First Name', 'Middle Name', 'Suffix & Ext.', 'RSBSA Reference No.', 'Name of Land Owner', 'Farm Area (Ha)' ]
-        ], null, 'A1' );
 
-        $row = 2;
-        $i   = 1;
-        foreach ( $requests as $req ) {
-            $sheet->fromArray( [
-                $i++,
-                $req[ 'last_name' ],
-                $req[ 'first_name' ],
-                $req[ 'middle_name' ] ?? 'N/A',
-                $req[ 'suffix_and_ext' ] ?? 'N/A',
-                $req[ 'rsbsa_ref_no' ],
-                $req[ 'name_land_owner' ],
-                $req[ 'farm_area' ]
-            ], null, "A{$row}" );
-            $row++;
-        }
+        // Header Text - Centered A-J
+        // Merge the cells for the single-row header
+        $sheet->mergeCells( 'B1:H1' );
 
-        // Auto-size columns
-        foreach ( range( 'A', $sheet->getHighestColumn() ) as $col ) {
+        // Set the value with line breaks
+        $sheet->setCellValue( 'B1', "Republic of the Philippines\nProvince of Eastern Samar\nMunicipality of Oras" );
+
+        // Enable text wrap so the line breaks show
+        $sheet->getStyle( 'B1' )->getAlignment()
+            ->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER )
+            ->setVertical( \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER )
+            ->setWrapText( true );
+
+        // Make font bold and size 12
+        $sheet->getStyle( 'B1' )->getFont()->setBold( true )->setSize( 12 );
+
+        // Barangay
+        $sheet->mergeCells( 'A3:H3' )->setCellValue( 'A3', 'Barangay: ' . $selectedBarangayName );
+
+        // Merge cells for left part (Seed Request)
+        $sheet->mergeCells( 'A4:C4' )->setCellValue( 'A4', 'REQUEST FOR ' . strtoupper( $seedType ) . ' SEEDS' );
+
+        // Merge cells for right/center part (Cropping Season)
+        $sheet->mergeCells( 'D4:G4' )->setCellValue( 'D4', 'Cropping Season: ' . $selectedSeasonName );
+
+        // Styles
+        $sheet->getStyle( 'A3' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'A3' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+
+
+        $sheet->getStyle( 'A4' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'A4' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT );
+
+        $sheet->getStyle( 'D4' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'D4' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+
+
+
+        // Table Headers
+        $headers  = [ 'NO.', 'LAST NAME', 'FIRST NAME', 'MIDDLE NAME', 'EXT.', 'RSBSA REF NO.', 'NAME OF LAND OWNER', 'FARM AREA (Ha)' ];
+        $col      = 'A';
+        $startRow = 6;
+        foreach ( $headers as $header ) {
+            $sheet->setCellValue( $col . $startRow, $header );
+            $sheet->getStyle( $col . $startRow )->getFont()->setBold( true );
+            $sheet->getStyle( $col . $startRow )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
             $sheet->getColumnDimension( $col )->setAutoSize( true );
+            $col++;
         }
 
-        // Add borders to all data
-        $lastRow    = $sheet->getHighestRow();
-        $lastColumn = $sheet->getHighestColumn();
-        $range      = "A1:{$lastColumn}{$lastRow}";
-        $sheet->getStyle( $range )->getBorders()->getAllBorders()->setBorderStyle( Border::BORDER_THIN );
+        // Fill Data
+        $rowNum  = $startRow + 1;
+        $counter = 1;
+        foreach ( $requests as $entry ) {
+            $sheet->setCellValue( 'A' . $rowNum, $counter++ );
+            $sheet->setCellValue( 'B' . $rowNum, $entry[ 'last_name' ] );
+            $sheet->setCellValue( 'C' . $rowNum, $entry[ 'first_name' ] );
+            $sheet->setCellValue( 'D' . $rowNum, empty( $entry[ 'middle_name' ] ) ? 'N/A' : $entry[ 'middle_name' ] );
+            $sheet->setCellValue( 'E' . $rowNum, empty( $entry[ 'suffix_and_ext' ] ) ? 'N/A' : $entry[ 'suffix_and_ext' ] );
+            $sheet->setCellValue( 'F' . $rowNum, $entry[ 'rsbsa_ref_no' ] );
+            $sheet->setCellValue( 'G' . $rowNum, $entry[ 'name_land_owner' ] );
+            $sheet->setCellValue( 'H' . $rowNum, $entry[ 'farm_area' ] );
+            $rowNum++;
+        }
 
-        // Output to browser
-        $filename = 'seed_requests_export.xlsx';
+        // Apply Borders
+        $sheet->getStyle( 'A' . $startRow . ':H' . ( $rowNum - 1 ) )
+            ->getBorders()->getAllBorders()
+            ->setBorderStyle( \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN );
+
+        // Filename and Output
+        $filename = 'Seed_Request_Report_for_' . $seedType . '-' . $selectedBarangayName . '-' . $selectedSeasonName . '.xlsx';
         header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
-        header( "Content-Disposition: attachment; filename=\"{$filename}\"" );
-        header( 'Cache-Control: max-age=0' );
+        header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
 
-        $writer = new Xlsx( $spreadsheet );
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx( $spreadsheet );
         $writer->save( 'php://output' );
         exit;
     }
 
     /**
-     * Reports Export to PDF file.
+     * Reports for beneficiaries Export to Excel file.
+     *
+     * @return \CodeIgniter\HTTP\ResponseInterface
+     */
+    public function beneficiariesExportToExcel()
+    {
+        $inventoryId = $this->request->getPost( 'beneficiaries_inventory_id' );
+        $seedName    = $this->request->getPost( 'beneficiaries_seed_name' );
+
+        if ( !$inventoryId ) {
+            return $this->response->setBody( 'No inventory ID provided.' );
+        }
+
+        // Extract type like "Rice" from "RC18(Rice)"
+        if ( preg_match( '/\((.*?)\)/', $seedName, $match ) ) {
+            $seedType = $match[ 1 ];
+        } else {
+            $seedType = $seedName;
+        }
+
+        if ( !session()->has( 'selected_cropping_season_id' ) ) {
+            if ( session()->has( 'current_season_id' ) && session()->has( 'current_season_name' ) ) {
+                session()->set( [
+                    'selected_cropping_season_id'   => session()->get( 'current_season_id' ),
+                    'selected_cropping_season_name' => session()->get( 'current_season_name' )
+                ] );
+            }
+        }
+
+        $selectedSeasonId     = session()->get( 'selected_cropping_season_id' );
+        $selectedSeasonName   = session()->get( 'selected_cropping_season_name' );
+        $selectedBarangayName = session()->get( 'selected_report_barangay_name' );
+
+        $beneficiariesModel = new BeneficiariesModel();
+
+        $requests = $beneficiariesModel
+            ->select( [
+                'beneficiaries.*',
+                'client_info.*',
+                'users.contact_no',
+                'inventory.inventory_tbl_id',
+                'inventory.seed_name',
+                'inventory.seed_class',
+                'cropping_season.season',
+                'cropping_season.year'
+            ] )
+            ->join( 'seed_requests', 'seed_requests.seed_requests_tbl_id = beneficiaries.seed_requests_tbl_id' )
+            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id' )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id' )
+            ->where( 'inventory.inventory_tbl_id', $inventoryId )
+            ->where( 'cropping_season.cropping_season_tbl_id', $selectedSeasonId )
+            ->where( 'client_info.brgy', $selectedBarangayName )
+            ->orderBy( 'client_info.last_name', 'ASC' )
+            ->findAll();
+
+        if ( empty( $requests ) ) {
+            session()->setFlashdata( 'swal', [
+                'title'             => 'No Data',
+                'text'              => 'No available data. Please try again later.',
+                'icon'              => 'info',
+                'confirmButtonText' => 'OK'
+            ] );
+            return redirect()->back();
+        }
+
+        // ✅ Create Excel Spreadsheet
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet       = $spreadsheet->getActiveSheet();
+
+        // Insert Logo (sticky on left of header)
+        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $drawing->setPath( FCPATH . 'templates/img/icon.png' );
+        $drawing->setCoordinates( 'A1' );
+        $drawing->setHeight( 60 );
+        $drawing->setOffsetX( 5 ); // small padding
+        $drawing->setOffsetY( 5 );
+        $drawing->setWorksheet( $sheet );
+        $sheet->getRowDimension( 1 )->setRowHeight( 60 );
+
+        // Header Text - Centered
+        $sheet->mergeCells( 'B1:H1' );
+        $sheet->setCellValue( 'B1', "Republic of the Philippines\nProvince of Eastern Samar\nMunicipality of Oras" );
+        $sheet->getStyle( 'B1' )->getAlignment()
+            ->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER )
+            ->setVertical( \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER )
+            ->setWrapText( true );
+        $sheet->getStyle( 'B1' )->getFont()->setBold( true )->setSize( 12 );
+
+        // Barangay
+        $sheet->mergeCells( 'A2:H2' )->setCellValue( 'A2', 'Barangay: ' . $selectedBarangayName );
+        $sheet->getStyle( 'A2' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'A2' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+
+        // Request & Season (left + center)
+        $sheet->mergeCells( 'A3:C3' )->setCellValue( 'A3', 'REQUEST FOR ' . strtoupper( $seedType ) . ' SEEDS' );
+        $sheet->mergeCells( 'D3:H3' )->setCellValue( 'D3', 'Cropping Season: ' . $selectedSeasonName );
+
+        $sheet->getStyle( 'A3' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'A3' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT );
+
+        $sheet->getStyle( 'D3' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'D3' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+
+        // Table Headers
+        $headers  = [
+            'No.',
+            'RSBSA Ref No.',
+            'Last Name',
+            'First Name',
+            'Middle Name',
+            'Suffix & Ext.',
+            'Barangay',
+            'Municipality',
+            'Province',
+            'Birthdate',
+            'Gender',
+            'Contact No.',
+            'Farm Area (Ha)',
+            'Voucher Ref',
+            'Date Received'
+        ];
+        $col      = 'A';
+        $startRow = 5;
+        foreach ( $headers as $header ) {
+            $sheet->setCellValue( $col . $startRow, $header );
+            $sheet->getStyle( $col . $startRow )->getFont()->setBold( true );
+            $sheet->getStyle( $col . $startRow )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+            $sheet->getColumnDimension( $col )->setAutoSize( true );
+            $col++;
+        }
+
+        // Fill Data
+        $rowNum  = $startRow + 1;
+        $counter = 1;
+        foreach ( $requests as $entry ) {
+            $sheet->setCellValue( 'A' . $rowNum, $counter++ );
+            $sheet->setCellValue( 'B' . $rowNum, $entry[ 'rsbsa_ref_no' ] );
+            $sheet->setCellValue( 'C' . $rowNum, $entry[ 'last_name' ] );
+            $sheet->setCellValue( 'D' . $rowNum, $entry[ 'first_name' ] );
+            $sheet->setCellValue( 'E' . $rowNum, !empty( $entry[ 'middle_name' ] ) ? $entry[ 'middle_name' ] : '—' );
+            $sheet->setCellValue( 'F' . $rowNum, !empty( $entry[ 'suffix_and_ext' ] ) ? $entry[ 'suffix_and_ext' ] : '—' );
+            $sheet->setCellValue( 'G' . $rowNum, $entry[ 'brgy' ] ?? '—' );
+            $sheet->setCellValue( 'H' . $rowNum, $entry[ 'mun' ] ?? '—' );
+            $sheet->setCellValue( 'I' . $rowNum, $entry[ 'prov' ] ?? '—' );
+            $sheet->setCellValue( 'J' . $rowNum, !empty( $entry[ 'b_date' ] ) ? ( new DateTime( $entry[ 'b_date' ] ) )->format( 'F j, Y' ) : '—' );
+            $sheet->setCellValue( 'K' . $rowNum, $entry[ 'gender' ] ?? '—' );
+            $sheet->setCellValue( 'L' . $rowNum, $entry[ 'contact_no' ] ?? '—' );
+            $sheet->setCellValue( 'M' . $rowNum, $entry[ 'farm_area' ] ?? '—' );
+            $sheet->setCellValue( 'N' . $rowNum, $entry[ 'qr_code' ] ?? '—' );
+            $sheet->setCellValue( 'O' . $rowNum, !empty( $entry[ 'date_time_received' ] ) ? ( new DateTime( $entry[ 'date_time_received' ] ) )->format( 'F j, Y h:i A' ) : '—' );
+            $rowNum++;
+        }
+
+        // Apply Borders
+        $sheet->getStyle( 'A' . $startRow . ':O' . ( $rowNum - 1 ) )
+            ->getBorders()->getAllBorders()->setBorderStyle( \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN );
+
+        // Output
+        $filename = 'Beneficiaries_Report_for_' . $seedType . '-' . $selectedBarangayName . '-' . $selectedSeasonName . '.xlsx';
+        header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
+        header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx( $spreadsheet );
+        $writer->save( 'php://output' );
+        exit;
+    }
+
+
+    /**
+     * Reports for Seed Request Export to PDF file.
      *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */
@@ -370,9 +610,6 @@ class ReportsController extends BaseController
         $dompdf->setPaper( 'A4', 'landscape' );
         $dompdf->render();
 
-        // return $this->response
-        //     ->setContentType( 'application/pdf' )
-        //     ->setBody( $dompdf->output() );
 
         $filename = 'Seed_Request_Report_for_' . $seedType . '-' . $selectedBarangayName . '-' . $selectedSeasonName . '.pdf';
 
@@ -380,7 +617,7 @@ class ReportsController extends BaseController
         exit;
     }
     /**
-     * Beneficiaries Export to PDF file.
+     * Reports for Beneficiaries Export to PDF file.
      *
      * @return \CodeIgniter\HTTP\ResponseInterface
      */

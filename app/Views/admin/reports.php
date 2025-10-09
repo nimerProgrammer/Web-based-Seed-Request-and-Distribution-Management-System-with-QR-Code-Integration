@@ -150,17 +150,18 @@
                                                 </ul>
 
                                             </div>
-                                            <!-- Hidden Export Form -->
-                                            <form id="excelExportForm"
-                                                action="<?= base_url( '/admin/reports/exportToExcel' ) ?>" method="post"
-                                                target="_blank" style="display: none;">
+                                            <!-- Hidden Excel Export Form -->
+                                            <form id="seedRequestExcelExportForm"
+                                                action="<?= base_url( '/admin/reports/seedRequestExportToExcel' ) ?>"
+                                                method="post" target="_blank" style="display: none;">
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="inventory_id" id="excelInventoryId">
+                                                <input type="hidden" name="seed_name" id="excelSeedName">
                                             </form>
 
                                             <!-- Excel Button -->
                                             <a href="#" class="btn btn-sm btn-outline-success btn-excel"
-                                                id="exportSeedRequestExcelBtn">
+                                                id="seedRequestExportExcelBtn">
                                                 <i class="bi bi-file-earmark-excel"></i> Excel
                                             </a>
 
@@ -411,16 +412,19 @@
 
                                             </div>
                                             <!-- Hidden Export Form -->
-                                            <form id="excelExportForm"
-                                                action="<?= base_url( '/admin/reports/exportToExcel' ) ?>" method="post"
-                                                target="_blank" style="display: none;">
+                                            <form id="beneficiariesExcelExportForm"
+                                                action="<?= base_url( '/admin/reports/beneficiariesExportToExcel' ) ?>"
+                                                method="post" target="_blank" style="display: none;">
                                                 <?= csrf_field() ?>
-                                                <input type="hidden" name="inventory_id" id="excelInventoryId">
+                                                <input type="hidden" name="beneficiaries_inventory_id"
+                                                    id="excelBeneficiariesInventoryId">
+                                                <input type="hidden" name="beneficiaries_seed_name"
+                                                    id="excelBeneficiariesSeedName">
                                             </form>
 
                                             <!-- Excel Button -->
                                             <a href="#" class="btn btn-sm btn-outline-success btn-excel"
-                                                id="exportbeneficiariesExcelBtn">
+                                                id="beneficiariesExportExcelBtn">
                                                 <i class="bi bi-file-earmark-excel"></i> Excel
                                             </a>
 

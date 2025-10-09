@@ -400,7 +400,7 @@ $(document).ready(function () {
     showLoader();
   });
 
-  $("#exportExcelBtn").on("click", function (e) {
+  $("#seedRequestExportExcelBtn").on("click", function (e) {
     e.preventDefault();
 
     // Get the active tab
@@ -409,13 +409,43 @@ $(document).ready(function () {
     );
     if (!activeTab) return;
 
-    // Extract inventory ID from tab's data-bs-target
-    const targetId = activeTab.getAttribute("data-bs-target"); // e.g., "#tab-content-5"
+    // Extract inventory ID
+    const targetId = activeTab.getAttribute("data-bs-target");
     const inventoryId = targetId.replace("#tab-content-", "");
 
-    // Set hidden input value and submit the form
+    // Get the seed name directly from the active tab
+    const seedName = activeTab.getAttribute("data-seed-name");
+
+    // Fill hidden inputs
     $("#excelInventoryId").val(inventoryId);
-    $("#excelExportForm").submit();
+    $("#excelSeedName").val(seedName);
+
+    // Submit form
+    $("#seedRequestExcelExportForm").submit();
+  });
+
+  $("#beneficiariesExportExcelBtn").on("click", function (e) {
+    e.preventDefault();
+
+    // Get the active tab
+    const activeTab = document.querySelector(
+      "#beneficiariesReportsTabs .nav-link.active"
+    );
+    if (!activeTab) return;
+
+    // Extract inventory ID
+    const targetId = activeTab.getAttribute("data-bs-target");
+    const inventoryId = targetId.replace("#tab-content-", "");
+
+    // Get the seed name directly from the active tab
+    const seedName = activeTab.getAttribute("data-seed-name");
+
+    // Fill hidden inputs
+    $("#excelBeneficiariesInventoryId").val(inventoryId);
+    $("#excelBeneficiariesSeedName").val(seedName);
+
+    // Submit form
+    $("#beneficiariesExcelExportForm").submit();
   });
 
   $("#seedRequestExportPdfBtn").on("click", function (e) {
@@ -509,20 +539,6 @@ $(document).ready(function () {
         const logoutUrl = $(this).data("url");
         window.location.href = logoutUrl;
       }
-    });
-  });
-
-  $(".btn-excel").on("click", function () {
-    Swal.fire({
-      title: "Coming Soon!",
-      text: "We are working on this feature.",
-      icon: "warning",
-      showCancelButton: false,
-      confirmButtonText: "OK",
-      customClass: {
-        confirmButton: "btn btn-sm btn-primary mr-1",
-      },
-      buttonsStyling: false,
     });
   });
 });

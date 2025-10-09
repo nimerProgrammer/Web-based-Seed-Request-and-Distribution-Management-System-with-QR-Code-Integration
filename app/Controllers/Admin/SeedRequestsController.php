@@ -50,7 +50,7 @@ class SeedRequestsController extends BaseController
         $inventoryModel   = new InventoryModel();
         $logsModel        = new LogsModel();
 
-        $qrCode = "$season $year-$seedName$seedClass-$rsbsa";
+        $qrCode = "$season {$year}_{$seedName}-{$seedClass}_{$rsbsa}";
 
         $philTime      = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
         $formattedDate = getPhilippineTimeFormatted();
@@ -67,7 +67,7 @@ class SeedRequestsController extends BaseController
         // Build final reference code
         $refCode = 'REF-' . $dateCode . '-' . $randomCode;
 
-        $requestModel->update( $id, [ 
+        $requestModel->update( $id, [
             'status'             => 'Approved',
             'date_time_approved' => $formattedDate
         ] );
@@ -117,8 +117,8 @@ class SeedRequestsController extends BaseController
             ->update();
 
 
-        $beneficiaryModel->insert( [ 
-            'qr_code'              => $qrCode . '-' . $refCode,
+        $beneficiaryModel->insert( [
+            'qr_code'              => $qrCode . '_' . $refCode,
             'status'               => 'For Receiving',
             'seed_requests_tbl_id' => $id,
             'kg'                   => $kg
@@ -134,14 +134,14 @@ class SeedRequestsController extends BaseController
             ( $this->request->getPost( 'suffix_and_ext' ) ? ' ' . $this->request->getPost( 'suffix_and_ext' ) : '' )
         ) ) );
 
-        $logsModel->insert( [ 
+        $logsModel->insert( [
             'timestamp'    => $formattedDate,
             'action'       => 'Approved Seed Request',
             'details'      => "$staffFullName approved the seed request of \"$fullName\" (RSBSA: $rsbsa).",
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
-        session()->setFlashdata( 'swal', [ 
+        session()->setFlashdata( 'swal', [
             'title' => 'Success!',
             'text'  => 'Request approved.',
             'icon'  => 'success',
@@ -171,7 +171,7 @@ class SeedRequestsController extends BaseController
         $inventoryModel   = new InventoryModel();
         $logsModel        = new LogsModel();
 
-        $requestModel->update( $id, [ 
+        $requestModel->update( $id, [
             'status'             => 'Pending',
             'date_time_approved' => null
         ] );
@@ -207,14 +207,14 @@ class SeedRequestsController extends BaseController
             ( $this->request->getPost( 'suffix_and_ext' ) ? ' ' . $this->request->getPost( 'suffix_and_ext' ) : '' )
         ) ) );
 
-        $logsModel->insert( [ 
+        $logsModel->insert( [
             'timestamp'    => $formattedDate,
             'action'       => 'Undo Approval',
             'details'      => "$staffFullName reverted approval for \"$fullName\" (RSBSA: $rsbsa).",
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
-        session()->setFlashdata( 'swal', [ 
+        session()->setFlashdata( 'swal', [
             'title' => 'Success!',
             'text'  => 'Undo successful.',
             'icon'  => 'success',
@@ -235,7 +235,7 @@ class SeedRequestsController extends BaseController
         $logsModel     = new LogsModel();
         $requestModel  = new SeedRequestsModel();
 
-        $requestModel->update( $id, [ 
+        $requestModel->update( $id, [
             'status'             => 'Rejected',
             'date_time_rejected' => $formattedDate
         ] );
@@ -253,14 +253,14 @@ class SeedRequestsController extends BaseController
 
         $rsbsa = $this->request->getPost( 'rsbsa' );
 
-        $logsModel->insert( [ 
+        $logsModel->insert( [
             'timestamp'    => $formattedDate,
             'action'       => 'Rejected Seed Request',
             'details'      => "$staffFullName rejected the seed request of \"$fullName\" (RSBSA: $rsbsa).",
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
-        session()->setFlashdata( 'swal', [ 
+        session()->setFlashdata( 'swal', [
             'title' => 'Success!',
             'text'  => 'Rejected.',
             'icon'  => 'success',
@@ -281,7 +281,7 @@ class SeedRequestsController extends BaseController
         $model         = new SeedRequestsModel();
         $logsModel     = new LogsModel();
 
-        $model->update( $id, [ 
+        $model->update( $id, [
             'status'             => 'Pending',
             'date_time_rejected' => null,
         ] );
@@ -299,14 +299,14 @@ class SeedRequestsController extends BaseController
 
         $rsbsa = $this->request->getPost( 'rsbsa' );
 
-        $logsModel->insert( [ 
+        $logsModel->insert( [
             'timestamp'    => $formattedDate,
             'action'       => 'Undo Rejection',
             'details'      => "$staffFullName undid rejection of \"$fullName\" (RSBSA: $rsbsa).",
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
-        session()->setFlashdata( 'swal', [ 
+        session()->setFlashdata( 'swal', [
             'title' => 'Success!',
             'text'  => 'Undo successful.',
             'icon'  => 'success',

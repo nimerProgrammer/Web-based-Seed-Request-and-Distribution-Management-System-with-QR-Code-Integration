@@ -134,8 +134,9 @@ $routes->post( '/admin/reports/setSeasonView', 'Admin\ReportsController::setSeas
 
 
 
-$routes->post( '/admin/reports/exportToExcel', 'Admin\ReportsController::exportToExcel' );
+$routes->post( '/admin/reports/seedRequestExportToExcel', 'Admin\ReportsController::seedRequestExportToExcel' );
 $routes->post( '/admin/reports/seedRequestExportToPDF', 'Admin\ReportsController::seedRequestExportToPDF' );
+$routes->post( '/admin/reports/beneficiariesExportToExcel', 'Admin\ReportsController::beneficiariesExportToExcel' );
 $routes->post( '/admin/reports/beneficiariesExportToPDF', 'Admin\ReportsController::beneficiariesExportToPDF' );
 
 /*** LOGS CONTROLLER ACTIONS ***/
