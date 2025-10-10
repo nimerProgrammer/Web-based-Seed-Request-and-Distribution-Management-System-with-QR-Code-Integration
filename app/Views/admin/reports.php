@@ -509,7 +509,7 @@
                                                                                 <th>Date Received</th>
                                                                             </tr>
                                                                         </thead>
-                                                                        <tbody>
+                                                                        <tbody class="beneficiariesTbody">
                                                                             <?php $i = 1; ?>
                                                                             <?php if ( !empty( $beneficiaries ) ) : ?>
                                                                                 <?php foreach ( $beneficiaries as $beneficiary ) : ?>
@@ -565,7 +565,10 @@
                                                                                             <?= esc( $beneficiary[ 'farm_area' ] ) ?>
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <?= esc( $beneficiary[ 'qr_code' ] ) ?>
+                                                                                            <?php
+                                                                                            $parts = explode( '_', $beneficiary[ 'qr_code' ] );
+                                                                                            echo isset( $parts[ 3 ] ) ? esc( $parts[ 3 ] ) : '—';
+                                                                                            ?>
                                                                                         </td>
                                                                                         <td class="align-middle">
                                                                                             <?php

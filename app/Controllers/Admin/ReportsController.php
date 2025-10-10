@@ -163,7 +163,7 @@ class ReportsController extends BaseController
             ->setWrapText( true );
 
         // Make font bold and size 12
-        $sheet->getStyle( 'B1' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'B1' )->getFont()->setBold( false )->setSize( 12 );
 
         // Barangay
         $sheet->mergeCells( 'A3:H3' )->setCellValue( 'A3', 'Barangay: ' . $selectedBarangayName );
@@ -175,14 +175,14 @@ class ReportsController extends BaseController
         $sheet->mergeCells( 'D4:G4' )->setCellValue( 'D4', 'Cropping Season: ' . $selectedSeasonName );
 
         // Styles
-        $sheet->getStyle( 'A3' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'A3' )->getFont()->setBold( false )->setSize( 12 );
         $sheet->getStyle( 'A3' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
 
 
         $sheet->getStyle( 'A4' )->getFont()->setBold( true )->setSize( 12 );
         $sheet->getStyle( 'A4' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT );
 
-        $sheet->getStyle( 'D4' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'D4' )->getFont()->setBold( false )->setSize( 12 );
         $sheet->getStyle( 'D4' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
 
 
@@ -190,7 +190,7 @@ class ReportsController extends BaseController
         // Table Headers
         $headers  = [ 'NO.', 'LAST NAME', 'FIRST NAME', 'MIDDLE NAME', 'EXT.', 'RSBSA REF NO.', 'NAME OF LAND OWNER', 'FARM AREA (Ha)' ];
         $col      = 'A';
-        $startRow = 6;
+        $startRow = 5;
         foreach ( $headers as $header ) {
             $sheet->setCellValue( $col . $startRow, $header );
             $sheet->getStyle( $col . $startRow )->getFont()->setBold( true );
@@ -211,6 +211,13 @@ class ReportsController extends BaseController
             $sheet->setCellValue( 'F' . $rowNum, $entry[ 'rsbsa_ref_no' ] );
             $sheet->setCellValue( 'G' . $rowNum, $entry[ 'name_land_owner' ] );
             $sheet->setCellValue( 'H' . $rowNum, $entry[ 'farm_area' ] );
+
+            // Set alignment left for the entire row
+            foreach ( range( 'A', 'H' ) as $col ) {
+                $sheet->getStyle( $col . $rowNum )
+                    ->getAlignment()
+                    ->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT );
+            }
             $rowNum++;
         }
 
@@ -301,89 +308,146 @@ class ReportsController extends BaseController
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet       = $spreadsheet->getActiveSheet();
 
-        // Insert Logo (sticky on left of header)
+        // Insert Logo
         $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
         $drawing->setPath( FCPATH . 'templates/img/icon.png' );
-        $drawing->setCoordinates( 'A1' );
+        $drawing->setCoordinates( 'H1' );
+        $sheet->getRowDimension( 1 )->setRowHeight( 60 ); // match the image height
         $drawing->setHeight( 60 );
-        $drawing->setOffsetX( 5 ); // small padding
-        $drawing->setOffsetY( 5 );
+        $drawing->setOffsetX( 90 );
+        $drawing->setOffsetY( 8 );        // vertical alignment
         $drawing->setWorksheet( $sheet );
-        $sheet->getRowDimension( 1 )->setRowHeight( 60 );
 
-        // Header Text - Centered
-        $sheet->mergeCells( 'B1:H1' );
+
+        // Header Text - Centered A-J
+        // Merge the cells for the single-row header
+        $sheet->mergeCells( 'B1:O1' );
+
+        // Set the value with line breaks
         $sheet->setCellValue( 'B1', "Republic of the Philippines\nProvince of Eastern Samar\nMunicipality of Oras" );
+
+        // Enable text wrap so the line breaks show
         $sheet->getStyle( 'B1' )->getAlignment()
             ->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER )
             ->setVertical( \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER )
             ->setWrapText( true );
-        $sheet->getStyle( 'B1' )->getFont()->setBold( true )->setSize( 12 );
+
+        // Make font bold and size 12
+        $sheet->getStyle( 'B1' )->getFont()->setBold( false )->setSize( 12 );
 
         // Barangay
-        $sheet->mergeCells( 'A2:H2' )->setCellValue( 'A2', 'Barangay: ' . $selectedBarangayName );
-        $sheet->getStyle( 'A2' )->getFont()->setBold( true )->setSize( 12 );
-        $sheet->getStyle( 'A2' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+        $sheet->mergeCells( 'A3:O3' )->setCellValue( 'A3', 'Barangay: ' . $selectedBarangayName );
 
-        // Request & Season (left + center)
-        $sheet->mergeCells( 'A3:C3' )->setCellValue( 'A3', 'REQUEST FOR ' . strtoupper( $seedType ) . ' SEEDS' );
-        $sheet->mergeCells( 'D3:H3' )->setCellValue( 'D3', 'Cropping Season: ' . $selectedSeasonName );
+        // Merge cells for left part (Seed Request)
+        $sheet->mergeCells( 'A4:C4' )->setCellValue( 'A4', 'BENEFICIARIES FOR ' . strtoupper( $seedType ) . ' SEEDS' );
 
-        $sheet->getStyle( 'A3' )->getFont()->setBold( true )->setSize( 12 );
-        $sheet->getStyle( 'A3' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT );
+        // Merge cells for right/center part (Cropping Season)
+        $sheet->mergeCells( 'D4:N4' )->setCellValue( 'D4', 'Cropping Season: ' . $selectedSeasonName );
 
-        $sheet->getStyle( 'D3' )->getFont()->setBold( true )->setSize( 12 );
-        $sheet->getStyle( 'D3' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+        // Styles
+        $sheet->getStyle( 'A3' )->getFont()->setBold( false )->setSize( 12 );
+        $sheet->getStyle( 'A3' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
 
-        // Table Headers
-        $headers  = [
-            'No.',
-            'RSBSA Ref No.',
-            'Last Name',
-            'First Name',
-            'Middle Name',
-            'Suffix & Ext.',
-            'Barangay',
-            'Municipality',
-            'Province',
-            'Birthdate',
-            'Gender',
-            'Contact No.',
-            'Farm Area (Ha)',
-            'Voucher Ref',
-            'Date Received'
-        ];
-        $col      = 'A';
+
+        $sheet->getStyle( 'A4' )->getFont()->setBold( true )->setSize( 12 );
+        $sheet->getStyle( 'A4' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT );
+
+        $sheet->getStyle( 'D4' )->getFont()->setBold( false )->setSize( 12 );
+        $sheet->getStyle( 'D4' )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
+
+
+
+        // Multi-row Table Headers
         $startRow = 5;
-        foreach ( $headers as $header ) {
-            $sheet->setCellValue( $col . $startRow, $header );
-            $sheet->getStyle( $col . $startRow )->getFont()->setBold( true );
-            $sheet->getStyle( $col . $startRow )->getAlignment()->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER );
-            $sheet->getColumnDimension( $col )->setAutoSize( true );
-            $col++;
+
+        // First row
+        $sheet->setCellValue( 'A' . $startRow, 'No.' );
+        $sheet->setCellValue( 'B' . $startRow, 'RSBSA Ref No.' );
+        $sheet->setCellValue( 'C' . $startRow, 'Name of Farmer' );
+        $sheet->setCellValue( 'G' . $startRow, 'Barangay' );
+        $sheet->setCellValue( 'H' . $startRow, 'Municipality' );
+        $sheet->setCellValue( 'I' . $startRow, 'Province' );
+        $sheet->setCellValue( 'J' . $startRow, "Birthdate\n(mm/dd/yyyy)" );
+        $sheet->setCellValue( 'K' . $startRow, "Gender\nMale/Female" );
+        $sheet->setCellValue( 'L' . $startRow, "Contact No.\n(Mobile No.)" );
+        $sheet->setCellValue( 'M' . $startRow, "Farm Area\n(Hectares)" );
+        $sheet->setCellValue( 'N' . $startRow, 'Voucher' );
+
+        // Merge for first row
+        $sheet->mergeCells( 'A5:A6' ); // No.
+        $sheet->mergeCells( 'B5:B6' ); // RSBSA Ref
+        $sheet->mergeCells( 'C5:F5' ); // Name of Farmer
+        $sheet->mergeCells( 'G5:G6' ); // Barangay
+        $sheet->mergeCells( 'H5:H6' ); // Municipality
+        $sheet->mergeCells( 'I5:I6' ); // Province
+        $sheet->mergeCells( 'J5:J6' ); // Birthdate
+        $sheet->mergeCells( 'K5:K6' ); // Gender
+        $sheet->mergeCells( 'L5:L6' ); // Contact No
+        $sheet->mergeCells( 'M5:M6' ); // Farm Area
+        $sheet->mergeCells( 'N5:O5' ); // Voucher Ref placeholder
+
+        // Second row
+        $sheet->setCellValue( 'C6', 'Last Name' );
+        $sheet->setCellValue( 'D6', 'First Name' );
+        $sheet->setCellValue( 'E6', 'Middle Name' );
+        $sheet->setCellValue( 'F6', "Suffix\n& Ext." );
+
+
+        $sheet->setCellValue( 'N6', 'Reference No' );
+        $sheet->setCellValue( 'O6', 'Date Received' );
+
+
+        // Style all header cells
+        foreach ( range( 'A', 'O' ) as $col ) {
+            foreach ( [ 5, 6 ] as $row ) {
+                $sheet->getStyle( $col . $row )->getFont()->setBold( true );
+                $sheet->getStyle( $col . $row )->getAlignment()
+                    ->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER )
+                    ->setVertical( \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER )
+                    ->setWrapText( true ); // ✅ Enable wrap text
+                $sheet->getColumnDimension( $col )->setAutoSize( true );
+            }
         }
 
+        // Optional: increase row height to show wrapped text properly
+        $sheet->getRowDimension( 5 )->setRowHeight( 30 );
+        $sheet->getRowDimension( 6 )->setRowHeight( 30 );
+
+
         // Fill Data
-        $rowNum  = $startRow + 1;
+        $rowNum  = $startRow + 2;
         $counter = 1;
         foreach ( $requests as $entry ) {
+
+            $parts = explode( '_', $entry[ 'qr_code' ] );
+            $ref   = $parts[ 3 ];
+
             $sheet->setCellValue( 'A' . $rowNum, $counter++ );
             $sheet->setCellValue( 'B' . $rowNum, $entry[ 'rsbsa_ref_no' ] );
             $sheet->setCellValue( 'C' . $rowNum, $entry[ 'last_name' ] );
             $sheet->setCellValue( 'D' . $rowNum, $entry[ 'first_name' ] );
-            $sheet->setCellValue( 'E' . $rowNum, !empty( $entry[ 'middle_name' ] ) ? $entry[ 'middle_name' ] : '—' );
-            $sheet->setCellValue( 'F' . $rowNum, !empty( $entry[ 'suffix_and_ext' ] ) ? $entry[ 'suffix_and_ext' ] : '—' );
-            $sheet->setCellValue( 'G' . $rowNum, $entry[ 'brgy' ] ?? '—' );
-            $sheet->setCellValue( 'H' . $rowNum, $entry[ 'mun' ] ?? '—' );
-            $sheet->setCellValue( 'I' . $rowNum, $entry[ 'prov' ] ?? '—' );
-            $sheet->setCellValue( 'J' . $rowNum, !empty( $entry[ 'b_date' ] ) ? ( new DateTime( $entry[ 'b_date' ] ) )->format( 'F j, Y' ) : '—' );
-            $sheet->setCellValue( 'K' . $rowNum, $entry[ 'gender' ] ?? '—' );
-            $sheet->setCellValue( 'L' . $rowNum, $entry[ 'contact_no' ] ?? '—' );
-            $sheet->setCellValue( 'M' . $rowNum, $entry[ 'farm_area' ] ?? '—' );
-            $sheet->setCellValue( 'N' . $rowNum, $entry[ 'qr_code' ] ?? '—' );
-            $sheet->setCellValue( 'O' . $rowNum, !empty( $entry[ 'date_time_received' ] ) ? ( new DateTime( $entry[ 'date_time_received' ] ) )->format( 'F j, Y h:i A' ) : '—' );
+            $sheet->setCellValue( 'E' . $rowNum, !empty( $entry[ 'middle_name' ] ) ? $entry[ 'middle_name' ] : 'N/A' );
+            $sheet->setCellValue( 'F' . $rowNum, !empty( $entry[ 'suffix_and_ext' ] ) ? $entry[ 'suffix_and_ext' ] : 'N/A' );
+            $sheet->setCellValue( 'G' . $rowNum, $entry[ 'brgy' ] ?? 'N/A' );
+            $sheet->setCellValue( 'H' . $rowNum, $entry[ 'mun' ] ?? 'N/A' );
+            $sheet->setCellValue( 'I' . $rowNum, $entry[ 'prov' ] ?? 'N/A' );
+            $sheet->setCellValue( 'J' . $rowNum, !empty( $entry[ 'b_date' ] ) ? ( new DateTime( $entry[ 'b_date' ] ) )->format( 'F j, Y' ) : 'N/A' );
+            $sheet->setCellValue( 'K' . $rowNum, $entry[ 'gender' ] ?? 'N/A' );
+            $sheet->setCellValue( 'L' . $rowNum, $entry[ 'contact_no' ] ?? 'N/A' );
+            $sheet->setCellValue( 'M' . $rowNum, $entry[ 'farm_area' ] ?? 'N/A' );
+            $sheet->setCellValue( 'N' . $rowNum, $ref ?? 'N/A' );
+            $sheet->setCellValue( 'O' . $rowNum, !empty( $entry[ 'date_time_received' ] ) ? ( new DateTime( $entry[ 'date_time_received' ] ) )->format( 'F j, Y h:i A' ) : 'N/A' );
+
+            // Set alignment left for the entire row
+            foreach ( range( 'A', 'O' ) as $col ) {
+                $sheet->getStyle( $col . $rowNum )
+                    ->getAlignment()
+                    ->setHorizontal( \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT );
+            }
+
             $rowNum++;
         }
+
 
         // Apply Borders
         $sheet->getStyle( 'A' . $startRow . ':O' . ( $rowNum - 1 ) )
@@ -650,7 +714,7 @@ class ReportsController extends BaseController
                 </div>
                 <div style="position: relative; width: 100%; height: 20px; margin-bottom: 2px; font-size: 12px;">
                     <div style="position: absolute; left: 0; font-weight: bold;">
-                        REQUEST FOR ' . strtoupper( htmlspecialchars( $seedType ) ) . ' SEEDS
+                        BENEFICIARIES FOR ' . strtoupper( htmlspecialchars( $seedType ) ) . ' SEEDS
                     </div>
                     <div style="position: absolute; left: 50%; transform: translateX(-50%);">
                         Cropping Season: ' . $seasonName . '
@@ -773,6 +837,10 @@ class ReportsController extends BaseController
             $rowCount = 0;
 
             foreach ( $entries as $entry ) {
+
+                $parts = explode( '_', $entry[ 'qr_code' ] );
+                $ref   = $parts[ 3 ];
+
                 if ( $rowCount % 15 == 0 ) {
                     if ( $rowCount > 0 ) {
                         $html .= '</tbody></table>';
@@ -813,9 +881,9 @@ class ReportsController extends BaseController
                 <td>' . esc( $entry[ 'rsbsa_ref_no' ] ) . '</td>
                 <td>' . esc( $entry[ 'last_name' ] ) . '</td>
                 <td>' . esc( $entry[ 'first_name' ] ) . '</td>
-                <td>' . ( !empty( $entry[ 'middle_name' ] ) ? esc( $entry[ 'middle_name' ] ) : '—' ) . '</td>
-                <td>' . ( !empty( $entry[ 'suffix_and_ext' ] ) ? esc( $entry[ 'suffix_and_ext' ] ) : '—' ) . '</td>
-                <td>' . esc( $entry[ 'brgy' ] ?? '—' ) . '</td>
+                <td>' . ( !empty( $entry[ 'middle_name' ] ) ? esc( $entry[ 'middle_name' ] ) : 'N/A' ) . '</td>
+                <td>' . ( !empty( $entry[ 'suffix_and_ext' ] ) ? esc( $entry[ 'suffix_and_ext' ] ) : 'N/A' ) . '</td>
+                <td>' . esc( $entry[ 'brgy' ] ?? 'N/A' ) . '</td>
                 <td>' . esc( $entry[ 'mun' ] ) . '</td>
                 <td>' . esc( $entry[ 'prov' ] ) . '</td>
                 <td>' . (
@@ -824,14 +892,14 @@ class ReportsController extends BaseController
                     : '—'
                 ) . '</td>
                 <td>' . esc( $entry[ 'gender' ] ) . '</td>
-                <td>' . esc( $entry[ 'contact_no' ] ?? '—' ) . '</td>
+                <td>' . esc( $entry[ 'contact_no' ] ?? 'N/A' ) . '</td>
                 <td>' . esc( $entry[ 'farm_area' ] ) . '</td>
-                <td>' . esc( $entry[ 'qr_code' ] ) . '</td>
+                <td>' . esc( $ref ?? "N/A" ) . '</td>
                 <td>' . (
                     !empty( $entry[ 'date_time_received' ] ) && DateTime::createFromFormat( 'm-d-Y h:i A', $entry[ 'date_time_received' ] )
                     ? DateTime::createFromFormat( 'm-d-Y h:i A', $entry[ 'date_time_received' ] )->format( 'F j, Y' ) . '<br><small>' .
                     DateTime::createFromFormat( 'm-d-Y h:i A', $entry[ 'date_time_received' ] )->format( 'h:i A' ) . '</small>'
-                    : '—'
+                    : 'N/A'
                 ) . '</td>
             </tr>';
 

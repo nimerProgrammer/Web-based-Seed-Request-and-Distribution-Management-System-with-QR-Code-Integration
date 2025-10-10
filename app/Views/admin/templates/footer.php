@@ -119,7 +119,7 @@
 
 
 <script src="<?= base_url( 'templates/js/season-watcher.js?v=6.6.6' ) ?>"></script>
-<script src="<?= base_url( 'templates/js/adminscript.js?v=7.1.2' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/adminscript.js?v=7.1.3' ) ?>"></script>
 
 <?php if ( session()->get( 'title' ) === 'Profile' && session()->get( 'current_tab' ) === 'profile' ) : ?>
     <script src="<?= base_url( 'templates/js/adminProfileScript.js?v=6.6.6' ) ?>"></script>
@@ -138,7 +138,7 @@
             title: '<?= esc( session( 'swal' )[ 'title' ] ) ?>',
             text: '<?= esc( session( 'swal' )[ 'text' ] ) ?>',
             icon: '<?= esc( session( 'swal' )[ 'icon' ] ) ?>',
-            timer: 2000, // 3 seconds
+            timer: 4000, // 4 seconds
             showConfirmButton: false,
             customClass: {
                 confirmButton: 'btn btn-primary'
