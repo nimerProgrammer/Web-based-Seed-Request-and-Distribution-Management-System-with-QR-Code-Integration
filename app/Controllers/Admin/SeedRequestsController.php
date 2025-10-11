@@ -73,9 +73,10 @@ class SeedRequestsController extends BaseController
         ] );
 
         $requests = $requestModel
-            ->select( 'seed_requests.*, client_info.*, inventory.*' )
+            ->select( 'seed_requests.*, client_info.*, inventory.*, users.*' )
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
             ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->join( 'users', 'users.users_tbl_id = client_info.users_tbl_id' )
             ->where( 'seed_requests.seed_requests_tbl_id', $id )
             ->first();
 
@@ -147,7 +148,70 @@ class SeedRequestsController extends BaseController
             'icon'  => 'success',
         ] );
 
+        if ( $requests[ 'email' ] !== null ) {
+            // Load your Email config
+            // Get Email service with default config
+            $email = \Config\Services::email();
+            // Set recipient and subject
+            // $email->setFrom( 'omas@oras-seed-request-distribution.com', 'LGU Oras' );
+            $email->setTo( $requests[ 'email' ] );
+            $email->setSubject( 'Your Seed Request Has Been Approved' );
+
+            $message = <<<EOD
+                <!DOCTYPE html>
+                <html>
+                <head>
+                <meta charset="UTF-8">
+                <title>Seed Request Approved</title>
+                <style>
+                    body { font-family: Arial, sans-serif; color: #333; background-color: #f4f4f4; margin: 0; padding: 0; }
+                    .bg {
+                                    width: 100%;
+                                    height: 100%;
+                                    background-color: #e9e6e6ff; /* control gray */
+                                    margin: 0;
+                                    padding-top: 10px;
+                                    padding-bottom: 10px;
+                                  }
+                    .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ccc; }
+                    .header { background-color: #4CAF50; color: #fff; padding: 10px; text-align: center; font-size: 18px; font-weight: bold; border-radius: 4px 4px 0 0; }
+                    .content { padding: 20px; font-size: 14px; line-height: 1.5; }
+                    .footer { font-size: 12px; color: #777; text-align: center; padding-top: 10px; }
+                </style>
+                </head>
+                <body>
+                <div class="bg">
+                    <div class="container">
+                        <div class="header">Seed Request Distribution</div>
+                        <div class="content">
+                            <p>Dear {$fullName},</p>
+                            <p>Your seed request for <b>{$seedName} ({$seedClass})</b> has been <b>approved</b>.</p>
+                            <p>Allocated Seeds: <b>{$kg} kg</b></p>
+                            <p>Thank you for your inconvenience.</p>
+                            <p>Sincerely,<br>OMAS Oras Team</p>
+                        </div>
+                        <div class="footer">
+                            &copy; 2025 Seed Request and Distribution System. All rights reserved.
+                        </div>
+                    </div>
+                    </div>
+                </body>
+                </html>
+                EOD;
+
+            $email->setMessage( $message );
+            $email->setMailType( 'html' );
+            $email->send();
+            if ( !$email->send() ) {
+                // Log debug info if email fails
+                log_message( 'error', $email->printDebugger( [ 'headers', 'subject', 'body', 'SMTP' ] ) );
+            }
+        }
+
+
         return redirect()->back()->with( 'message', 'Request approved and beneficiary recorded.' );
+
+
     }
 
     /**
