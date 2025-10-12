@@ -43,10 +43,19 @@ if ( !function_exists( 'checkCroppingSeason' ) ) {
                     'ccs_name' => $seasonName,
                 ] );
 
+                session()->set( [
+                    'current_season_id'   => $seasonId,
+                    'current_season_name' => $seasonName
+                ] );
+
             }
 
             if ( $currentStatus === 'Current' && $end <= $todayTimestamp ) {
                 $model->update( $seasonId, [ 'status' => 'Ended' ] );
+                session()->set( [
+                    'current_season_id'   => null,
+                    'current_season_name' => null
+                ] );
             }
 
             if ( $start >= $todayTimestamp ) {

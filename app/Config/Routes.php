@@ -145,6 +145,9 @@ $routes->post( '/admin/logs/clearLogs', 'Admin\LogsController::clearLogs' );
 /* NOTIFICATION CONTROLLER */
 $routes->get( '/admin/notifications/fetch', 'NotificationsController::fetch' );
 $routes->get( '/admin/notifications/seenAll', 'NotificationsController::seenAll' );
+$routes->post( '/admin/notifications/seen', 'NotificationsController::seen' );
+$routes->post( '/admin/notifications/approve', 'NotificationsController::approve' );
+$routes->post( '/admin/notifications/reject', 'NotificationsController::reject' );
 
 
 

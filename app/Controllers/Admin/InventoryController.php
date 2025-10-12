@@ -20,11 +20,21 @@ class InventoryController extends BaseController
         $inventoryModel = new InventoryModel();
         $logsModel      = new LogsModel();
 
+        if ( session( 'current_season_name' ) === null ) {
+            session()->setFlashdata( 'swal', [
+                'title' => 'No cropping season found!',
+                'text'  => 'Please wait until a cropping season starts or set one in the dashboard to proceed.',
+                'icon'  => 'warning',
+            ] );
+
+            return redirect()->to( '/admin/inventory' );
+        }
+
         // Get Philippine time
         $formattedDate = getPhilippineTimeFormatted();
 
         // Collect form data
-        $data = [ 
+        $data = [
             'seed_name'              => $this->request->getPost( 'add_seed_name' ),
             'seed_class'             => $this->request->getPost( 'add_seed_class' ),
             'stock'                  => $this->request->getPost( 'add_stock' ),
@@ -38,14 +48,14 @@ class InventoryController extends BaseController
         $staffFullName = session( 'user_fullname' );
 
         // Insert log entry
-        $logsModel->insert( [ 
+        $logsModel->insert( [
             'timestamp'    => $formattedDate,
             'action'       => 'Add Inventory',
             'details'      => $staffFullName . ' added new inventory: "' . $data[ 'seed_name' ] . '" (' . $data[ 'seed_class' ] . ') with stock ' . $data[ 'stock' ] . '.',
             'users_tbl_id' => session( 'user_id' ),
         ] );
 
-        session()->setFlashdata( 'swal', [ 
+        session()->setFlashdata( 'swal', [
             'title' => 'Success!',
             'text'  => 'Seed added successfully.',
             'icon'  => 'success',
@@ -69,7 +79,7 @@ class InventoryController extends BaseController
         $original = $inventoryModel->find( $id );
 
         // New data from form
-        $newData = [ 
+        $newData = [
             'seed_name'  => $this->request->getPost( 'edit_seed_name' ),
             'seed_class' => $this->request->getPost( 'edit_seed_class' ),
             'stock'      => $this->request->getPost( 'edit_stock' ),
@@ -94,20 +104,20 @@ class InventoryController extends BaseController
             /* Staff Fullname */
             $staffFullName = session( 'user_fullname' );
 
-            $logsModel->insert( [ 
+            $logsModel->insert( [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Update Inventory',
                 'details'      => $staffFullName . ' updated inventory: ' . implode( '; ', $changes ) . '.',
                 'users_tbl_id' => session( 'user_id' ),
             ] );
 
-            session()->setFlashdata( 'swal', [ 
+            session()->setFlashdata( 'swal', [
                 'title' => 'Updated!',
                 'text'  => 'Seed inventory updated successfully.',
                 'icon'  => 'success'
             ] );
         } else {
-            session()->setFlashdata( 'swal', [ 
+            session()->setFlashdata( 'swal', [
                 'title' => 'No Changes',
                 'text'  => 'No changes were made to the inventory.',
                 'icon'  => 'info'
@@ -137,20 +147,20 @@ class InventoryController extends BaseController
             /* Staff Fullname */
             $staffFullName = session( 'user_fullname' );
 
-            $logsModel->insert( [ 
+            $logsModel->insert( [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Delete Inventory',
                 'details'      => $staffFullName . ' deleted seed "' . ( $seed[ 'seed_name' ] ?? 'Unknown' ) . '" (' . ( $seed[ 'seed_class' ] ?? '-' ) . ').',
                 'users_tbl_id' => session( 'user_id' ),
             ] );
 
-            session()->setFlashdata( 'swal', [ 
+            session()->setFlashdata( 'swal', [
                 'title' => 'Deleted!',
                 'text'  => 'Seed entry deleted successfully.',
                 'icon'  => 'success'
             ] );
         } else {
-            session()->setFlashdata( 'swal', [ 
+            session()->setFlashdata( 'swal', [
                 'title' => 'Error!',
                 'text'  => 'Failed to delete the seed entry.',
                 'icon'  => 'error'

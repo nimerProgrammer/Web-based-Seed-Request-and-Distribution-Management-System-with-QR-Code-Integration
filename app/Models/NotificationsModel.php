@@ -15,6 +15,7 @@ class NotificationsModel extends Model
         'content',
         'type',
         'status_view',
+        'request_id',
         'created_at',
         'updated_at',
         'users_tbl_id'

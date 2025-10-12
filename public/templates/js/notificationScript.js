@@ -38,13 +38,22 @@ $(document).ready(function () {
 
             // Add Approve button only if type is 'new request'
             if (item.type === "new request") {
-              approveBtn = `<button class="btn btn-sm btn-success ms-2 approve-btn" data-id="${item.id}">
-                              Approve
-                          </button>`;
+              approveBtn = `
+                  <br>
+                  <button class="btn btn-sm btn-success ms-2 approve-btn" data-request_id="${item.request_id}" data-id="${item.notifications_tbl_id}">
+                      <i class="bi bi-check-lg"></i> Approve
+                  </button>
+
+                  <button class="btn btn-sm btn-danger ms-2 reject-btn" data-request_id="${item.request_id}" data-id="${item.notifications_tbl_id}">
+                      <i class="bi bi-x-lg"></i> Reject
+                  </button>
+              `;
             }
 
             html += `
-              <li class="mt-2">
+              <li class="mt-2 notification-item" data-notifid="${
+                item.notifications_tbl_id
+              }">
                   <i class="${item.icon} ${item.color}"></i> ${item.content}
                   <br>
                   <small class="text-muted">${formatNotificationDate(
@@ -134,6 +143,118 @@ $(document).ready(function () {
           fetchNotifications();
           hideLoader();
         }
+      },
+    });
+  });
+
+  $(document).on("click", ".notification-item", function () {
+    const id = $(this).data("notifid");
+
+    // Example AJAX call to approve the request
+    $.ajax({
+      url: "notifications/seen", // Backend route
+      method: "POST",
+      data: { id: id },
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          fetchNotifications();
+        }
+      },
+      error: function () {
+        alert("Something went wrong!");
+      },
+    });
+  });
+
+  // Event delegation for Approve button
+  $(document).on("click", ".approve-btn", function () {
+    const id = $(this).data("id");
+    const request_id = $(this).data("request_id");
+
+    // Example AJAX call to approve the request
+    $.ajax({
+      url: "notifications/approve", // Backend route
+      method: "POST",
+      data: { id: id, request_id: request_id },
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Request approved.",
+            timer: 4000,
+            showConfirmButton: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+            buttonsStyling: false,
+          });
+          fetchNotifications();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "This request cannot be approved. It may have been canceled.",
+            timer: 4000,
+            showConfirmButton: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+            buttonsStyling: false,
+          });
+          return;
+        }
+      },
+      error: function () {
+        alert("Something went wrong!");
+      },
+    });
+  });
+
+  // Event delegation for Reject button
+  $(document).on("click", ".reject-btn", function () {
+    const id = $(this).data("id");
+    const request_id = $(this).data("request_id");
+
+    // Example AJAX call to reject the request
+    $.ajax({
+      url: "notifications/reject", // Backend route
+      method: "POST",
+      data: { id: id, request_id: request_id },
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Request rejected.",
+            timer: 4000,
+            showConfirmButton: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+            buttonsStyling: false,
+          });
+          fetchNotifications();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "This request cannot be rejected. It may have been canceled.",
+            timer: 4000,
+            showConfirmButton: false,
+            customClass: {
+              confirmButton: "btn btn-primary",
+            },
+            buttonsStyling: false,
+          });
+          return;
+        }
+      },
+      error: function () {
+        alert("Something went wrong!");
       },
     });
   });

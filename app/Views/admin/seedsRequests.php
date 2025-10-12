@@ -13,7 +13,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-end">
                         <li class="breadcrumb-item active">
-                            <?= esc( session( 'ccs_name' ) ?? 'No Cropping Season' ) ?>
+                            <?= esc( session( 'current_season_name' ) ?? '' ) ?>
                         </li>
                     </ol>
                 </div>

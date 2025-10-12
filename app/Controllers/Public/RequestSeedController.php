@@ -48,6 +48,7 @@ class RequestSeedController extends BaseController
             'inventory_tbl_id'    => $seedID,
             'client_info_tbl_id'  => $userClientID,
         ] );
+        $request_id = $model->getInsertID();
 
         // Optional: Insert log
         $logsModel->insert( [
@@ -62,6 +63,7 @@ class RequestSeedController extends BaseController
             'content'      => 'New seed request: ' . $fullname . ' is requesting ' . $seedName . ' seeds (RSBSA No. ' . $rsbsa_no . ') from Barangay ' . session()->get( 'public_user_barangay' ) . '.',
             'type'         => 'new request',
             'status_view'  => 'unseen',
+            'request_id'   => $request_id,
             'users_tbl_id' => $userID,
         ] );
 
