@@ -8,7 +8,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\BeneficiariesModel;
 use App\Models\SeedRequestsModel;
 use App\Models\LogsModel;
-
+use App\Models\NotificationsModel;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Encoding\Encoding;
@@ -182,7 +182,7 @@ class SentRequestsController extends BaseController
 
         $seedRequestModel = new SeedRequestsModel();
 
-        $updateData = [ 
+        $updateData = [
             'inventory_tbl_id' => $inventoryId,
         ];
 
@@ -192,7 +192,7 @@ class SentRequestsController extends BaseController
             $formattedDate = getPhilippineTimeFormatted();
 
             $logsModel = new LogsModel();
-            $logsModel->insert( [ 
+            $logsModel->insert( [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Edit Seed Request',
                 'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' edited a seed request and selected a new seed.',
@@ -220,19 +220,43 @@ class SentRequestsController extends BaseController
         $requestId = $this->request->getPost( 'seed_requests_tbl_id' );
 
         $seedRequestModel = new SeedRequestsModel();
+        $getSeedName      = $seedRequestModel->select( 'seed_requests.*, inventory.*, client_info.*' )
+            ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
+            ->join( 'client_info', 'client_info.client_info_tbl_id = seed_requests.client_info_tbl_id' )
+            ->where( 'seed_requests.seed_requests_tbl_id', $requestId )
+            ->first();
 
-        $success = $seedRequestModel->delete( $requestId );
+        $seed_name = $getSeedName[ 'seed_name' ];
+        $success   = $seedRequestModel->delete( $requestId );
 
         if ( $success ) {
+
+            $userID   = esc( session( 'public_user_id' ) );
+            $fullname = esc( session( 'public_user_fullname' ) );
+            $rsbsa    = esc( session( 'public_user_rsbsa_no' ) );
+            $brgy     = esc( session( 'public_user_barangay' ) );
+
             $formattedDate = getPhilippineTimeFormatted();
 
             $logsModel = new LogsModel();
-            $logsModel->insert( [ 
+            $notif     = new NotificationsModel();
+            $logsModel->insert( [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Cancel Seed Request',
                 'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' canceled a seed request.',
                 'users_tbl_id' => session( 'public_user_id' ),
             ] );
+
+            /* Insert Notification */
+            $notif->insert( [
+                'content'      => 'Cancelled Request: ' . $fullname . ' of Barangay ' . $brgy . ' (RSBSA No. ' . $rsbsa . ') has cancelled their seed request for ' . $seed_name . ' seeds.',
+                'type'         => 'cancel request',
+                'status_view'  => 'unseen',
+                'users_tbl_id' => $userID,
+            ] );
+
+
+
 
             return redirect()->to( base_url( 'public/sentRequests' ) );
         }

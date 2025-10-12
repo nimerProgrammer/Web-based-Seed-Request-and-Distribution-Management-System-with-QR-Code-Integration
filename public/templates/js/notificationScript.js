@@ -95,4 +95,17 @@ $(document).ready(function () {
       return `${monthDay} • ${formattedTime} • ${timeAgo}`;
     }
   }
+
+  $("#viewAllBtn").on("click", function () {
+    $.ajax({
+      url: "notifications/seenAll", // Backend route
+      method: "GET",
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          console.log("working get");
+        }
+      },
+    });
+  });
 });

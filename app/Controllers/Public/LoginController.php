@@ -33,7 +33,7 @@ class LoginController extends BaseController
             ->first();
 
         if ( !$user ) {
-            $logData = [ 
+            $logData = [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Login',
                 'details'      => 'Login attempt failed — username not found: ' . $username,
@@ -46,7 +46,7 @@ class LoginController extends BaseController
         }
 
         if ( !password_verify( $password, $user[ 'password' ] ) ) {
-            $logData = [ 
+            $logData = [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Login',
                 'details'      => 'Login attempt failed due to incorrect password for username: ' . $username . ', user type: ' . $user[ 'user_type' ],
@@ -64,7 +64,7 @@ class LoginController extends BaseController
             $farmer      = $farmerModel->where( 'users_tbl_id', $user[ 'users_tbl_id' ] )->first();
 
             if ( !$farmer ) {
-                session()->setFlashdata( 'swal', [ 
+                session()->setFlashdata( 'swal', [
                     'title'             => 'Error!',
                     'text'              => 'An error occurred fetching data. Please try again.',
                     'icon'              => 'error',
@@ -74,8 +74,9 @@ class LoginController extends BaseController
             }
 
             // ✅ Set session with user + staff data
-            session()->set( [ 
+            session()->set( [
                 'public_user_id'             => $user[ 'users_tbl_id' ],
+                'public_user_barangay'       => $farmer[ 'brgy' ],
                 'public_user_client_id'      => $farmer[ 'client_info_tbl_id' ],
                 'public_user_email'          => $user[ 'email' ],
                 'public_user_rsbsa_no'       => $farmer[ 'rsbsa_ref_no' ],
@@ -94,7 +95,7 @@ class LoginController extends BaseController
 
             ] );
 
-            $logData = [ 
+            $logData = [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Login',
                 'details'      => 'User ' . esc( session( 'public_user_fullname' ) ) . ' logged in successfully.',
@@ -109,13 +110,13 @@ class LoginController extends BaseController
                 ->first(); // Use `first()` since you expect only one
 
             if ( $currentSeason ) {
-                session()->set( [ 
+                session()->set( [
                     'current_season_id'   => $currentSeason[ 'cropping_season_tbl_id' ],
                     'current_season_name' => $currentSeason[ 'season' ] . ' ' . $currentSeason[ 'year' ]
                 ] );
             }
 
-            return $this->response->setJSON( [ 
+            return $this->response->setJSON( [
                 'success'      => true,
                 'redirect_url' => base_url( 'public/home' )
             ] );
@@ -127,7 +128,7 @@ class LoginController extends BaseController
             $staff      = $staffModel->where( 'users_tbl_id', $user[ 'users_tbl_id' ] )->first();
 
             if ( !$staff ) {
-                session()->setFlashdata( 'swal', [ 
+                session()->setFlashdata( 'swal', [
                     'title'             => 'Error!',
                     'text'              => 'An error occurred fetching data. Please try again.',
                     'icon'              => 'error',
@@ -137,7 +138,7 @@ class LoginController extends BaseController
             }
 
             // ✅ Set session with user + staff data
-            session()->set( [ 
+            session()->set( [
                 'user_id'             => $user[ 'users_tbl_id' ],
                 'user_email'          => $user[ 'email' ],
                 'emp_id'              => $staff[ 'emp_id' ],
@@ -154,7 +155,7 @@ class LoginController extends BaseController
                 ) ) )
             ] );
 
-            $logData = [ 
+            $logData = [
                 'timestamp'    => $formattedDate,
                 'action'       => 'Login',
                 'details'      => 'User ' . esc( session( 'user_fullname' ) ) . ' logged in successfully.',
@@ -169,13 +170,13 @@ class LoginController extends BaseController
                 ->first(); // Use `first()` since you expect only one
 
             if ( $currentSeason ) {
-                session()->set( [ 
+                session()->set( [
                     'current_season_id'   => $currentSeason[ 'cropping_season_tbl_id' ],
                     'current_season_name' => $currentSeason[ 'season' ] . ' ' . $currentSeason[ 'year' ]
                 ] );
             }
 
-            return $this->response->setJSON( [ 
+            return $this->response->setJSON( [
                 'success'      => true,
                 'redirect_url' => base_url( 'admin/dashboard' )
             ] );

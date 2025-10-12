@@ -48,7 +48,7 @@
 
 
 <script src="<?= base_url( 'templates/js/publicScript.js?v=5.5.5' ) ?>"></script>
-<script src="<?= base_url( 'templates/js/publicLoginScript.js?v=4.4.4' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/publicLoginScript.js?v=4.4.5' ) ?>"></script>
 <script src="<?= base_url( 'templates/js/season-watcher.js?v=4.4.4' ) ?>"></script>
 
 

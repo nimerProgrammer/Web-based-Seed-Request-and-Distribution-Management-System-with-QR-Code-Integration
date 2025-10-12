@@ -100,6 +100,7 @@ $(document).ready(function () {
         console.error("AJAX Error:", error);
         alert("An error occurred. Please try again.");
         $submitBtn.text("Log in").attr("disabled", false);
+        hideLoader();
       },
     });
   });

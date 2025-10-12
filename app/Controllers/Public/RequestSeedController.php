@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\SeedRequestsModel;
 use App\Models\LogsModel;
 use App\Models\InventoryModel;
+use App\Models\NotificationsModel;
 
 
 class RequestSeedController extends BaseController
@@ -30,6 +31,7 @@ class RequestSeedController extends BaseController
         $model          = new SeedRequestsModel();
         $logsModel      = new LogsModel();
         $inventoryModel = new InventoryModel();
+        $notif          = new NotificationsModel();
 
         $formattedDate = getPhilippineTimeFormatted();
 
@@ -38,7 +40,7 @@ class RequestSeedController extends BaseController
         $seedName = $seed ? $seed[ 'seed_name' ] : 'Unknown Seed';
 
         // Insert seed request
-        $model->insert( [ 
+        $model->insert( [
             'date_time_requested' => $formattedDate,
             'date_time_approved'  => null,
             'date_time_rejected'  => null,
@@ -48,14 +50,22 @@ class RequestSeedController extends BaseController
         ] );
 
         // Optional: Insert log
-        $logsModel->insert( [ 
+        $logsModel->insert( [
             'timestamp'    => $formattedDate,
             'action'       => 'Seed Request Submitted',
             'details'      => 'Farmer ' . $fullname . ' (RSBSA No. ' . $rsbsa_no . ') submitted a seed request for ' . $seedName . '.',
             'users_tbl_id' => $userID,
         ] );
 
-        session()->setFlashdata( 'swal', [ 
+        /* Insert Notification */
+        $notif->insert( [
+            'content'      => 'New seed request: ' . $fullname . ' is requesting ' . $seedName . ' seeds (RSBSA No. ' . $rsbsa_no . ') from Barangay ' . session()->get( 'public_user_barangay' ) . '.',
+            'type'         => 'new request',
+            'status_view'  => 'unseen',
+            'users_tbl_id' => $userID,
+        ] );
+
+        session()->setFlashdata( 'swal', [
             'title'             => 'Success!',
             'text'              => 'Your seed request has been submitted successfully. Once approved, you can download the voucher with QR code from the Sent Requests page.',
             'icon'              => 'success',

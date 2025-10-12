@@ -27,12 +27,18 @@
 <!-- Right Sidebar (Control Sidebar) -->
 <aside class="control-sidebar control-sidebar-dark">
     <!-- Content inside -->
-    <div class="p-3 control-sidebar-content">
-        <h5>Notifications</h5>
-        <hr class="mb-2">
-
+    <div class="control-sidebar-content">
+        <!-- Sticky header + View All button -->
+        <div class="sticky-top bg-dark pb-2 mb-2" style="z-index: 10;">
+            <h5 class="text-center border-bottom mb-2 pb-2 ml-2 pt-3 text-white">Notifications</h5>
+            <div class="text-center">
+                <a href="javascript:void(0)" id="viewAllBtn">
+                    View All
+                </a>
+            </div>
+        </div>
         <!-- ✅ Just add this ID -->
-        <ul class="list-unstyled" id="notificationList">
+        <ul class="list-unstyled pl-3 pr-3" id="notificationList">
             <!-- This will be replaced dynamically -->
         </ul>
 

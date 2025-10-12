@@ -115,6 +115,14 @@
                             /* ✅ Match badge color */
                             border-radius: 2px;
                         }
+
+                        #notificationList li:hover {
+                            margin: -10px;
+                            padding: 10px;
+                            border-radius: 5px;
+                            background: rgba(255, 255, 255, 0.1);
+                            /* Light hover for dark sidebar */
+                        }
                     </style>
 
 

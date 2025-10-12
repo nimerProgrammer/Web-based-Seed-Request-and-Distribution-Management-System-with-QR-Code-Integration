@@ -16,6 +16,7 @@ class NotificationsController extends BaseController
             ->join( 'users', 'users.users_tbl_id = notifications.users_tbl_id' )
             ->join( 'client_info', 'client_info.users_tbl_id = users.users_tbl_id' )
             ->where( 'notifications.status_view', 'unseen' )
+            ->orderBy( 'notifications.created_at', 'DESC' )
             ->findAll();
 
         // Count unseen notifications
@@ -23,14 +24,14 @@ class NotificationsController extends BaseController
 
         foreach ( $notifications as &$notif ) {
             if ( $notif[ 'type' ] == 'new user' ) {
-                $notif[ 'icon' ]  = 'bi bi-person-plus-fill';
+                $notif[ 'icon' ]  = 'bi bi-person-plus-fill fs-4';
                 $notif[ 'color' ] = 'text-success';
             } elseif ( $notif[ 'type' ] == 'new request' ) {
-                $notif[ 'icon' ]  = 'bi bi-exclamation-circle-fill';
+                $notif[ 'icon' ]  = 'bi bi-send-fill fs-4';
                 $notif[ 'color' ] = 'text-warning';
-            } else {
-                $notif[ 'icon' ]  = 'bi bi-info-circle-fill';
-                $notif[ 'color' ] = 'text-primary';
+            } elseif ( $notif[ 'type' ] == 'cancel request' ) {
+                $notif[ 'icon' ]  = 'bi bi-send-x-fill fs-4';
+                $notif[ 'color' ] = 'text-danger';
             }
         }
 
@@ -41,4 +42,11 @@ class NotificationsController extends BaseController
         ] );
     }
 
+    public function seenAll()
+    {
+        // Return both in JSON format
+        return $this->response->setJSON( [
+            'success' => true,
+        ] );
+    }
 }
