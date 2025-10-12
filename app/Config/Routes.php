@@ -146,3 +146,5 @@ $routes->post( '/admin/logs/clearLogs', 'Admin\LogsController::clearLogs' );
 $routes->get( '/admin/notifications/fetch', 'NotificationsController::fetch' );
 $routes->get( '/admin/notifications/seenAll', 'NotificationsController::seenAll' );
 
+
+

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\NotificationsModel;
+
 class NotificationsController extends BaseController
 {
     public function fetch()
@@ -44,6 +45,15 @@ class NotificationsController extends BaseController
 
     public function seenAll()
     {
+        if ( !$this->request->isAJAX() ) {
+            return view( 'errors/html/error_403' );
+        }
+
+        $model = new NotificationsModel();
+
+        $model->set( 'status_view', 'seen' )
+            ->where( 'status_view', 'unseen' )
+            ->update( null ); // updates all rows in the table
         // Return both in JSON format
         return $this->response->setJSON( [
             'success' => true,

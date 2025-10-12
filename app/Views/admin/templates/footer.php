@@ -32,7 +32,7 @@
         <div class="sticky-top bg-dark pb-2 mb-2" style="z-index: 10;">
             <h5 class="text-center border-bottom mb-2 pb-2 ml-2 pt-3 text-white">Notifications</h5>
             <div class="text-center">
-                <a href="javascript:void(0)" id="viewAllBtn">
+                <a href="javascript:void(0)" id="viewAllBtn" class="d-none">
                     View All
                 </a>
             </div>
@@ -67,7 +67,7 @@
 
 <script src="<?= base_url( 'templates/js/season-watcher.js?v=6.6.6' ) ?>"></script>
 <script src="<?= base_url( 'templates/js/adminscript.js?v=7.1.3' ) ?>"></script>
-<script src="<?= base_url( 'templates/js/notificationScript.js?v=1' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/notificationScript.js?v=1.2' ) ?>"></script>
 
 <?php if ( session()->get( 'title' ) === 'Profile' && session()->get( 'current_tab' ) === 'profile' ) : ?>
     <script src="<?= base_url( 'templates/js/adminProfileScript.js?v=6.6.6' ) ?>"></script>

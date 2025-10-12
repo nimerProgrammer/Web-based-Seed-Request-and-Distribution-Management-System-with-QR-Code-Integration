@@ -1,4 +1,18 @@
 $(document).ready(function () {
+  function showLoader() {
+    const loader = document.getElementById("loading-spinner");
+    if (loader) {
+      loader.style.display = "flex";
+    }
+  }
+
+  function hideLoader() {
+    const loader = document.getElementById("loading-spinner");
+    if (loader) {
+      loader.style.display = "none";
+    }
+  }
+
   function fetchNotifications() {
     $.ajax({
       url: "notifications/fetch", // Backend route
@@ -11,13 +25,24 @@ $(document).ready(function () {
         // ✅ Toggle red bell if unseen > 0
         if (unseenCount > 0) {
           $("#notifCount").removeClass("d-none").text(unseenCount);
+          $("#viewAllBtn").removeClass("d-none");
         } else {
           $("#notifCount").addClass("d-none");
+          $("#viewAllBtn").addClass("d-none");
         }
 
         // ✅ Use data.notifications instead of data.forEach
         if (unseenCount > 0 && data.notifications.length > 0) {
           data.notifications.forEach((item) => {
+            let approveBtn = "";
+
+            // Add Approve button only if type is 'new request'
+            if (item.type === "new request") {
+              approveBtn = `<button class="btn btn-sm btn-success ms-2 approve-btn" data-id="${item.id}">
+                              Approve
+                          </button>`;
+            }
+
             html += `
               <li class="mt-2">
                   <i class="${item.icon} ${item.color}"></i> ${item.content}
@@ -25,6 +50,7 @@ $(document).ready(function () {
                   <small class="text-muted">${formatNotificationDate(
                     item.created_at
                   )}</small>
+                  ${approveBtn}
               </li>
             `;
           });
@@ -97,13 +123,16 @@ $(document).ready(function () {
   }
 
   $("#viewAllBtn").on("click", function () {
+    showLoader();
+
     $.ajax({
       url: "notifications/seenAll", // Backend route
       method: "GET",
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          console.log("working get");
+          fetchNotifications();
+          hideLoader();
         }
       },
     });
