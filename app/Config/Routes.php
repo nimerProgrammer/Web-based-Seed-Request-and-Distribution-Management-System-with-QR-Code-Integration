@@ -142,5 +142,6 @@ $routes->post( '/admin/reports/beneficiariesExportToPDF', 'Admin\ReportsControll
 /*** LOGS CONTROLLER ACTIONS ***/
 $routes->post( '/admin/logs/clearLogs', 'Admin\LogsController::clearLogs' );
 
-
+/* NOTIFICATION CONTROLLER */
+$routes->get( '/admin/notifications/fetch', 'NotificationsController::fetch' );
 

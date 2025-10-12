@@ -75,10 +75,51 @@
 
                 <div class="d-flex align-items-center ms-auto gap-2">
                     <!-- Notifications -->
-                    <a class="nav-link p-1 mt-1" data-widget="control-sidebar" data-controlsidebar-slide="true"
-                        href="#">
+                    <a class="nav-link p-1 mt-1 position-relative" data-widget="control-sidebar"
+                        data-controlsidebar-slide="true" href="#">
                         <i class="bi bi-bell fs-5"></i>
+
+                        <span id="notifCount"
+                            class="position-absolute badge badge-danger rounded-pill text-white fw-bold notif-badge d-none">
+                            9+
+                        </span>
+
                     </a>
+                    <style>
+                        .notif-badge {
+                            font-size: 11px;
+                            top: -2px;
+                            right: 10px;
+                            /* padding-left: 8px; */
+                            margin-right: 8px;
+                            height: 16px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-width: 16px;
+                            position: absolute;
+                        }
+
+                        .notif-badge::after {
+                            content: "";
+                            position: absolute;
+                            bottom: -4px;
+                            /* ✅ Position of the triangle */
+                            right: 4px;
+                            /* ✅ Attach to right-bottom */
+                            width: 0;
+                            height: 0;
+                            border-left: 5px solid transparent;
+                            /* ✅ Triangle shape */
+                            border-top: 5px solid var(--bs-danger);
+                            /* ✅ Match badge color */
+                            border-radius: 2px;
+                        }
+                    </style>
+
+
+
+
 
                     <!-- Mobile user (only avatar) -->
                     <a href="profile" class="nav-link p-1 d-lg-none" data-bs-toggle="tooltip" title="View Profile">

@@ -7,7 +7,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UsersModel;
 use App\Models\ClientInfoModel;
 use App\Models\LogsModel;
-use DateTime;
+use App\Models\NotificationsModel;
+
 class SignUpController extends BaseController
 {
     /**
@@ -28,7 +29,7 @@ class SignUpController extends BaseController
             return $this->response->setJSON( [ 'exists' => false ] );
         }
 
-        return $this->response->setJSON( [ 
+        return $this->response->setJSON( [
             'exists' => isDuplicate( $table, $field, $value )
         ] );
     }
@@ -47,11 +48,12 @@ class SignUpController extends BaseController
         $clientModel = new ClientInfoModel();
         $userModel   = new UsersModel();
         $logsModel   = new LogsModel();
+        $notif       = new NotificationsModel();
 
         $formattedDate = getPhilippineTimeFormatted();
 
         /* Save to users table */
-        $userModel->insert( [ 
+        $userModel->insert( [
             'users_tbl_id'   => null,
             'contact_no'     => trim( $request->getPost( 'contact_no' ) ),
             'email'          => trim( $request->getPost( 'email' ) ),
@@ -86,7 +88,7 @@ class SignUpController extends BaseController
 
         $fullName = implode( ' ', $fullNameParts );
 
-        $clientModel->insert( [ 
+        $clientModel->insert( [
             'last_name'       => $lastName,
             'first_name'      => $firstName,
             'middle_name'     => $middleName,
@@ -107,14 +109,22 @@ class SignUpController extends BaseController
         $genderType = $gender ? 'his' : 'her';
 
         /* Insert log entry */
-        $logsModel->insert( [ 
+        $logsModel->insert( [
             'timestamp'    => $formattedDate,
             'action'       => 'Create Account',
             'details'      => 'Farmer "' . $fullName . '" signed up and created ' . $genderType . ' account.',
             'users_tbl_id' => $userID,
         ] );
 
-        session()->setFlashdata( 'swal', [ 
+        /* Insert Notification */
+        $notif->insert( [
+            'content'      => 'New account created for ' . $fullName . ' from barangay ' . trim( $this->request->getPost( 'barangay' ) ) . '.',
+            'type'         => 'new user',
+            'status_view'  => 'unseen',
+            'users_tbl_id' => $userID,
+        ] );
+
+        session()->setFlashdata( 'swal', [
             'title'             => 'Success!',
             'text'              => 'Your account has been created successfully.',
             'icon'              => 'success',

@@ -30,74 +30,15 @@
     <div class="p-3 control-sidebar-content">
         <h5>Notifications</h5>
         <hr class="mb-2">
-        <ul class="list-unstyled">
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
-            <li>
-                <i class="bi bi-bell text-warning"></i> New seed request submitted
-                <br><small class="text-muted">2 mins ago</small>
-            </li>
-            <li class="mt-2">
-                <i class="bi bi-check-circle text-success"></i> Request #102 approved
-                <br><small class="text-muted">10 mins ago</small>
-            </li>
+
+        <!-- ✅ Just add this ID -->
+        <ul class="list-unstyled" id="notificationList">
+            <!-- This will be replaced dynamically -->
         </ul>
+
     </div>
 </aside>
+
 
 </div>
 
@@ -120,6 +61,7 @@
 
 <script src="<?= base_url( 'templates/js/season-watcher.js?v=6.6.6' ) ?>"></script>
 <script src="<?= base_url( 'templates/js/adminscript.js?v=7.1.3' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/notificationScript.js?v=1' ) ?>"></script>
 
 <?php if ( session()->get( 'title' ) === 'Profile' && session()->get( 'current_tab' ) === 'profile' ) : ?>
     <script src="<?= base_url( 'templates/js/adminProfileScript.js?v=6.6.6' ) ?>"></script>
