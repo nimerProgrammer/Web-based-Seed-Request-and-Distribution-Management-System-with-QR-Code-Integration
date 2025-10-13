@@ -49,6 +49,9 @@ $routes->post( 'public/sentRequests/cancel', 'Public\SentRequestsController::can
 
 $routes->get( '/public/signUp', 'Public\Home::signUp' );
 $routes->post( '/public/login', 'Public\LoginController::login' );
+$routes->post( '/public/forgotPassword', 'Public\ForgotPassword::forgotPassword' );
+$routes->get( '/public/reset-password', 'Public\Home::reset_password' );
+$routes->post( '/public/submitResetPassword', 'Public\ForgotPassword::submitResetPassword' );
 /* login credentials */
 $routes->post( '/public/login/check_credentials', 'Public\LoginController::check_credentials' );
 $routes->get( '/public/logout', 'Public\Home::logout' );

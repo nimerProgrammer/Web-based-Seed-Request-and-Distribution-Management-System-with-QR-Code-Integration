@@ -25,6 +25,37 @@ class Home extends BaseController
     }
 
     /**
+     * Displays the reset password page.
+     *
+     * @return string
+     */
+    public function reset_password()
+    {
+        $token     = $this->request->getGet( 'token' );
+        $secretKey = 'SEEDREQUEST2025';
+
+        if ( !$token ) {
+            return view( 'errors/html/error_403' );
+        }
+
+        $decoded                         = base64_decode( $token );
+        list( $email, $expiresAt, $key ) = explode( '|', $decoded );
+
+        if ( $key !== $secretKey || time() > $expiresAt ) {
+            return view( 'errors/html/reset_pass_expired' );
+        }
+
+        session()->set( "title", "Reset-Password" );
+        session()->set( "current_tab", "resetPassword" );
+
+        // ✅ Pass token and email to view
+        return view( 'public/reset_password', [
+            'token' => $token,
+            'email' => $email
+        ] );
+    }
+
+    /**
      * Displays the home page.
      *
      * This method sets session variables for the public user and renders the home view.
@@ -52,7 +83,7 @@ class Home extends BaseController
                 ->where( 'post_description_tbl_id', $post[ 'post_description_tbl_id' ] )
                 ->findAll();
 
-            $posts[] = [ 
+            $posts[] = [
                 'description' => $post[ 'description' ],
                 'created_at'  => $post[ 'created_at' ],
                 'images'      => $images
@@ -107,7 +138,7 @@ class Home extends BaseController
         ' )
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )
             ->join( 'cropping_season', 'cropping_season.cropping_season_tbl_id = inventory.cropping_season_tbl_id', 'left' )
-            ->where( [ 
+            ->where( [
                 'cropping_season.cropping_season_tbl_id' => $selectedSeason,     // e.g., 'Wet'
                 'cropping_season.status'                 => 'Current',     // e.g., 'Wet'
                 'seed_requests.client_info_tbl_id'       => $clientId  // e.g., 12

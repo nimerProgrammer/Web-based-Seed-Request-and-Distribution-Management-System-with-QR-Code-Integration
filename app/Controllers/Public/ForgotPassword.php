@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controllers\Admin;
+namespace App\Controllers\Public;
 
 use App\Controllers\BaseController;
-use App\Models\StaffInfoModel;
-use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\ClientInfoModel;
+use App\Models\UsersModel;
 
 class ForgotPassword extends BaseController
 {
@@ -14,10 +14,10 @@ class ForgotPassword extends BaseController
         $emailAcc = $this->request->getPost( 'email' );
 
         $model      = new UsersModel();
-        $staff_info = new StaffInfoModel();
+        $staff_info = new ClientInfoModel();
 
         $user = $model->where( 'email', $emailAcc )
-            ->where( 'user_type', 'admin' )
+            ->where( 'user_type', 'farmer' )
             ->first();
 
         if ( !$user ) {
@@ -41,13 +41,13 @@ class ForgotPassword extends BaseController
         $rawToken = $emailAcc . '|' . $expiresAt . '|' . $secretKey;
         $token    = base64_encode( $rawToken );
 
-        $resetLink = base_url( "admin/reset-password?token={$token}" );
+        $resetLink = base_url( "public/reset-password?token={$token}" );
 
         $email = \Config\Services::email();
         // Set recipient and subject
         // $email->setFrom( 'omas@oras-seed-request-distribution.com', 'LGU Oras' );
         $email->setTo( $emailAcc );
-        $email->setSubject( '[OMAS ORAS] Administrator Password Reset Instructions' );
+        $email->setSubject( '[OMAS ORAS] Farmer Password Reset Instructions' );
 
         $message = <<<EOD
             <!DOCTYPE html>
@@ -134,7 +134,7 @@ class ForgotPassword extends BaseController
 
         // 🔍 Check if email exists
         $user = $model->where( 'email', $email )
-            ->where( 'user_type', 'admin' )
+            ->where( 'user_type', 'farmer' )
             ->first();
 
         if ( !$user ) {
@@ -149,6 +149,7 @@ class ForgotPassword extends BaseController
         // ✅ Update password
         $reset = $model->update( $user[ 'users_tbl_id' ], [ 'password' => $hashedPassword ] );
 
+
         if ( $reset ) {
 
             session()->set( 'pass', 'updated' );
@@ -159,5 +160,4 @@ class ForgotPassword extends BaseController
         }
 
     }
-
 }

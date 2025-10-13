@@ -47,8 +47,8 @@
     integrity="sha256-u2yoem2HtOCQCnsp3fO9sj5kUrL+7hOAfm8es18AFjw=" crossorigin="anonymous"></script>
 
 
-<script src="<?= base_url( 'templates/js/publicScript.js?v=5.5.5' ) ?>"></script>
-<script src="<?= base_url( 'templates/js/publicLoginScript.js?v=4.4.5' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/publicScript.js?v=5.5.6' ) ?>"></script>
+<script src="<?= base_url( 'templates/js/publicLoginScript.js?v=4.4.6' ) ?>"></script>
 <script src="<?= base_url( 'templates/js/season-watcher.js?v=4.4.4' ) ?>"></script>
 
 
@@ -103,3 +103,38 @@
         $('meta[name="csrf_token"]').attr("content") || "<?= csrf_hash() ?>";
 
 </script>
+
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="small text-muted">Enter your registered email address. We will send you a link to reset your
+                    password.</p>
+
+                <!-- ✅ Message will appear here -->
+                <div id="forgot_message" class="mb-2"></div>
+
+                <form id="forgotPasswordForm">
+                    <div class="mb-3">
+                        <label for="forgot_email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="forgot_email" name="email"
+                            placeholder="e.g. user@example.com" required>
+                        <div id="forgot_email_error" class="text-danger small mt-1"></div>
+                    </div>
+                    <button type="submit" id="forgotPasswordBtn" class="btn btn-primary w-100">
+                        <span class="spinner-border spinner-border-sm me-2 d-none" id="forgotSpinner" role="status"
+                            aria-hidden="true"></span>
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

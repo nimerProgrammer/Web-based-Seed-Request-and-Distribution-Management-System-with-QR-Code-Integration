@@ -104,4 +104,43 @@ $(document).ready(function () {
       },
     });
   });
+
+  $("#forgotPasswordForm").on("submit", function (e) {
+    e.preventDefault();
+    const email = $("#forgot_email").val();
+
+    $("#forgotSpinner").removeClass("d-none");
+    $("#forgotPasswordBtn").attr("disabled", true);
+    // Example AJAX (replace URL with your actual endpoint)
+    $.ajax({
+      url: "forgotPassword", // Backend route here
+      method: "POST",
+      data: { email: email },
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          $("#forgot_message").html(
+            `<div class="alert alert-success">Password reset link sent to your email!</div>`
+          );
+          $("#forgot_email").removeClass("is-invalid");
+          $("#forgot_email").val("");
+        } else {
+          $("#forgot_message").html(
+            `<div class="alert alert-danger">Email not found or not registered.</div>`
+          );
+          $("#forgot_email").addClass("is-invalid");
+        }
+
+        $("#forgotSpinner").addClass("d-none");
+        $("#forgotPasswordBtn").attr("disabled", false);
+      },
+      error: function () {
+        $("#forgot_message").html(
+          `<div class="alert alert-danger p-2 mb-2">Email not found or error occurred.</div>`
+        );
+        $("#forgotSpinner").addClass("d-none");
+        $("#forgotPasswordBtn").attr("disabled", false);
+      },
+    });
+  });
 });
