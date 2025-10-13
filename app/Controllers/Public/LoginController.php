@@ -30,6 +30,7 @@ class LoginController extends BaseController
 
         $user = $userModel
             ->where( 'username', $username )
+            ->where( 'user_type', 'farmer' )
             ->first();
 
         if ( !$user ) {

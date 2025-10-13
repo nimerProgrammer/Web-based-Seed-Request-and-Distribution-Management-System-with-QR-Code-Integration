@@ -9,6 +9,9 @@ use CodeIgniter\Router\RouteCollection;
 
 /*** LOGIN ***/
 $routes->get( '/admin/login', 'Admin\Admin::login' );
+$routes->post( '/admin/forgotPassword', 'Admin\ForgotPassword::forgotPassword' );
+$routes->get( '/admin/reset-password', 'Admin\Admin::reset_password' );
+
 /*** SERVER REQUESTS ***/
 // User data API endpoints
 $routes->post( '/get_user_data', 'Admin\Admin::get_user_data' );

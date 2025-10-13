@@ -30,6 +30,37 @@ class Admin extends BaseController
     }
 
     /**
+     * Displays the reset password page.
+     *
+     * @return string
+     */
+    public function reset_password()
+    {
+        $token     = $this->request->getGet( 'token' );
+        $secretKey = 'SEEDREQUEST2025';
+
+        if ( !$token ) {
+            return view( 'errors/html/error_403' );
+        }
+
+        $decoded                         = base64_decode( $token );
+        list( $email, $expiresAt, $key ) = explode( '|', $decoded );
+
+        if ( $key !== $secretKey || time() > $expiresAt ) {
+            return view( 'errors/html/error_403' );
+        }
+
+        session()->set( "title", "Reset-Password" );
+        session()->set( "current_tab", "resetPassword" );
+
+        // ✅ Pass token and email to view
+        return view( 'admin/reset_password', [
+            'token' => $token,
+            'email' => $email
+        ] );
+    }
+
+    /**
      * Displays the login page.
      *
      * @return string
