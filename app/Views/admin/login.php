@@ -24,13 +24,16 @@
 
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="card shadow-lg p-4 mt-3" style="max-width: 400px; width: 100%;">
+        <div class="card shadow-lg pt-4 pl-4 pr-4 mt-3" style="max-width: 400px; width: 100%;">
             <div class="border-bottom">
-                <div class="text-center mb-4">
+                <div class="d-flex align-items-center mb-4">
                     <img src="<?= base_url( 'templates/img/icon.png' ) ?>" alt="Logo" class="img-fluid"
-                        style="max-width: 150px;" />
+                        style="max-width: 70px; margin-right: 10px;" />
+                    <p class="text-secondary m-0">
+                        <span class="fw-bold">Seed Request & Distribution</span><br>
+                        <small>Login your account</small>
+                    </p>
                 </div>
-                <p class="text-center text-secondary">Seed Request & Distribution</p>
             </div>
             <form action="javascript:void(0)" method="post" id="login_form">
                 <div class="mb-3 mt-3">

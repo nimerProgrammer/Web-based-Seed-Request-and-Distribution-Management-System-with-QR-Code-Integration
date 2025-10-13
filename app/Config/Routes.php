@@ -11,6 +11,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get( '/admin/login', 'Admin\Admin::login' );
 $routes->post( '/admin/forgotPassword', 'Admin\ForgotPassword::forgotPassword' );
 $routes->get( '/admin/reset-password', 'Admin\Admin::reset_password' );
+$routes->post( '/admin/submitResetPassword', 'Admin\ForgotPassword::submitResetPassword' );
 
 /*** SERVER REQUESTS ***/
 // User data API endpoints

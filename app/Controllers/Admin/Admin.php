@@ -47,7 +47,7 @@ class Admin extends BaseController
         list( $email, $expiresAt, $key ) = explode( '|', $decoded );
 
         if ( $key !== $secretKey || time() > $expiresAt ) {
-            return view( 'errors/html/error_403' );
+            return view( 'errors/html/reset_pass_expired' );
         }
 
         session()->set( "title", "Reset-Password" );

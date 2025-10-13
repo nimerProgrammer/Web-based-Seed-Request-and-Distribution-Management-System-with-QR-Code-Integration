@@ -116,8 +116,48 @@ class ForgotPassword extends BaseController
             log_message( 'error', $email->printDebugger( [ 'headers', 'subject', 'body', 'SMTP' ] ) );
         }
 
+        if ( session()->has( 'pass' ) ) {
+            session()->remove( 'pass' );
+        }
+
         return $this->response->setJSON( [
             'success' => true
         ] );
     }
+
+    public function submitResetPassword()
+    {
+        $email    = $this->request->getPost( 'email' );
+        $new_pass = $this->request->getPost( 'new_password' );
+
+        $model = new UsersModel();
+
+        // 🔍 Check if email exists
+        $user = $model->where( 'email', $email )->first();
+
+        if ( !$user ) {
+            return $this->response->setJSON( [
+                'error' => false
+            ] );
+        }
+
+        // ✅ Hash the password
+        $hashedPassword = password_hash( $new_pass, PASSWORD_DEFAULT );
+
+        // ✅ Update password
+        $reset = $model->update( $user[ 'users_tbl_id' ], [
+            'password' => $hashedPassword,
+        ] );
+
+        if ( $reset ) {
+
+            session()->set( 'pass', 'updated' );
+
+            return $this->response->setJSON( [
+                'success' => true
+            ] );
+        }
+
+    }
+
 }
