@@ -33,12 +33,17 @@ if ( !$beneficiary ) {
     echo json_encode( [ 'success' => false, 'message' => 'Beneficiary not found' ] );
     exit;
 }
+function getPhilippineTimeFormatted( $format = 'm-d-Y h:i:s A' )
+{
+    $philTime = new \DateTime( 'now', new \DateTimeZone( 'Asia/Manila' ) );
+    return $philTime->format( $format );
+}
 
 $inventoryId   = $beneficiary[ 'inventory_tbl_id' ];
 $kg            = (float) $beneficiary[ 'kg' ];
 $rsbsa         = $beneficiary[ 'rsbsa_ref_no' ];
 $fullName      = trim( $beneficiary[ 'first_name' ] . " " . $beneficiary[ 'middle_name' ] . " " . $beneficiary[ 'last_name' ] . " " . $beneficiary[ 'suffix_and_ext' ] );
-$formattedDate = date( "Y-m-d H:i:s" );
+$formattedDate = getPhilippineTimeFormatted();
 
 /* ---------------------------
    2. Update Inventory (distributed + kg)

@@ -72,6 +72,7 @@ class SeedRequestsController extends BaseController
             'date_time_approved' => $formattedDate
         ] );
 
+        
         $requests = $requestModel
             ->select( 'seed_requests.*, client_info.*, inventory.*, users.*' )
             ->join( 'inventory', 'inventory.inventory_tbl_id = seed_requests.inventory_tbl_id' )

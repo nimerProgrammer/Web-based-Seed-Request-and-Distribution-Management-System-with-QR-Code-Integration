@@ -180,18 +180,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: "Request approved.",
-            timer: 4000,
-            showConfirmButton: false,
-            customClass: {
-              confirmButton: "btn btn-primary",
-            },
-            buttonsStyling: false,
-          });
-          fetchNotifications();
+          location.reload();
         } else {
           Swal.fire({
             icon: "error",
@@ -226,18 +215,7 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: "Request rejected.",
-            timer: 4000,
-            showConfirmButton: false,
-            customClass: {
-              confirmButton: "btn btn-primary",
-            },
-            buttonsStyling: false,
-          });
-          fetchNotifications();
+          location.reload();
         } else {
           Swal.fire({
             icon: "error",

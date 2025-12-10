@@ -11,6 +11,10 @@ class ForgotPassword extends BaseController
 {
     public function forgotPassword()
     {
+        if ( !$this->request->isAJAX() ) {
+            return view( 'errors/html/error_403' );
+        }
+
         $emailAcc = $this->request->getPost( 'email' );
 
         $model      = new UsersModel();
@@ -127,6 +131,10 @@ class ForgotPassword extends BaseController
 
     public function submitResetPassword()
     {
+        if ( !$this->request->isAJAX() ) {
+            return view( 'errors/html/error_403' );
+        }
+
         $email    = $this->request->getPost( 'email' );
         $new_pass = $this->request->getPost( 'new_password' );
 

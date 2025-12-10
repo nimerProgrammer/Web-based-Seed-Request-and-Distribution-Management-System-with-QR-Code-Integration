@@ -36,6 +36,10 @@ class Admin extends BaseController
      */
     public function reset_password()
     {
+        if ( !$this->request->isAJAX() ) {
+            return view( 'errors/html/error_403' );
+        }
+
         $token     = $this->request->getGet( 'token' );
         $secretKey = 'SEEDREQUEST2025';
 
@@ -643,7 +647,7 @@ class Admin extends BaseController
         // Fetch all logs, optionally ordered by latest
 
         $data[ 'logs' ] = $logsModel
-            ->select( 'logs.*, users.user_type' )
+            ->select( 'logs.*, users.*' )
             ->join( 'users', 'users.users_tbl_id = logs.users_tbl_id', 'left' ) // ← Use 'left' join
             ->orderBy( 'logs.logs_tbl_id', 'DESC' )
             ->findAll();

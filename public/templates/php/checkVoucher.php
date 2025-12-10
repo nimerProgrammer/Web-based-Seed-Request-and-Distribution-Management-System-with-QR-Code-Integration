@@ -30,10 +30,10 @@ if ( $row = $result->fetch_assoc() ) {
     if ( count( $parts ) >= 3 ) {
         $part1 = $parts[ 0 ];                             // e.g., "1st CROPPING 2025"
         $part2 = $parts[ 1 ];                             // e.g., "RC18 (Rice)Improved"
-        $part4 = $parts[ 2 ];                             // e.g., "34343"
+        $part3 = $parts[ 2 ];                             // e.g., "34343"
         // $ref   = implode( '-', array_slice( $parts, 4 ) );  // e.g., "REF-08042025-XXXXXXX"
         $ref   = $parts[ 3 ];
-        $part3 = $row[ 'kg' ];                             // e.g., "kg"
+        $part4 = $row[ 'kg' ];                             // e.g., "kg"
 
         echo json_encode( [
             'id'         => $row[ 'beneficiaries_tbl_id' ],

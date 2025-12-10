@@ -69,10 +69,17 @@
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <?= isset( $log[ 'user_type' ] )
-                                                        ? esc( ucfirst( $log[ 'user_type' ] ) )
-                                                        : '<span class="text-danger">Anonymous</span>' ?>
+                                                    <?php if ( !empty( $log[ 'user_type' ] ) ) : ?>
+                                                        <?= esc( ucfirst( $log[ 'user_type' ] ) ) ?>
+                                                    <?php else : ?>
+                                                        <?php if ( isset( $log[ 'action' ] ) && trim( $log[ 'action' ] ) === 'Marked as Received' ) : ?>
+                                                            <span class="text-primary">QR Code Scanner</span>
+                                                        <?php else : ?>
+                                                            <span class="text-danger">Anonymous</span>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
                                                 </td>
+
 
                                                 </td>
                                                 <td><?= esc( $log[ 'action' ] ) ?></td>
