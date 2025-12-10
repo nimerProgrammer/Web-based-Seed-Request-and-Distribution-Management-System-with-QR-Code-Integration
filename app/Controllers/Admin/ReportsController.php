@@ -723,6 +723,46 @@ class ReportsController extends BaseController
             ;
         }
 
+        /**
+         * Renders the footer for the PDF report.
+         *
+         * @return string HTML content for the footer.
+         */
+        function renderFooter()
+        {
+            return '
+                <div class="footer">
+                    <table style="width:100%; font-size:12px; text-align:center; border-collapse: collapse; border: none;">
+                        <tr>
+                            <td>
+                                Prepared by:<br><br><br>
+                                _______________________________<br>
+                                <strong>Agricultural Technician</strong>
+                            </td>
+                            <td>
+                                Reviewed/Validated by:<br><br><br>
+
+                                 <strong style="font-weight: bold; font-size: 14px;  display: block; margin-top: 5px;">
+                                    Salvador Dalosa
+                                </strong>
+
+                                <!-- signature line -->
+                                <div style="border-bottom: 1px solid #000; width: 180px; margin: 0 auto; height: 3px;"></div>
+
+   
+                                <strong>Municipal Agriculturist</strong>
+                            </td>
+                            <td>
+                                Attested by:<br><br><br>
+                                _______________________________<br>
+                                <strong>APCO</strong>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            ';
+        }
+
         $inventoryId = $this->request->getPost( 'beneficiaries_inventory_id' );
         $seedName    = $this->request->getPost( 'beneficiaries_seed_name' );
 
@@ -775,6 +815,7 @@ class ReportsController extends BaseController
             ->findAll();
 
 
+
         if ( empty( $requests ) ) {
             session()->setFlashdata( 'swal', [
                 'title'             => 'No Data',
@@ -811,6 +852,19 @@ class ReportsController extends BaseController
             }
             th {
                 background-color: transparent;
+            }
+
+            .footer {
+                position: fixed;
+                bottom: -1.2in;   /* moves footer INTO page margin */
+                left: 0;
+                right: 0;
+                height: 1.2in;    /* footer height */
+            }
+
+            .footer th, .footer td {
+                border: none;
+                
             }
         </style>';
 
@@ -904,9 +958,18 @@ class ReportsController extends BaseController
             </tr>';
 
                 $rowCount++;
+
+                if ( $rowCount % 15 == 0 ) {
+                    $html .= '</tbody></table>';
+                    $html .= renderFooter();
+
+
+                }
             }
 
             $html .= '</tbody></table>';
+            $html .= renderFooter();
+
         }
 
 

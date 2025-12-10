@@ -74,9 +74,9 @@
 <?php endif; ?>
 
 <?php if ( session()->get( 'title' ) === 'Dashboard' && session()->get( 'current_tab' ) === 'dashboard' ) : ?>
-    <script src="<?= base_url( 'templates/js/adminDashboardScript.js?v=7.7.7' ) ?>"></script>
-    <script src="<?= base_url( 'templates/js/adminDashboardSeasonUpdate.js?v=7.7.7' ) ?>"></script>
-    <script src="<?= base_url( 'templates/js/adminDashboardTableUpdate.js?v=7.7.7' ) ?>"></script>
+    <script src="<?= base_url( 'templates/js/adminDashboardScript.js?v=8.8.8' ) ?>"></script>
+    <script src="<?= base_url( 'templates/js/adminDashboardSeasonUpdate.js?v=8.8.8' ) ?>"></script>
+    <script src=" <?= base_url( 'templates/js/adminDashboardTableUpdate.js?v=8.8.8' ) ?>"></script>
 
 <?php endif; ?>
 
